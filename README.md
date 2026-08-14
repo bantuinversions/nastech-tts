@@ -1,87 +1,133 @@
 # Nastech TTS
 
-**Nastech TTS** is an English expressive-speech product built on one ready-made open-source TTS model family: `canopylabs/orpheus-3b-0.1-ft`.
+**Nastech TTS** is an English-first **expressive-speech control plane** for Fish Audio S2. It gives agents one stable markup format, compiles that intent into Fish-native emotion and vocal-event controls, and exposes an authenticated local REST API for generation or dry-run inspection.
 
-Nastech does **not** train a foundation model from random weights and does **not** merge unrelated model checkpoints. It uses the ready-made Orpheus English fine-tune for inference and prepares a small Nastech LoRA/QLoRA adapter to improve deterministic control of emotions and natural vocal behaviors from licensed English recordings.
+> Nastech is **not** a separate 4B foundation model and does not redistribute Fish model weights. It is a production integration layer for a model family with documented, direct controls such as `[angry]`, `[sad]`, `[excited]`, `[laughing]`, `[sigh]`, `[whisper]`, and `[shouting]`. [1]
 
-## Product Status
-
-| Capability | Status in Nastech v0.2 |
+| Capability | Nastech v0.3 status |
 |---|---|
-| One selected model family | Complete: Orpheus 3B fine-tuned English model |
-| Natural English speech | Working in local CPU development mode |
-| Direct laughs, coughs, sighs, gasps, and related documented vocal events | Working through the selected model |
-| NastechML behavior markup | Complete |
-| Nastech behavior manifest | Complete |
-| Deterministic `angry` / `sad` control | Pending Nastech LoRA adapter training on licensed data |
-| New Nastech model checkpoint | Pending GPU adapter training |
+| Real named emotion controls | Compiles to Fish S2 provider-native inline tags |
+| Real vocal-event controls | Direct mappings for laugh, chuckle, sigh, gasp, groan, and cry |
+| Cough, sniffle, yawn | Compiled as free-form S2 tags and marked release-dependent in the manifest |
+| Agent calls | Native Nastech agent endpoints and OpenAI-compatible `/v1/audio/speech` |
+| Self-hosted inference | Routes to the official Fish local server on a GPU host |
+| Hosted inference | Routes to the official Fish cloud API when `FISH_AUDIO_API_KEY` is supplied |
+| Agent audit trail | Returns a request ID and offers a compile-only endpoint with the full provider payload |
 
-## Model Provenance
+## Architecture
 
 ```text
-Product model ID: nastech-voice-en-v1
-Base model: canopylabs/orpheus-3b-0.1-ft
-Base license: Apache-2.0
-Language: English
-Modification: Nastech LoRA/QLoRA behavior adapter
+Agent / workflow
+      |
+      | NastechML or REST JSON
+      v
+Nastech Agent Gateway
+  - validates English expressive markup
+  - compiles Fish S2 behavior tags
+  - validates provider controls and creates a manifest
+      |
+      +---- fish-local ---> official Fish Speech S2 server (GPU)
+      |
+      +---- fish-cloud ---> official Fish Audio `/v1/tts` API
+      v
+Audio bytes plus Nastech request ID
 ```
 
-Read [single_model_decision.md](docs/single_model_decision.md) and [adapter_training_strategy.md](docs/adapter_training_strategy.md) before attempting a fine-tuning run.
+Read [Fish S2 Architecture](docs/fish_s2_architecture.md), [Model Selection](docs/real_feature_model_selection.md), and [Provider Protocol](docs/fish_provider_protocol.md) for the complete technical and licensing boundaries.
 
 ## Installation
 
-The local runtime uses the official CPU-compatible Orpheus path. Install Nastech and the local runtime in a Python environment:
-
-```bash
-pip install 'nastech-tts[local]'
-```
-
-For this development checkout:
-
 ```bash
 cd nastech-tts
-pip install -e '.[local]'
+python -m venv .venv
+source .venv/bin/activate
+pip install -e '.[dev]'
 ```
 
-## Render an Expressive Scene
+Nastech itself is lightweight. A **real Fish S2 model server is a separate GPU workload**. Start an official local Fish server first, then point Nastech to it:
 
 ```bash
+export NASTECH_PROVIDER=fish-local
+export FISH_BASE_URL=http://127.0.0.1:8080
 nastech-tts status
-nastech-tts render examples/expressive_scene.xml --output output/scene.wav
+nastech-tts serve --host 127.0.0.1 --port 8765
 ```
 
-Each generated WAV has a companion `*.manifest.json` file containing model provenance, span-by-span behavior fidelity, and warnings. Nastech never labels a named emotion as deterministic until its own adapter has passed evaluation.
+For the official cloud route, set an API key that you obtain from Fish Audio; do not store it in source control:
+
+```bash
+export NASTECH_PROVIDER=fish-cloud
+export FISH_AUDIO_API_KEY='your-provider-key'
+export FISH_CLOUD_MODEL=s2.1-pro-free
+nastech-tts serve --host 127.0.0.1 --port 8765
+```
+
+Set `NASTECH_API_KEY` to protect the gateway's own API with bearer authentication.
+
+## Agent Calls
+
+An agent should first compile a request. This exposes the exact emotion and event controls that will be sent to Fish S2 without generating audio:
+
+```bash
+curl --request POST http://127.0.0.1:8765/v1/agent/compile \
+  --header 'content-type: application/json' \
+  --data @- <<'JSON'
+{
+  "markup": "<speak><emotion name=\"sad\">I thought the lantern was gone.</emotion><sound type=\"sigh\"/><emotion name=\"happy\">But the sunrise brought it home.</emotion><sound type=\"laugh\"/></speak>",
+  "output_format": "wav"
+}
+JSON
+```
+
+The resulting manifest includes a Fish-native payload similar to this:
+
+```text
+[sad] I thought the lantern was gone. [sigh] [delight] But the sunrise brought it home. [laughing]
+```
+
+When the output is approved, call `/v1/agent/speech` with the same JSON. The response body is audio and response headers include `X-Nastech-Request-Id` and `X-Nastech-Provider`.
+
+Existing OpenAI-style clients can instead call:
+
+```bash
+curl --request POST http://127.0.0.1:8765/v1/audio/speech \
+  --header 'content-type: application/json' \
+  --data '{"model":"nastech-fish-s2","input":"Hello from Nastech.","response_format":"wav"}' \
+  --output hello.wav
+```
+
+The complete agent tool descriptor is available at [agent_tools/nastech_tts_tool.json](agent_tools/nastech_tts_tool.json), or dynamically at `GET /v1/agent/tools`.
 
 ## NastechML
 
 ```xml
-<speak voice="tara">
-  <emotion name="angry" intensity="0.80">I asked you not to touch that.</emotion>
+<speak voice="narrator-voice-id">
+  <emotion name="sad" intensity="0.70">I thought we had lost the way.</emotion>
+  <sound type="sigh" />
+  <pause ms="400" />
+  <emotion name="angry" intensity="0.85">Then the storm tore down the sign.</emotion>
   <sound type="cough" />
-  <pause ms="250" />
-  <emotion name="sad" intensity="0.70">I am sorry that I hurt you.</emotion>
+  <prosody rate="fast" volume="loud">
+    <emotion name="excited">But the lantern flared, and everyone cheered.</emotion>
+  </prosody>
   <sound type="laugh" />
 </speak>
 ```
 
-The current selected base supports these direct vocal event types: `laugh`, `chuckle`, `sigh`, `cough`, `sniffle`, `groan`, `yawn`, and `gasp`.
+Use `nastech-tts compile examples/story.xml` to produce a local manifest before any provider call.
 
-## Adapter Training
+## Deployment
 
-Nastech is designed to train a small adapter on top of the ready-made fine-tuned base model. The training process needs a GPU plus a dataset of consented, licensed English recordings labelled for transcript, speaker, emotion, intensity, and vocal events. See the `training/` directory for the dataset contract, configuration template, and validation commands.
+The default Manus sandbox is not a persistent service host and has no GPU. The gateway can run anywhere Python runs, but a self-hosted Fish S2 provider needs a separate persistent GPU server. The repository includes a Docker image for the Nastech gateway, compose templates, environment examples, health checks, and deployment instructions under `deploy/`.
 
-## Product Boundaries
+## License and Model Notice
 
-Nastech is a product layer and a future adapter; it does not claim ownership of the upstream Orpheus checkpoint. The upstream model’s source, license, and access conditions continue to apply. See [NOTICE.md](NOTICE.md).
-
-## Development
-
-```bash
-python -m unittest discover -s tests -v
-```
+Nastech source code is Apache-2.0. The selected Fish Speech repository and Fish S2 weights are released under the **Fish Audio Research License**, which remains binding. Nastech does not bundle weights and is not a commercial-license substitute. Review [NOTICE.md](NOTICE.md) and the upstream terms before use.
 
 ## References
 
-[1] [Orpheus 3B 0.1 Finetuned model card](https://huggingface.co/canopylabs/orpheus-3b-0.1-ft)
+[1] [Fish Speech official S2 repository](https://github.com/fishaudio/fish-speech)
 
-[2] [Orpheus TTS source repository](https://github.com/canopyai/Orpheus-TTS)
+[2] [Fish Speech local server documentation](https://speech.fish.audio/server/)
+
+[3] [Fish Audio official `/v1/tts` API](https://docs.fish.audio/api-reference/endpoint/openapi-v1/text-to-speech)

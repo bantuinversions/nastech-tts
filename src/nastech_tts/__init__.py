@@ -1,18 +1,26 @@
-"""Nastech TTS: English expressive speech based on one adaptable Orpheus model family."""
+"""Nastech TTS: agent-ready expressive speech control for Fish Audio S2."""
 
+from .fish import (
+    CompiledRequest,
+    FishHttpProvider,
+    NastechGateway,
+    ProviderError,
+    ProviderSettings,
+    build_gateway_from_env,
+    compile_nastechml,
+)
 from .markup import NastechMarkupError, parse_nastechml
-from .model import NASTECH_ORPHEUS_V1, NastechModelSpec
-from .service import NastechService
-from .types import RenderManifest, RenderResult
 
 __all__ = [
-    "NASTECH_ORPHEUS_V1",
+    "CompiledRequest",
+    "FishHttpProvider",
+    "NastechGateway",
     "NastechMarkupError",
-    "NastechModelSpec",
-    "NastechService",
-    "RenderManifest",
-    "RenderResult",
+    "ProviderError",
+    "ProviderSettings",
+    "build_gateway_from_env",
+    "compile_nastechml",
     "parse_nastechml",
 ]
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"

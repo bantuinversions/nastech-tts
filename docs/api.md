@@ -1,36 +1,66 @@
-# Nastech TTS Local API
+# Nastech Agent API
 
-The Nastech HTTP API is optional and local by default. It wraps the same single-model runtime used by the CLI. Install the API and local runtime extras, then start the service:
+The Nastech gateway exposes a stable agent-facing API. All behavior controls are expressed in English NastechML and compiled to Fish S2 before a provider call.
 
-```bash
-pip install 'nastech-tts[api,local]'
-nastech-tts serve --host 127.0.0.1 --port 8765
+## Authentication
+
+When `NASTECH_API_KEY` is set, call protected endpoints with:
+
+```text
+Authorization: Bearer <NASTECH_API_KEY>
 ```
 
-The development sandbox is not an always-on service host. Use the API locally for integration tests; deploy it only on a suitable persistent GPU environment for production use.
+The health endpoint is intentionally unauthenticated so orchestration systems can monitor readiness.
 
 ## Endpoints
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/v1/health` | Returns runtime availability and selected-model status. |
-| `GET` | `/v1/models/nastech-voice-en-v1` | Returns selected-model provenance and capability metadata. |
-| `POST` | `/v1/audio/speech` | Accepts NastechML and returns `audio/wav`. |
+| `GET` | `/v1/health` | Nastech and configured provider status |
+| `GET` | `/v1/capabilities` | Supported English controls and output formats |
+| `GET` | `/v1/agent/tools` | Machine-readable tool descriptors |
+| `POST` | `/v1/agent/compile` | Compile NastechML without a provider call |
+| `POST` | `/v1/agent/speech` | Generate expressive audio from NastechML |
+| `POST` | `/v1/audio/speech` | OpenAI-compatible plain-text synthesis alias |
 
-## Generate Speech
+## Compile Before Generation
 
-```bash
-curl --request POST http://127.0.0.1:8765/v1/audio/speech \
-  --header 'Content-Type: application/json' \
-  --data '{"markup":"<speak voice=\"tara\">Hello from Nastech.<sound type=\"laugh\" /></speak>"}' \
-  --output speech.wav
+Agents should compile when they need a visible audit of what the provider will receive.
+
+```json
+{
+  "markup": "<speak><emotion name=\"angry\">Do not leave me here.</emotion><sound type=\"sigh\" /></speak>",
+  "reference_id": "optional-voice-id",
+  "output_format": "wav",
+  "latency": "normal",
+  "temperature": 0.7
+}
 ```
 
-The response includes two headers:
+The compile response includes `provider_payload.text`, a request ID, and a manifest containing each mapped control. For the example above, the compiled text starts with `[angry]` and includes `[sigh]`.
 
-| Header | Meaning |
-|---|---|
-| `X-Nastech-Model` | Nastech product model ID used for the synthesis. |
-| `X-Nastech-Fidelity` | Comma-separated direct/approximated fidelity entries for each generated audio span. |
+## Generate Audio
 
-The API does not accept arbitrary upstream model IDs. It runs only the selected Nastech base model family and, once trained, its matching Nastech adapter.
+Send the same request body to `POST /v1/agent/speech`. The response is raw audio bytes. Store the `X-Nastech-Request-Id` response header with downstream workflow records; it links the audio output to the compile manifest. `X-Nastech-Provider` identifies `fish-local` or `fish-cloud`.
+
+## OpenAI-Compatible Alias
+
+`POST /v1/audio/speech` accepts this smaller request shape:
+
+```json
+{
+  "model": "nastech-fish-s2",
+  "input": "The story begins at dawn.",
+  "voice": "optional-voice-id",
+  "response_format": "wav",
+  "speed": 1.0
+}
+```
+
+This path intentionally accepts plain text only. Use `/v1/agent/speech` for real Fish S2 emotion and event controls.
+
+## Reference Voices
+
+The self-hosted Fish server accepts a single saved `reference_id` per Nastech request. The Fish cloud S2 API can support multi-speaker requests with an array of reference IDs and `<|speaker:n|>` tokens; use the cloud provider only after checking its current terms and model availability.
+
+The complete versioned schema is available in [openapi.json](openapi.json).

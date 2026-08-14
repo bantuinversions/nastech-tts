@@ -1,10 +1,14 @@
 # Changelog
 
+## 0.3.0 — 2026-08-14
+
+Nastech TTS is now a complete **Fish Audio S2 expressive-speech gateway** rather than an Orpheus CPU prototype. The project compiles English NastechML into provider-native Fish S2 controls for documented emotions and vocal events, exposes agent-first compile and synthesis endpoints, offers an OpenAI-compatible speech alias, and supports both official self-hosted Fish servers and the official Fish cloud API.
+
+This release adds a typed Fish provider adapter, request manifests, optional gateway bearer authentication, distributed-trace forwarding, an OpenAPI contract, a machine-readable agent tool descriptor, Docker and compose deployment templates, CI configuration, release automation, and provider-free tests. Nastech does not bundle Fish weights and preserves the Fish Audio Research License boundary.
+
 ## 0.2.0 — 2026-08-14
 
-Nastech TTS moved from a multi-engine experimentation foundation to a single-model product architecture. The selected ready-made base is the Apache-2.0 `canopylabs/orpheus-3b-0.1-ft` English fine-tune. The local runtime now uses only the corresponding CPU-compatible Orpheus path.
-
-This release adds explicit model provenance, Nastech adapter-training strategy, a consent-aware expressive-speech manifest validator, a LoRA/QLoRA GPU training launcher, a behavior-fidelity suite, release notices, and publication checklists. The direct laugh and cough controls are supported by the selected base model. Named emotions remain correctly reported as approximated until a Nastech adapter is trained and evaluated.
+Nastech TTS moved from a multi-engine experimentation foundation to a single-model Orpheus product architecture. This version is superseded by v0.3.0.
 
 ## 0.1.0 — 2026-08-14
 

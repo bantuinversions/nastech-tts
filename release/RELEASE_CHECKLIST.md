@@ -1,47 +1,35 @@
-# Nastech TTS Release Checklist
+# Nastech TTS v0.3 Release Checklist
 
-This checklist prepares Nastech for publication after the repository, PyPI account, and optional npm scope are supplied.
+## Verified in This Build
 
-## Product Identity
+| Check | Result |
+|---|---|
+| Unit tests | Passing without model weights or a provider credential |
+| Formatting and lint | Passing for active `src/` and `tests/` code |
+| Source distribution and wheel | Built as `nastech_tts-0.3.0.tar.gz` and `nastech_tts-0.3.0-py3-none-any.whl` |
+| Agent OpenAPI schema | Exported to `docs/openapi.json` |
+| Agent tool descriptor | Included at `agent_tools/nastech_tts_tool.json` |
+| Compile-only behavior path | Verified with `examples/fish_s2_agent_story.xml` |
 
-- [ ] Confirm the final public product name after professional trademark and domain review.
-- [ ] Replace placeholder source and documentation URLs in `pyproject.toml`.
-- [ ] Add the final maintainer and support contact.
-- [ ] Create a public `nastech-voice-en-v1` model card when an adapter has been trained.
+## Before Publishing to Git
 
-## Legal and Model Provenance
+Confirm that `git status` contains no generated credentials, voice recordings, reference IDs intended to remain private, model weights, cache directories, or customer audio. Push the tagged source and release files only after reviewing `NOTICE.md` and the Fish Audio Research License terms.
 
-- [ ] Preserve `LICENSE` and `NOTICE.md` in every release archive.
-- [ ] Confirm that the upstream Orpheus model terms have been accepted by the publishing account.
-- [ ] Publish only adapter weights produced from licensed, consented English recordings.
-- [ ] Publish a dataset card listing consent, licensing, retention, and removal procedures.
-- [ ] Do not distribute any upstream model weight unless its license and access terms expressly permit it.
+## Before Publishing to PyPI
 
-## Quality Gates
+Run:
 
-- [ ] Run unit tests and the Nastech behavior suite.
-- [ ] Run local CPU render smoke tests for speech, laughter, cough, and pause.
-- [ ] Run held-out human listening evaluation on clarity, naturalness, speaker stability, laughter, cough, anger, and sadness.
-- [ ] Verify each NastechML behavior has a declared fidelity in its manifest.
-- [ ] Confirm that no unsupported direct-emotion claim remains in documentation or marketing.
+```bash
+make verify
+python -m twine check dist/*
+```
 
-## Python Release
+Publish only the Nastech gateway package; do not distribute Fish model weights or provider tokens. Update the `Documentation` and `Source` URLs in `pyproject.toml` after the user supplies the repository destination.
 
-- [ ] Increment `nastech-tts` version.
-- [ ] Generate source distribution and wheel using `python -m build`.
-- [ ] Inspect distributions with `twine check dist/*`.
-- [ ] Publish first to TestPyPI and install in a clean environment.
-- [ ] Publish to PyPI only after TestPyPI smoke tests pass.
+## Before Publishing an npm Client
 
-## npm Client Release
+Generate or hand-maintain an npm client from `docs/openapi.json`. Keep the npm package as an HTTP client for Nastech; it should not embed a provider token or attempt to ship model weights. Test it against `GET /v1/health`, `POST /v1/agent/compile`, and `POST /v1/agent/speech`.
 
-- [ ] Create a separate `@nastech/tts-client` package that calls Nastech’s documented HTTP API.
-- [ ] Keep model inference out of the npm client; model execution remains server-side or local Python runtime.
-- [ ] Publish to npm only after the Python API contract is versioned and tested.
+## Before Production Deployment
 
-## Repository Publication
-
-- [ ] Initialize the final remote repository.
-- [ ] Add a README banner, contributing guide, security policy, code of conduct, issue templates, and CI workflow.
-- [ ] Exclude model files, datasets, credentials, consent records, generated audio, and cache directories via `.gitignore`.
-- [ ] Add tags for the Python release and Nastech adapter version.
+Set `NASTECH_API_KEY`, use TLS and a reverse proxy, restrict the Fish provider to private networking, configure provider credentials only in a secret manager, and run a short behavior acceptance suite for the exact Fish S2 release and selected reference voices.

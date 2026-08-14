@@ -1,0 +1,28 @@
+services:
+  nastech-gateway:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: nastech-tts:0.3.0
+    env_file:
+      - .env
+    environment:
+      NASTECH_PROVIDER: ${NASTECH_PROVIDER:-fish-local}
+      FISH_BASE_URL: ${FISH_BASE_URL:-http://host.docker.internal:8080}
+      FISH_CLOUD_MODEL: ${FISH_CLOUD_MODEL:-s2.1-pro-free}
+      NASTECH_API_KEY: ${NASTECH_API_KEY:-}
+      FISH_AUDIO_API_KEY: ${FISH_AUDIO_API_KEY:-}
+    ports:
+      - "${NASTECH_PORT:-8765}:8765"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8765/v1/health')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+# Run Fish S2 itself on a separate GPU-capable host according to the official
+# Fish Speech server documentation. The model is not included in this image.

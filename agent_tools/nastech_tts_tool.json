@@ -1,0 +1,52 @@
+{
+  "schema_version": "1.0",
+  "service": "nastech-tts",
+  "model_family": "fish-s2",
+  "tools": [
+    {
+      "name": "nastech_compile_speech",
+      "description": "Compile English NastechML into a validated Fish S2 expressive-speech payload. Use this to inspect real emotion/event controls before synthesis.",
+      "http": {
+        "method": "POST",
+        "path": "/v1/agent/compile"
+      },
+      "input": {
+        "type": "object",
+        "required": ["markup"],
+        "properties": {
+          "markup": {
+            "type": "string",
+            "description": "English NastechML. Example: <speak><emotion name=\"sad\">I miss home.</emotion><sound type=\"sigh\" /></speak>"
+          },
+          "reference_id": {
+            "oneOf": [
+              {"type": "string"},
+              {"type": "array", "items": {"type": "string"}}
+            ],
+            "description": "Optional Fish reference voice ID or speaker ID array."
+          },
+          "output_format": {"type": "string", "enum": ["wav", "mp3", "opus", "pcm"], "default": "wav"},
+          "latency": {"type": "string", "enum": ["low", "balanced", "normal"], "default": "normal"},
+          "temperature": {"type": "number", "minimum": 0, "maximum": 1, "default": 0.7}
+        }
+      }
+    },
+    {
+      "name": "nastech_generate_speech",
+      "description": "Generate English expressive speech from NastechML using the configured Fish S2 local server or Fish Audio cloud provider.",
+      "http": {
+        "method": "POST",
+        "path": "/v1/agent/speech",
+        "response": "audio bytes with X-Nastech-Request-Id and X-Nastech-Provider headers"
+      },
+      "input": {
+        "$ref": "#/tools/0/input"
+      }
+    }
+  ],
+  "controls": {
+    "emotions": ["angry", "sad", "happy", "excited", "fearful", "disgusted", "frustrated", "calm"],
+    "events": ["laugh", "chuckle", "sigh", "gasp", "groan", "cry", "cough", "sniffle", "yawn"],
+    "prosody": ["slow", "normal", "fast"]
+  }
+}

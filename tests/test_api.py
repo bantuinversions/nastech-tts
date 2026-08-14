@@ -1,34 +1,35 @@
-import unittest
+from fastapi.testclient import TestClient
 
-try:
-    from fastapi.testclient import TestClient
-
-    from nastech_tts.api import create_app
-    API_AVAILABLE = True
-except ImportError:
-    API_AVAILABLE = False
+from nastech_tts.api import create_app
+from nastech_tts.fish import NastechGateway
 
 
-@unittest.skipUnless(API_AVAILABLE, "FastAPI API extra is not installed")
-class NastechApiTests(unittest.TestCase):
-    def setUp(self):
-        self.client = TestClient(create_app())
+class CompileOnlyProvider:
+    async def health(self):
+        return {"status": "compile_only", "provider": "none"}
 
-    def test_health_exposes_single_model_runtime(self):
-        response = self.client.get("/v1/health")
-        self.assertEqual(response.status_code, 200)
+
+class NastechApiTests:
+    def test_health_exposes_fish_gateway_runtime(self):
+        client = TestClient(
+            create_app(NastechGateway(provider=CompileOnlyProvider(), provider_mode="compile-only"))
+        )
+        response = client.get("/v1/health")
+
+        assert response.status_code == 200
         payload = response.json()
-        self.assertEqual(payload["product_model_id"], "nastech-voice-en-v1")
-        self.assertEqual(payload["runtime"], "nastech-orpheus")
-        self.assertNotIn("kokoro", str(payload).lower())
+        assert payload["service"] == "nastech-tts"
+        assert payload["version"] == "0.3.0"
+        assert payload["provider_mode"] == "compile-only"
 
-    def test_model_endpoint_preserves_upstream_provenance(self):
-        response = self.client.get("/v1/models/nastech-voice-en-v1")
-        self.assertEqual(response.status_code, 200)
+    def test_capabilities_expose_real_feature_control_contract(self):
+        client = TestClient(
+            create_app(NastechGateway(provider=CompileOnlyProvider(), provider_mode="compile-only"))
+        )
+        response = client.get("/v1/capabilities")
+
+        assert response.status_code == 200
         payload = response.json()
-        self.assertEqual(payload["upstream_model_id"], "canopylabs/orpheus-3b-0.1-ft")
-        self.assertEqual(payload["upstream_license"], "Apache-2.0")
-
-
-if __name__ == "__main__":
-    unittest.main()
+        assert payload["model_family"] == "fish-s2"
+        assert "sad" in payload["emotions"]
+        assert "laugh" in payload["direct_events"]

@@ -16,12 +16,15 @@ class NastechMarkupTests(unittest.TestCase):
         """
         voice, spans = parse_nastechml(markup)
         self.assertEqual(voice, "tara")
-        self.assertEqual([span.kind for span in spans], [
-            SpanKind.SPEECH,
-            SpanKind.SOUND,
-            SpanKind.PAUSE,
-            SpanKind.SPEECH,
-        ])
+        self.assertEqual(
+            [span.kind for span in spans],
+            [
+                SpanKind.SPEECH,
+                SpanKind.SOUND,
+                SpanKind.PAUSE,
+                SpanKind.SPEECH,
+            ],
+        )
         self.assertEqual(spans[0].style.emotion, "angry")
         self.assertEqual(spans[0].style.intensity, 0.8)
         self.assertEqual(spans[1].value, "cough")
@@ -34,7 +37,7 @@ class NastechMarkupTests(unittest.TestCase):
 
     def test_rejects_non_english_characters(self):
         with self.assertRaises(NastechMarkupError):
-            parse_nastechml('<speak>Bonjour, café.</speak>')
+            parse_nastechml("<speak>Bonjour, café.</speak>")
 
 
 if __name__ == "__main__":

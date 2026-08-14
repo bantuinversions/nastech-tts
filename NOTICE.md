@@ -2,19 +2,23 @@
 
 Copyright 2026 Nastech contributors.
 
-Nastech TTS project code is distributed under the Apache License, Version 2.0. The project is built to load, but does not redistribute or claim ownership of, one upstream model family.
+Nastech TTS source code is distributed under the Apache License, Version 2.0. Nastech is an integration and control-plane project: it does **not** redistribute, rename, train, or claim ownership of upstream Fish model weights.
 
 ## Upstream Model and Runtime Attribution
 
 | Item | Source | License / access note | Nastech use |
 |---|---|---|---|
-| Orpheus 3B 0.1 Finetuned | `canopylabs/orpheus-3b-0.1-ft` | Apache-2.0 model card; model page requests agreement to its access conditions before original files are accessed | Sole ready-made base model for `nastech-voice-en-v1`. |
-| Orpheus TTS source | `canopyai/Orpheus-TTS` | Apache-2.0 | Reference implementation and documented fine-tuning workflow. |
-| orpheus-cpp | PyPI package `orpheus-cpp` | Review upstream package terms before redistribution | Optional CPU-compatible local inference runtime. |
-| llama-cpp-python | PyPI package `llama-cpp-python` | MIT license; review upstream notice on distribution | Optional CPU inference dependency. |
+| Fish Audio S2 Pro | `fishaudio/s2-pro` | Fish Audio Research License; review upstream terms before any deployment or commercial use | Selected real-feature expressive-speech provider. |
+| Fish Speech source | `fishaudio/fish-speech` | Fish Audio Research License | Reference local server and self-hosted provider implementation. |
+| Fish Audio cloud API | `https://api.fish.audio` | Provider terms and user API key required | Optional managed provider for the Nastech gateway. |
+| FastAPI / Uvicorn / HTTPX | Python dependencies | Their respective upstream licenses | Gateway API and provider HTTP client. |
 
-Nastech does not bundle upstream model weights in this repository. Users download model files through the selected upstream runtime and remain responsible for accepting applicable terms.
+Nastech does not bundle Fish model weights. Users download and run model files only through upstream-approved mechanisms and remain responsible for accepting all applicable access terms.
 
-## Nastech Adapter Attribution
+## Nastech Integration Attribution
 
-A future `nastech-voice-en-v1` LoRA/QLoRA adapter will be trained on licensed, consented English recordings. Its model card must list the base model, dataset licenses, speaker-consent policy, evaluation protocol, and known behavior limitations.
+NastechML maps structured English speech intent to Fish S2 inline controls. Nastech must preserve original upstream attributions, provider model identifiers, and request fidelity notes when producing manifests. The current implementation distinguishes documented provider-native behavior tags from free-form controls that require release-specific acceptance testing.
+
+## Voice and Training Notice
+
+Any reference voice, custom model, or future fine-tune must use recordings supplied or licensed by the operator with documented speaker consent. Nastech must not be used to impersonate a person without authorization.

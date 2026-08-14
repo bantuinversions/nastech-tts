@@ -1,97 +1,135 @@
-"""Command-line interface for the single-model Nastech TTS product."""
+"""Command-line interface for the Nastech Fish S2 agent gateway."""
 
 from __future__ import annotations
 
 import argparse
+import asyncio
 import json
-from dataclasses import asdict
 from pathlib import Path
 
-from .evaluation import run_behavior_suite
-from .service import NastechRenderError, NastechService
-from .training import DatasetValidationError, validate_manifest
+from .fish import ProviderError, build_gateway_from_env
+from .markup import NastechMarkupError
 
 
 def _parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="nastech-tts", description="Nastech English expressive TTS.")
+    parser = argparse.ArgumentParser(
+        prog="nastech-tts", description="Nastech expressive TTS gateway for Fish S2."
+    )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
-    render = subparsers.add_parser("render", help="Render a NastechML file to a WAV file.")
-    render.add_argument("input", type=Path, help="Path to an input .xml NastechML document.")
-    render.add_argument("--output", type=Path, required=True, help="Destination WAV path.")
+    compile_command = subparsers.add_parser(
+        "compile", help="Compile NastechML into an auditable Fish S2 payload."
+    )
+    compile_command.add_argument("input", type=Path, help="Input NastechML document.")
+    compile_command.add_argument("--output", type=Path, help="Optional JSON output path.")
+    compile_command.add_argument("--reference-id", help="Optional Fish reference voice ID.")
 
-    subparsers.add_parser("status", help="Show selected model and local runtime availability.")
-    subparsers.add_parser("model", help="Show full selected-model provenance and capability metadata.")
+    synthesize = subparsers.add_parser(
+        "synthesize", help="Generate audio through the configured Fish provider."
+    )
+    synthesize.add_argument("input", type=Path, help="Input NastechML document.")
+    synthesize.add_argument("--output", type=Path, required=True, help="Audio destination path.")
+    synthesize.add_argument("--manifest", type=Path, help="Optional manifest destination path.")
+    synthesize.add_argument("--reference-id", help="Optional Fish reference voice ID.")
 
-    validate = subparsers.add_parser("validate-data", help="Validate a licensed Nastech training manifest.")
-    validate.add_argument("manifest", type=Path, help="JSONL manifest to validate.")
+    subparsers.add_parser("status", help="Show Nastech and configured Fish provider health.")
+    subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
 
-    evaluate = subparsers.add_parser("evaluate", help="Run a Nastech behavior-fidelity suite.")
-    evaluate.add_argument("suite", type=Path, help="JSON behavior-suite fixture.")
-
-    serve = subparsers.add_parser("serve", help="Start the local Nastech HTTP API.")
+    serve = subparsers.add_parser("serve", help="Start the Nastech agent API.")
     serve.add_argument("--host", default="127.0.0.1", help="API bind address.")
     serve.add_argument("--port", type=int, default=8765, help="API bind port.")
     return parser
 
 
+def _write_json(path: Path, payload: dict[str, object]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+async def _status() -> int:
+    gateway = build_gateway_from_env()
+    print(
+        json.dumps(
+            {
+                "service": "nastech-tts",
+                "version": "0.3.0",
+                "provider_mode": gateway.provider_mode,
+                "provider": await gateway.health(),
+            },
+            indent=2,
+        )
+    )
+    return 0
+
+
 def main() -> int:
     args = _parser().parse_args()
-    service = NastechService()
 
     if args.command == "status":
-        print(json.dumps(service.engine_status(), indent=2))
-        return 0
-
-    if args.command == "model":
-        print(json.dumps(service.model.to_dict(), indent=2))
-        return 0
-
-    if args.command == "validate-data":
-        try:
-            summary = validate_manifest(args.manifest)
-        except DatasetValidationError as exc:
-            print(f"Nastech data validation failed: {exc}")
-            return 2
-        print(json.dumps(summary.to_dict(), indent=2))
-        return 0
-
-    if args.command == "evaluate":
-        results = run_behavior_suite(args.suite)
-        payload = {
-            "total": len(results),
-            "passed": sum(result.passed for result in results),
-            "failed": sum(not result.passed for result in results),
-            "results": [asdict(result) for result in results],
-        }
-        print(json.dumps(payload, indent=2))
-        return 0 if payload["failed"] == 0 else 2
+        return asyncio.run(_status())
 
     if args.command == "serve":
-        try:
-            import uvicorn
+        import uvicorn
 
-            from .api import create_app
-        except ImportError:
-            print("Nastech API dependencies are missing. Install the project with the [api] extra.")
-            return 2
-        uvicorn.run(create_app(service), host=args.host, port=args.port)
+        uvicorn.run("nastech_tts.api:app", host=args.host, port=args.port, reload=False)
         return 0
 
-    if args.command == "render":
-        try:
-            markup = args.input.read_text(encoding="utf-8")
-            result = service.render(markup, args.output)
-        except (OSError, ValueError, NastechRenderError) as exc:
-            print(f"Nastech TTS error: {exc}")
-            return 2
-        print(f"Audio: {result.audio_path}")
-        print(f"Manifest: {result.manifest_path}")
-        if result.manifest.warnings:
-            print("Warnings:")
-            for warning in result.manifest.warnings:
-                print(f"- {warning}")
+    if args.command == "agent-tools":
+        from .api import AgentCompileRequest, AgentSpeechRequest
+
+        print(
+            json.dumps(
+                {
+                    "tools": [
+                        {
+                            "name": "nastech_compile_speech",
+                            "input_schema": AgentCompileRequest.model_json_schema(),
+                        },
+                        {
+                            "name": "nastech_generate_speech",
+                            "input_schema": AgentSpeechRequest.model_json_schema(),
+                        },
+                    ]
+                },
+                indent=2,
+            )
+        )
         return 0
+
+    try:
+        markup = args.input.read_text(encoding="utf-8")
+        gateway = build_gateway_from_env()
+        if args.command == "compile":
+            compiled = gateway.compile(markup, reference_id=args.reference_id)
+            payload = {
+                "request_id": compiled.request_id,
+                "provider_mode": gateway.provider_mode,
+                "provider_payload": compiled.provider_payload,
+                "manifest": compiled.manifest,
+            }
+            if args.output:
+                _write_json(args.output, payload)
+                print(args.output)
+            else:
+                print(json.dumps(payload, indent=2))
+            return 0
+
+        if args.command == "synthesize":
+            audio, compiled = asyncio.run(
+                gateway.synthesize(markup, reference_id=args.reference_id)
+            )
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_bytes(audio.data)
+            manifest_path = args.manifest or args.output.with_suffix(
+                args.output.suffix + ".manifest.json"
+            )
+            _write_json(manifest_path, compiled.manifest)
+            print(f"Audio: {args.output}")
+            print(f"Manifest: {manifest_path}")
+            return 0
+    except (OSError, ValueError, NastechMarkupError, ProviderError) as exc:
+        print(f"Nastech error: {exc}")
+        return 2
 
     return 1
 

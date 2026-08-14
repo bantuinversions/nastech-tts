@@ -50,9 +50,7 @@ def _validate_english(value: str) -> None:
         )
 
 
-def _append_text(
-    spans: list[AudioSpan], text: str | None, voice: str, style: SpeechStyle
-) -> None:
+def _append_text(spans: list[AudioSpan], text: str | None, voice: str, style: SpeechStyle) -> None:
     if text is None:
         return
     normalized = re.sub(r"\s+", " ", text).strip()
@@ -97,7 +95,9 @@ def _walk(
         try:
             milliseconds = int(element.attrib.get("ms", ""))
         except ValueError as exc:
-            raise NastechMarkupError("<pause ms=...> requires an integer number of milliseconds.") from exc
+            raise NastechMarkupError(
+                "<pause ms=...> requires an integer number of milliseconds."
+            ) from exc
         if not 0 <= milliseconds <= 10_000:
             raise NastechMarkupError("Pause duration must be from 0 to 10000 ms.")
         spans.append(AudioSpan(kind=SpanKind.PAUSE, value=milliseconds, voice=voice, style=style))
