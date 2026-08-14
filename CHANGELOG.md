@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.6.0 — 2026-08-14
+
+Nastech Compact now provides a GitHub-ready maintenance layer. It includes 69 deterministic Python tests across markup validation, compiler fidelity, CPU configuration, runtime cache behavior, authenticated API behavior, and agent tool discovery. The package adds `validate` and `clear-cache` CLI commands plus an authenticated `POST /v1/runtime/cache/clear` operation.
+
+The repository adds expanded GitHub Actions CI and draft-release workflows, Dependabot configuration, YAML bug and feature issue forms, pull-request review guidance, a reusable labels taxonomy, a project summary YAML contract, API/tool catalog updates, a test matrix, and repository automation documentation.
+
 ## 0.5.0 — 2026-08-14
 
 Nastech Compact now includes a production CPU optimization layer for the real local Supertonic ONNX runtime. It exposes validated `balanced`, `latency`, `throughput`, and `auto` CPU profiles; explicit ONNX intra-operation and inter-operation thread overrides; bounded concurrent synthesis; a queue timeout; and a bounded in-memory WAV response cache.

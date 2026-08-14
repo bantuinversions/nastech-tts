@@ -1,48 +1,46 @@
 # Nastech Compact Agent API
 
-Nastech Compact runs a local Supertonic ONNX model on CPU. An agent can compile English NastechML into an auditable local expression plan, then synthesize 44.1 kHz WAV audio without a cloud provider call. The v0.5.0 gateway adds configurable ONNX CPU threads, bounded synthesis concurrency, bounded response caching, local warm-up, and operational diagnostics. [1] [2]
+Nastech Compact v0.6.0 runs a local Supertonic ONNX model on CPU. An agent can validate and compile English NastechML into an auditable local expression plan, then synthesize 44.1 kHz WAV audio without a cloud provider call. The service also exposes bounded CPU scheduling, cached-response management, warm-up, diagnostics, and a stable agent tool catalog. [1] [2]
 
 ## Authentication
 
-When `NASTECH_API_KEY` is set, protect agent and runtime endpoints with:
+Set `NASTECH_API_KEY` to protect all non-health endpoints:
 
 ```text
 Authorization: Bearer <NASTECH_API_KEY>
 ```
 
-`GET /v1/health` remains available for local readiness checks. `GET /v1/capabilities` and all endpoints except health require the bearer token when a token is configured.
+`GET /v1/health` intentionally remains available for local readiness checks. It does not expose the configured key or request contents.
 
-## Endpoints
+## Endpoint Contract
 
-| Method | Path | Purpose |
+| Method | Path | Purpose | Authentication |
+|---|---|---|---|
+| `GET` | `/v1/health` | Readiness, model state, and CPU-policy status | Public |
+| `GET` | `/v1/capabilities` | Expression, format, and operational capability listing | Bearer when configured |
+| `GET` | `/v1/agent/tools` | Machine-readable catalog of the five agent operations | Bearer when configured |
+| `POST` | `/v1/agent/compile` | Compile NastechML without audio generation | Bearer when configured |
+| `POST` | `/v1/agent/speech` | Generate local expressive WAV from NastechML | Bearer when configured |
+| `POST` | `/v1/audio/speech` | OpenAI-compatible plain-text local synthesis alias | Bearer when configured |
+| `GET` | `/v1/runtime/diagnostics` | Effective CPU policy, model/cache state, and metrics | Bearer when configured |
+| `POST` | `/v1/runtime/warmup` | Load ONNX sessions and produce a short local warm-up WAV | Bearer when configured |
+| `POST` | `/v1/runtime/cache/clear` | Clear cached WAV data without unloading local ONNX sessions | Bearer when configured |
+
+## Agent Tool Catalog
+
+`GET /v1/agent/tools` and `agent_tools/nastech_tts_tool.json` expose the same stable operation set.
+
+| Tool | HTTP operation | Result |
 |---|---|---|
-| `GET` | `/v1/health` | Unauthenticated readiness, model-asset, and CPU policy status |
-| `GET` | `/v1/capabilities` | Controls, local-runtime capabilities, and CPU optimization features |
-| `GET` | `/v1/runtime/diagnostics` | Authenticated CPU profile, queue/cache statistics, and runtime metrics |
-| `POST` | `/v1/runtime/warmup` | Authenticated preload plus one short real local synthesis |
-| `GET` | `/v1/agent/tools` | Machine-readable agent tool descriptors |
-| `POST` | `/v1/agent/compile` | Compile NastechML without generating audio |
-| `POST` | `/v1/agent/speech` | Generate local WAV audio from NastechML |
-| `POST` | `/v1/audio/speech` | OpenAI-compatible plain-text local synthesis alias |
+| `nastech_compile_speech` | `POST /v1/agent/compile` | Auditable expression plan and fidelity manifest |
+| `nastech_generate_speech` | `POST /v1/agent/speech` | Local WAV bytes and request headers |
+| `nastech_runtime_diagnostics` | `GET /v1/runtime/diagnostics` | CPU policy, model/cache state, and aggregate metrics |
+| `nastech_warmup_runtime` | `POST /v1/runtime/warmup` | Warm-up duration, generated duration, and diagnostics |
+| `nastech_clear_runtime_cache` | `POST /v1/runtime/cache/clear` | Entries and bytes cleared plus refreshed diagnostics |
 
-## CPU Runtime Controls
+## Compile and Synthesis
 
-The gateway protects local CPU inference with a bounded semaphore. The configured number of active synthesis jobs may run concurrently; excess requests wait for `NASTECH_QUEUE_TIMEOUT_SECONDS` before receiving a `503` response. The runtime keeps a bounded in-memory WAV cache for identical requests, which improves repeated-call latency without storing data on disk.
-
-| Environment variable | Default | Meaning |
-|---|---:|---|
-| `NASTECH_CPU_PROFILE` | `balanced` | `balanced`, `latency`, `throughput`, or `auto` policy |
-| `NASTECH_INTRA_OP_THREADS` | Profile value | Explicit ONNX intra-operation worker count |
-| `NASTECH_INTER_OP_THREADS` | Profile value | Explicit ONNX inter-operation worker count |
-| `NASTECH_MAX_PARALLEL_SYNTHESIS` | Profile value | Active local syntheses permitted before queueing |
-| `NASTECH_QUEUE_TIMEOUT_SECONDS` | `120` | Queue timeout in seconds |
-| `NASTECH_AUDIO_CACHE_ENTRIES` | `8` | Maximum response-cache entries |
-| `NASTECH_AUDIO_CACHE_MIB` | `32` | Maximum response-cache size in MiB |
-| `NASTECH_WARMUP_ON_START` | `0` | Preload and synthesize at server startup when truthy |
-
-`GET /v1/runtime/diagnostics` exposes the effective values, model-cache size, response-cache size, request/failure counts, queue wait time, and mean synthesis time. It does not reveal secrets or user input.
-
-## Compile Endpoint
+Compile before synthesis when an agent needs to inspect the requested behavior:
 
 ```json
 {
@@ -51,28 +49,15 @@ The gateway protects local CPU inference with a bounded semaphore. The configure
 }
 ```
 
-The compact compiler returns an auditable plan similar to:
+The compiler produces a local prompt similar to:
 
 ```text
 <sad> The lantern went dark. <sigh> <laugh>
 ```
 
-Every requested control is tagged as `direct`, `approximated`, or `unavailable` in the manifest. `<laugh>` and `<sigh>` are documented Supertonic controls. Other preserved tags, including `<sad>`, `<angry>`, `<cough>`, and `<yawn>`, require model-release acceptance testing before deterministic claims are made. [1] [2]
+Every requested control is marked as `direct`, `approximated`, or `unavailable` in the manifest. `<laugh>` and `<sigh>` are documented Supertonic controls. Other preserved tags, including `<sad>`, `<angry>`, `<cough>`, and `<yawn>`, must pass pinned-model acceptance tests before deterministic product claims are made. [1] [2]
 
-## Synthesis Endpoint
-
-Send the same payload to `POST /v1/agent/speech`. The API returns `audio/wav` bytes at 44.1 kHz. Successful responses include:
-
-| Header | Meaning |
-|---|---|
-| `X-Nastech-Request-Id` | Request identifier shared with the compilation manifest |
-| `X-Nastech-Runtime` | `supertonic-local-onnx-cpu` |
-| `X-Nastech-Duration-Seconds` | Generated audio duration |
-| `X-Nastech-Manifest-Endpoint` | Compilation endpoint for the matching audit manifest |
-
-## Warm-up Endpoint
-
-Call `POST /v1/runtime/warmup` after deployment when startup warm-up was not enabled. It loads the local ONNX sessions and the default voice vector, then creates a short local WAV to stabilize the first production request. The response includes elapsed warm-up time and the resulting runtime diagnostics.
+Send the same request to `POST /v1/agent/speech` to receive `audio/wav` output. Successful responses include `X-Nastech-Request-Id`, `X-Nastech-Runtime: supertonic-local-onnx-cpu`, `X-Nastech-Duration-Seconds`, and the manifest endpoint.
 
 ## OpenAI-Compatible Alias
 
@@ -86,7 +71,15 @@ Call `POST /v1/runtime/warmup` after deployment when startup warm-up was not ena
 }
 ```
 
-Use `/v1/agent/speech` rather than this alias whenever the agent needs structured emotional or non-speech controls. The full versioned schema is available in [openapi.json](openapi.json).
+Use the structured agent endpoint for NastechML emotional or non-speech controls. The alias is designed for plain-text clients already using a familiar speech-request shape.
+
+## Runtime Operations
+
+The runtime uses a bounded synthesis queue and a bounded in-memory WAV cache. `GET /v1/runtime/diagnostics` reports the selected CPU policy, ONNX thread values, model assets, cache usage, queue timing, failure count, and mean synthesis time. `POST /v1/runtime/cache/clear` is useful when a long-lived process needs to free retained response bytes without paying model reload cost.
+
+Enable deterministic warm-up at process startup with `NASTECH_WARMUP_ON_START=1`, or call the warm-up endpoint after deployment. See [cpu_optimization.md](cpu_optimization.md) for measured profile evidence and [DEPLOYMENT.md](../deploy/DEPLOYMENT.md) for operational configuration.
+
+The versioned OpenAPI schema is [openapi.json](openapi.json).
 
 ## References
 

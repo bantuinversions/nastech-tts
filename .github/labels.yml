@@ -1,0 +1,39 @@
+- name: bug
+  color: "d73a4a"
+  description: "A reproducible defect in runtime behavior, tooling, packaging, or documentation."
+
+- name: enhancement
+  color: "a2eeef"
+  description: "A proposed user-visible capability or workflow improvement."
+
+- name: triage
+  color: "fbca04"
+  description: "Requires maintainer review before prioritization or implementation."
+
+- name: dependencies
+  color: "0366d6"
+  description: "Dependency, package, or GitHub Actions maintenance change."
+
+- name: python
+  color: "3572A5"
+  description: "Python runtime, packaging, test, or lint change."
+
+- name: github-actions
+  color: "2088FF"
+  description: "Continuous integration, release, or workflow automation change."
+
+- name: api
+  color: "5319e7"
+  description: "REST API, OpenAPI, or agent tool-contract change."
+
+- name: cpu-performance
+  color: "0e8a16"
+  description: "CPU policy, queue, cache, warm-up, or benchmark change."
+
+- name: documentation
+  color: "0075ca"
+  description: "README, API guide, deployment guide, template, or summary change."
+
+- name: needs-reproduction
+  color: "e99695"
+  description: "A bug report needs safe reproduction steps or diagnostics."

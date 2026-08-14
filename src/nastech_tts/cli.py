@@ -14,7 +14,7 @@ from .cpu import CpuConfigurationError
 from .markup import NastechMarkupError
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
-VERSION = "0.5.0"
+VERSION = "0.6.0"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -29,6 +29,12 @@ def _parser() -> argparse.ArgumentParser:
     compile_command.add_argument("input", type=Path, help="Input NastechML document.")
     compile_command.add_argument("--output", type=Path, help="Optional JSON output path.")
 
+    validate = subparsers.add_parser(
+        "validate", help="Validate English NastechML without loading or synthesizing the model."
+    )
+    validate.add_argument("input", type=Path, help="Input NastechML document.")
+    validate.add_argument("--output", type=Path, help="Optional JSON validation report path.")
+
     synthesize = subparsers.add_parser(
         "synthesize", help="Generate local WAV audio with Supertonic ONNX."
     )
@@ -39,6 +45,9 @@ def _parser() -> argparse.ArgumentParser:
     subparsers.add_parser("status", help="Show model, CPU policy, cache, and runtime status.")
     subparsers.add_parser(
         "warmup", help="Load ONNX sessions and generate a short local audio warm-up."
+    )
+    subparsers.add_parser(
+        "clear-cache", help="Discard local WAV cache entries without unloading ONNX."
     )
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
 
@@ -66,6 +75,18 @@ def _parser() -> argparse.ArgumentParser:
 def _write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def _compiled_payload(compiled: Any) -> dict[str, Any]:
+    return {
+        "request_id": compiled.request_id,
+        "runtime": "supertonic-local-onnx-cpu",
+        "text": compiled.text,
+        "voice": compiled.voice,
+        "steps": compiled.steps,
+        "speed": compiled.speed,
+        "manifest": compiled.manifest,
+    }
 
 
 def _benchmark(
@@ -137,24 +158,16 @@ def main() -> int:
             print(json.dumps(runtime.warmup(), indent=2))
             return 0
 
+        if args.command == "clear-cache":
+            print(json.dumps({"status": "cleared", **runtime.clear_audio_cache()}, indent=2))
+            return 0
+
         if args.command == "agent-tools":
-            from .api import AgentCompileRequest, AgentSpeechRequest
+            from .api import agent_tool_descriptors
 
             print(
                 json.dumps(
-                    {
-                        "tools": [
-                            {
-                                "name": "nastech_compile_speech",
-                                "input_schema": AgentCompileRequest.model_json_schema(),
-                            },
-                            {
-                                "name": "nastech_generate_speech",
-                                "input_schema": AgentSpeechRequest.model_json_schema(),
-                            },
-                        ]
-                    },
-                    indent=2,
+                    {"tools": [item.model_dump() for item in agent_tool_descriptors()]}, indent=2
                 )
             )
             return 0
@@ -176,16 +189,22 @@ def main() -> int:
             return 0
 
         compiled = compile_nastechml(markup, runtime.settings)
-        if args.command == "compile":
+        if args.command == "validate":
             payload = {
-                "request_id": compiled.request_id,
-                "runtime": "supertonic-local-onnx-cpu",
-                "text": compiled.text,
-                "voice": compiled.voice,
-                "steps": compiled.steps,
-                "speed": compiled.speed,
-                "manifest": compiled.manifest,
+                "valid": True,
+                "language": "en",
+                "span_count": len(compiled.manifest["decisions"]),
+                **_compiled_payload(compiled),
             }
+            if args.output:
+                _write_json(args.output, payload)
+                print(args.output)
+            else:
+                print(json.dumps(payload, indent=2))
+            return 0
+
+        if args.command == "compile":
+            payload = _compiled_payload(compiled)
             if args.output:
                 _write_json(args.output, payload)
                 print(args.output)

@@ -25,10 +25,10 @@ The upstream model’s execution stage is sequential because its ONNX modules ha
 | CPU | Intel Xeon, 6 logical CPUs |
 | Available RAM | 23 GiB |
 | Model assets | 384.83 MiB |
-| Python runtime and dependencies | 260.68 MiB |
-| Release assets | 2.00 MiB |
-| Full measured deployment | **647.51 MiB** |
-| Headroom below 1 GiB | **376.49 MiB** |
+| Python runtime and quality-tool dependencies | 289.15 MiB |
+| Release assets | 2.16 MiB |
+| Full measured deployment | **676.14 MiB** |
+| Headroom below 1 GiB | **347.86 MiB** |
 
 ## Benchmark Evidence
 

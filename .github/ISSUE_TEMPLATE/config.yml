@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security disclosure guidance
+    url: https://github.com/bantuinversions/nastech-tts/security/policy
+    about: Please follow the security policy and do not disclose vulnerabilities, credentials, or private audio in public issues.
+  - name: Project documentation
+    url: https://github.com/bantuinversions/nastech-tts/tree/main/docs
+    about: Review API, deployment, CPU, and quality documentation before opening an issue.

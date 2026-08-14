@@ -3,7 +3,7 @@
   "info": {
     "title": "Nastech Compact TTS",
     "description": "A local, CPU-tuned, agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. Use /v1/agent/compile for an auditable behavior plan before synthesis.",
-    "version": "0.5.0"
+    "version": "0.6.0"
   },
   "paths": {
     "/v1/health": {
@@ -150,6 +150,54 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runtime/cache/clear": {
+      "post": {
+        "summary": "Clear Runtime Cache",
+        "operationId": "clear_runtime_cache_v1_runtime_cache_clear_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Clear Runtime Cache V1 Runtime Cache Clear Post"
+                }
               }
             }
           },
@@ -473,6 +521,14 @@
             "type": "string",
             "title": "Description"
           },
+          "method": {
+            "type": "string",
+            "title": "Method"
+          },
+          "path": {
+            "type": "string",
+            "title": "Path"
+          },
           "input_schema": {
             "additionalProperties": true,
             "type": "object",
@@ -483,9 +539,12 @@
         "required": [
           "name",
           "description",
+          "method",
+          "path",
           "input_schema"
         ],
-        "title": "AgentToolDescriptor"
+        "title": "AgentToolDescriptor",
+        "description": "Machine-readable description of an agent-callable local API operation."
       },
       "HTTPValidationError": {
         "properties": {

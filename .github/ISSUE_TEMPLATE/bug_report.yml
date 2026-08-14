@@ -1,0 +1,83 @@
+name: Bug report
+description: Report a reproducible problem with local synthesis, the API, CPU tooling, or packaging.
+title: "[Bug]: "
+labels: [bug, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for helping improve Nastech Compact. Do not include API keys, bearer tokens, private audio, or customer text in this report.
+
+  - type: input
+    id: version
+    attributes:
+      label: Nastech version
+      description: Provide `nastech-tts status` output or the package version.
+      placeholder: "0.6.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - NastechML validation or compilation
+        - Local synthesis
+        - Agent API
+        - CPU profile or benchmark
+        - Response cache or warm-up
+        - Packaging or installation
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction steps
+      description: Include the smallest safe command, NastechML fragment, or API request needed to reproduce the issue.
+      placeholder: |
+        1. Set NASTECH_CPU_PROFILE=balanced
+        2. Run ...
+        3. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior and safe logs
+      description: Redact tokens, personal text, audio links, and local paths before submitting.
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include OS, Python version, CPU profile, `nastech-tts status` summary, and deployment method.
+      placeholder: |
+        OS: Ubuntu 24.04
+        Python: 3.12
+        CPU profile: balanced
+        Deployment: local venv
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed API keys, bearer tokens, and private user audio/text.
+          required: true
+        - label: I searched existing issues before filing this report.
+          required: true

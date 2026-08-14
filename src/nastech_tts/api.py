@@ -42,9 +42,55 @@ class OpenAISpeechRequest(BaseModel):
 
 
 class AgentToolDescriptor(BaseModel):
+    """Machine-readable description of an agent-callable local API operation."""
+
     name: str
     description: str
+    method: str
+    path: str
     input_schema: dict[str, Any]
+
+
+def agent_tool_descriptors() -> list[AgentToolDescriptor]:
+    """Return the stable catalog of agent-callable local operations."""
+    empty_input = {"type": "object", "properties": {}, "additionalProperties": False}
+    return [
+        AgentToolDescriptor(
+            name="nastech_compile_speech",
+            description="Compile English NastechML into a local Supertonic expression plan.",
+            method="POST",
+            path="/v1/agent/compile",
+            input_schema=AgentCompileRequest.model_json_schema(),
+        ),
+        AgentToolDescriptor(
+            name="nastech_generate_speech",
+            description="Generate local English expressive WAV audio with Supertonic ONNX.",
+            method="POST",
+            path="/v1/agent/speech",
+            input_schema=AgentSpeechRequest.model_json_schema(),
+        ),
+        AgentToolDescriptor(
+            name="nastech_runtime_diagnostics",
+            description="Read the local CPU policy, model state, cache state, and runtime metrics.",
+            method="GET",
+            path="/v1/runtime/diagnostics",
+            input_schema=empty_input,
+        ),
+        AgentToolDescriptor(
+            name="nastech_warmup_runtime",
+            description="Load the local ONNX runtime and perform a short local warm-up synthesis.",
+            method="POST",
+            path="/v1/runtime/warmup",
+            input_schema=empty_input,
+        ),
+        AgentToolDescriptor(
+            name="nastech_clear_runtime_cache",
+            description="Discard cached WAV responses without unloading local ONNX sessions.",
+            method="POST",
+            path="/v1/runtime/cache/clear",
+            input_schema=empty_input,
+        ),
+    ]
 
 
 def _authorization_required() -> bool:
@@ -97,7 +143,7 @@ def _compiled(payload: AgentCompileRequest, runtime: SupertonicRuntime):
 
 def _error_response(exc: Exception) -> JSONResponse:
     if isinstance(exc, NastechMarkupError):
-        code = status.HTTP_422_UNPROCESSABLE_ENTITY
+        code = status.HTTP_422_UNPROCESSABLE_CONTENT
     elif isinstance(exc, CompactRuntimeError):
         code = status.HTTP_503_SERVICE_UNAVAILABLE
     else:
@@ -133,7 +179,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
 
     app = FastAPI(
         title="Nastech Compact TTS",
-        version="0.5.0",
+        version="0.6.0",
         description=(
             "A local, CPU-tuned, agent-ready expressive TTS API backed by Supertonic 3 ONNX "
             "assets. Use /v1/agent/compile for an auditable behavior plan before synthesis."
@@ -147,7 +193,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         return {
             "status": "ok",
             "service": "nastech-tts",
-            "version": "0.5.0",
+            "version": "0.6.0",
             "runtime": local_runtime.status(),
             "authentication_required": _authorization_required(),
         }
@@ -163,7 +209,11 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
                 "/v1/agent/speech",
                 "/v1/audio/speech",
             ],
-            "runtime_endpoints": ["/v1/runtime/diagnostics", "/v1/runtime/warmup"],
+            "runtime_endpoints": [
+                "/v1/runtime/diagnostics",
+                "/v1/runtime/warmup",
+                "/v1/runtime/cache/clear",
+            ],
             "cpu_optimizations": [
                 "ORT_ENABLE_ALL graph optimization",
                 "configurable ONNX thread pools",
@@ -195,20 +245,17 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         except CompactRuntimeError as exc:
             return _error_response(exc)
 
+    @app.post("/v1/runtime/cache/clear")
+    async def clear_runtime_cache(
+        _: None = Depends(require_agent_key),
+        local_runtime: SupertonicRuntime = Depends(_runtime),
+    ) -> dict[str, Any]:
+        cleared = await run_in_threadpool(local_runtime.clear_audio_cache)
+        return {"status": "cleared", **cleared, "runtime": local_runtime.status()}
+
     @app.get("/v1/agent/tools", response_model=list[AgentToolDescriptor])
     async def agent_tools(_: None = Depends(require_agent_key)) -> list[AgentToolDescriptor]:
-        return [
-            AgentToolDescriptor(
-                name="nastech_compile_speech",
-                description="Compile English NastechML into a local Supertonic expression plan.",
-                input_schema=AgentCompileRequest.model_json_schema(),
-            ),
-            AgentToolDescriptor(
-                name="nastech_generate_speech",
-                description="Generate local English expressive WAV audio with Supertonic ONNX.",
-                input_schema=AgentSpeechRequest.model_json_schema(),
-            ),
-        ]
+        return agent_tool_descriptors()
 
     @app.post("/v1/agent/compile", response_model=None)
     async def compile_speech(

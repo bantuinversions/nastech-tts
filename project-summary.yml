@@ -1,0 +1,51 @@
+schema_version: "1.0"
+project:
+  name: "Nastech Compact TTS"
+  package: "nastech-tts"
+  version: "0.6.0"
+  repository: "https://github.com/bantuinversions/nastech-tts"
+  license: "Apache-2.0"
+  language_scope: "English only"
+runtime:
+  model_family: "Supertonic 3"
+  inference: "local ONNX on CPU"
+  gpu_required: false
+  cloud_synthesis_required: false
+  output:
+    format: "WAV"
+    sample_rate_hz: 44100
+  cpu_profiles:
+    - balanced
+    - latency
+    - throughput
+    - auto
+  operational_endpoints:
+    - "/v1/health"
+    - "/v1/capabilities"
+    - "/v1/runtime/diagnostics"
+    - "/v1/runtime/warmup"
+    - "/v1/runtime/cache/clear"
+quality:
+  test_target: 72
+  commands:
+    lint: "make lint"
+    tests: "pytest -q"
+    package: "make build"
+    full_verification: "make verify"
+  automation:
+    - ".github/workflows/ci.yml"
+    - ".github/workflows/release.yml"
+    - ".github/dependabot.yml"
+deployment_budget:
+  maximum_mib: 1024
+  latest_verified_mib: 676.14
+  remaining_mib: 347.86
+agent_contract:
+  descriptor: "agent_tools/nastech_tts_tool.json"
+  openapi: "docs/openapi.json"
+  tools:
+    - nastech_compile_speech
+    - nastech_generate_speech
+    - nastech_runtime_diagnostics
+    - nastech_warmup_runtime
+    - nastech_clear_runtime_cache

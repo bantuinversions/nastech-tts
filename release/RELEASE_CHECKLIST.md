@@ -1,24 +1,24 @@
-# Nastech Compact v0.5 Release Checklist
+# Nastech Compact v0.6 Release Checklist
 
-## Verified in This Build
+## Required Verification
 
-| Check | Result |
-|---|---|
-| Unit tests | 13 passing without any cloud provider credential |
-| Lint and formatting | Passing for active code, tests, and release scripts |
-| Real local synthesis | Verified with Supertonic ONNX on CPU |
-| Live local agent API | Verified with `POST /v1/agent/speech` returning real WAV bytes |
-| CPU diagnostics and warm-up | Verified through `/v1/runtime/diagnostics` and `/v1/runtime/warmup` |
-| Balanced CPU benchmark | 12.04-second expressive story synthesized in 2.16 seconds mean, 0.180 real-time factor |
-| Throughput benchmark | Four real requests at two scheduled clients completed at 0.758 requests/second |
-| Source distribution and wheel | Build as `nastech_tts-0.5.0.tar.gz` and `nastech_tts-0.5.0-py3-none-any.whl` |
-| OpenAPI schema | Exported to `docs/openapi.json` |
-| Agent tool descriptor | Included at `agent_tools/nastech_tts_tool.json` |
-| Deployment budget | Verified below 1 GiB by `scripts/check_compact_budget.py` |
+| Check | Command or evidence | Expected result |
+|---|---|---|
+| Formatting and static analysis | `make lint` | No formatting or Ruff failures |
+| Deterministic Python quality suite | `pytest -q` | **72 tests passing** without model download, GPU, cloud TTS credentials, or network service |
+| JSON and YAML contracts | `make contract` | Agent catalog, OpenAPI paths, project summary, workflow, issue-form, labels, and Dependabot contracts validate |
+| Source and wheel build | `make build` | `nastech_tts-0.6.0.tar.gz` and `nastech_tts-0.6.0-py3-none-any.whl` build successfully |
+| Distribution metadata | `python -m twine check dist/*` | Package long description and metadata validate |
+| OpenAPI contract | `make openapi && git diff --exit-code -- docs/openapi.json` | Intentional API changes are represented in the checked-in schema |
+| Deployment budget | `make budget` | Full bundle remains at or below 1 GiB |
+| Real local synthesis | `nastech-tts synthesize examples/compact_agent_story.xml --output output/release_story.wav` | Local CPU returns a valid 44.1 kHz WAV and manifest |
+| Live local agent API | `POST /v1/agent/speech`, diagnostics, warm-up, and cache-clear smoke tests | Local endpoint returns expected status and WAV response |
 
-## Before Publishing to Git
+## Before Publishing to GitHub
 
-Confirm that `git status` contains no generated credentials, model caches, voice-style JSON files that should remain private, recordings, or generated customer audio. Preserve `LICENSE`, `NOTICE.md`, and the Supertonic model-license boundary. Keep the source tag and release archive aligned with the wheel, source distribution, OpenAPI schema, benchmark JSON files, and checksum manifest.
+Confirm that `git status` contains no generated credentials, bearer tokens, private audio, model caches, voice-style JSON files not intended for distribution, or customer text. Preserve `LICENSE`, `NOTICE.md`, and the Supertonic model-license boundary. Commit the generated OpenAPI schema, project summary YAML, agent tool catalog, and any intentionally updated benchmark or budget evidence.
+
+Review the GitHub Actions workflows and make sure the repository’s Actions permissions allow the release workflow to create only a **draft** release. The draft must be reviewed for checksums, license notice, changelog, release notes, and artifact contents before publication.
 
 ## Before Publishing to PyPI
 
@@ -29,14 +29,12 @@ make verify
 python -m twine check dist/*
 ```
 
-Publish the Nastech control package only. Do not distribute Supertonic model weights unless the upstream OpenRAIL-M terms and every host’s distribution requirements permit that deployment method. Update the placeholder package URLs after the user provides the Git destination.
+Publish the Nastech control package only. Do not distribute Supertonic model weights unless the upstream OpenRAIL-M terms and every host’s distribution requirements permit that method. Use a dedicated PyPI token configured outside source control; never place it in issues, pull requests, the project summary, or workflow files.
 
 ## Before Publishing an npm Client
 
-Generate or maintain an HTTP client from `docs/openapi.json`. The npm package should call the local Nastech API; it should not embed Python, model weights, or device-specific cache paths. Surface the agent speech, OpenAI-compatible speech, runtime diagnostics, and warm-up endpoints.
+Generate or maintain an HTTP client from `docs/openapi.json`. The npm package should call the local Nastech API and should not embed Python, model weights, local cache paths, or user audio. Surface the five agent operations: compile, synthesis, diagnostics, warm-up, and cache clear.
 
 ## Before Production Deployment
 
-Run the 1 GiB budget checker on the actual target image or runtime. Set `NASTECH_API_KEY`, use TLS and a reverse proxy for Internet-facing access, and perform a short listening acceptance test for every non-direct tag that product material intends to advertise.
-
-Set `NASTECH_CPU_PROFILE` deliberately, then run the cache-bypassing benchmark against the real target machine. Confirm `GET /v1/runtime/diagnostics` reports expected thread limits, bounded concurrency, cache limits, successful warm-up, and no synthesis failures before accepting production traffic.
+Set `NASTECH_API_KEY` outside source control. Use TLS and a reverse proxy for Internet-facing use. Choose a CPU profile deliberately, run the cache-bypassing benchmark against the target machine, and inspect `GET /v1/runtime/diagnostics` after warm-up. Perform a listening acceptance test for every release-dependent tag that product material intends to advertise.

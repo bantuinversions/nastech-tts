@@ -1,10 +1,15 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "service": "nastech-tts",
-  "version": "0.4.0",
+  "version": "0.6.0",
   "model_family": "supertonic-3",
   "inference": "local-onnx-cpu",
   "max_deployment_mib": 1024,
+  "authentication": {
+    "environment_variable": "NASTECH_API_KEY",
+    "scheme": "Bearer",
+    "health_endpoint_is_public": true
+  },
   "tools": [
     {
       "name": "nastech_compile_speech",
@@ -36,7 +41,7 @@
     },
     {
       "name": "nastech_generate_speech",
-      "description": "Generate local English expressive WAV audio with the bundled Supertonic ONNX model. No cloud provider call is made.",
+      "description": "Generate local English expressive WAV audio with Supertonic ONNX. No cloud provider call is made.",
       "http": {
         "method": "POST",
         "path": "/v1/agent/speech",
@@ -44,6 +49,45 @@
       },
       "input": {
         "$ref": "#/tools/0/input"
+      }
+    },
+    {
+      "name": "nastech_runtime_diagnostics",
+      "description": "Read the active CPU policy, model load state, cache state, and synthesis metrics.",
+      "http": {
+        "method": "GET",
+        "path": "/v1/runtime/diagnostics"
+      },
+      "input": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "nastech_warmup_runtime",
+      "description": "Load the local ONNX runtime and generate a short local warm-up synthesis before production traffic.",
+      "http": {
+        "method": "POST",
+        "path": "/v1/runtime/warmup"
+      },
+      "input": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
+      }
+    },
+    {
+      "name": "nastech_clear_runtime_cache",
+      "description": "Discard cached local WAV responses without unloading the ONNX model sessions.",
+      "http": {
+        "method": "POST",
+        "path": "/v1/runtime/cache/clear"
+      },
+      "input": {
+        "type": "object",
+        "properties": {},
+        "additionalProperties": false
       }
     }
   ],

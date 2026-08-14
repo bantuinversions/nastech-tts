@@ -1,17 +1,17 @@
 {
   "limit_mib": 1024.0,
   "parts_bytes": {
-    "python_runtime": 273346390,
+    "python_runtime": 303197568,
     "model_assets": 403520887,
-    "release_assets": 2097593
+    "release_assets": 2263613
   },
   "parts_mib": {
-    "python_runtime": 260.68,
+    "python_runtime": 289.15,
     "model_assets": 384.83,
-    "release_assets": 2.0
+    "release_assets": 2.16
   },
-  "total_bytes": 678964870,
-  "total_mib": 647.51,
-  "remaining_mib": 376.49,
+  "total_bytes": 708982068,
+  "total_mib": 676.14,
+  "remaining_mib": 347.86,
   "passes": true
 }

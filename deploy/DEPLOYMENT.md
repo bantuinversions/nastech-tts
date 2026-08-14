@@ -4,7 +4,7 @@ Nastech Compact is a **single local service**. It contains the Nastech agent API
 
 ## Size Contract
 
-The target maximum full deployment budget is **1 GiB**. The verified release measurement is **647.51 MiB**, consisting of 384.83 MiB of real Supertonic assets, 260.68 MiB of runtime dependencies, and 2.00 MiB of Nastech release assets. This leaves 376.49 MiB of headroom. Run the budget check after every dependency or model update.
+The target maximum full deployment budget is **1 GiB**. The verified release measurement is **676.14 MiB**, consisting of 384.83 MiB of real Supertonic assets, 289.15 MiB of runtime and quality-tool dependencies, and 2.16 MiB of Nastech release assets. This leaves 347.86 MiB of headroom. Run the budget check after every dependency or model update.
 
 ```bash
 python scripts/check_compact_budget.py \

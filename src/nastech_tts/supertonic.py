@@ -322,11 +322,14 @@ class SupertonicRuntime:
             },
         }
 
-    def clear_audio_cache(self) -> None:
+    def clear_audio_cache(self) -> dict[str, int]:
         """Discard cached WAV responses without unloading the local ONNX sessions."""
         with self._state_lock:
+            entries = len(self._audio_cache)
+            bytes_cleared = self._cache_bytes
             self._audio_cache.clear()
             self._cache_bytes = 0
+        return {"entries_cleared": entries, "bytes_cleared": bytes_cleared}
 
     def warmup(self) -> dict[str, Any]:
         """Load ONNX sessions, voice vectors, and run one short local synthesis."""

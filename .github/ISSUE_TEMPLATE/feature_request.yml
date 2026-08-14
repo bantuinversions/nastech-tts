@@ -1,0 +1,64 @@
+name: Feature request
+description: Propose an improvement to the local English TTS runtime, agent API, tooling, or documentation.
+title: "[Feature]: "
+labels: [enhancement, triage]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Nastech Compact is CPU-only, English-only, local-first, and limited to a 1 GiB deployment budget. Please describe the outcome rather than requesting hidden provider dependencies or unverified model claims.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem to solve
+      description: What workflow or user outcome is currently difficult?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: Describe the CLI, API, NastechML, documentation, or operational change you would like.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Primary interface
+      options:
+        - NastechML
+        - Python package
+        - Command-line interface
+        - Agent REST API
+        - CPU operations or diagnostics
+        - GitHub automation or templates
+        - Documentation
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Testable acceptance criteria
+      description: List observable criteria that can become automated tests or verification steps.
+      placeholder: |
+        - `nastech-tts ...` returns ...
+        - The API returns ...
+        - The deployment remains under 1 GiB
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints acknowledged
+      options:
+        - label: The proposal should preserve local CPU inference and avoid a cloud synthesis dependency.
+          required: true
+        - label: The proposal should remain within the 1 GiB full deployment target or explain a measured exception.
+          required: true
+        - label: The proposal should include meaningful automated-test coverage.
+          required: true
