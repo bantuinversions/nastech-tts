@@ -1,9 +1,9 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Nastech TTS Agent Gateway",
-    "description": "A structured expressive-speech gateway that compiles NastechML to Fish S2 controls. Use /v1/agent/compile before synthesis when an agent needs auditable provider intent.",
-    "version": "0.3.0"
+    "title": "Nastech Compact TTS",
+    "description": "A local agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. Use /v1/agent/compile for an auditable behavior plan before synthesis.",
+    "version": "0.4.0"
   },
   "paths": {
     "/v1/health": {
@@ -130,22 +130,6 @@
         "operationId": "compile_speech_v1_agent_compile_post",
         "parameters": [
           {
-            "name": "traceparent",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Traceparent"
-            }
-          },
-          {
             "name": "authorization",
             "in": "header",
             "required": false,
@@ -204,22 +188,6 @@
         "operationId": "synthesize_speech_v1_agent_speech_post",
         "parameters": [
           {
-            "name": "traceparent",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Traceparent"
-            }
-          },
-          {
             "name": "authorization",
             "in": "header",
             "required": false,
@@ -273,22 +241,6 @@
         "summary": "Openai Compatible Speech",
         "operationId": "openai_compatible_speech_v1_audio_speech_post",
         "parameters": [
-          {
-            "name": "traceparent",
-            "in": "header",
-            "required": false,
-            "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
-              ],
-              "title": "Traceparent"
-            }
-          },
           {
             "name": "authorization",
             "in": "header",
@@ -349,55 +301,30 @@
             "minLength": 1,
             "title": "Markup"
           },
-          "reference_id": {
+          "voice": {
             "anyOf": [
               {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Reference Id"
+            "title": "Voice"
           },
-          "output_format": {
-            "type": "string",
-            "pattern": "^(wav|mp3|opus|pcm)$",
-            "title": "Output Format",
-            "default": "wav"
-          },
-          "sample_rate": {
+          "steps": {
             "anyOf": [
               {
                 "type": "integer",
-                "maximum": 48000.0,
-                "minimum": 8000.0
+                "maximum": 12.0,
+                "minimum": 5.0
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Sample Rate",
-            "default": 44100
-          },
-          "latency": {
-            "type": "string",
-            "pattern": "^(low|balanced|normal)$",
-            "title": "Latency",
-            "default": "normal"
-          },
-          "temperature": {
-            "type": "number",
-            "maximum": 1.0,
-            "minimum": 0.0,
-            "title": "Temperature",
-            "default": 0.7
+            "title": "Steps"
           }
         },
         "type": "object",
@@ -405,7 +332,7 @@
           "markup"
         ],
         "title": "AgentCompileRequest",
-        "description": "A structured agent request expressed in stable NastechML."
+        "description": "A structured NastechML request with local-runtime controls."
       },
       "AgentSpeechRequest": {
         "properties": {
@@ -415,55 +342,30 @@
             "minLength": 1,
             "title": "Markup"
           },
-          "reference_id": {
+          "voice": {
             "anyOf": [
               {
-                "type": "string"
-              },
-              {
-                "items": {
-                  "type": "string"
-                },
-                "type": "array"
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Reference Id"
+            "title": "Voice"
           },
-          "output_format": {
-            "type": "string",
-            "pattern": "^(wav|mp3|opus|pcm)$",
-            "title": "Output Format",
-            "default": "wav"
-          },
-          "sample_rate": {
+          "steps": {
             "anyOf": [
               {
                 "type": "integer",
-                "maximum": 48000.0,
-                "minimum": 8000.0
+                "maximum": 12.0,
+                "minimum": 5.0
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Sample Rate",
-            "default": 44100
-          },
-          "latency": {
-            "type": "string",
-            "pattern": "^(low|balanced|normal)$",
-            "title": "Latency",
-            "default": "normal"
-          },
-          "temperature": {
-            "type": "number",
-            "maximum": 1.0,
-            "minimum": 0.0,
-            "title": "Temperature",
-            "default": 0.7
+            "title": "Steps"
           }
         },
         "type": "object",
@@ -471,7 +373,7 @@
           "markup"
         ],
         "title": "AgentSpeechRequest",
-        "description": "NastechML request that produces a provider audio response."
+        "description": "NastechML request that produces local Supertonic audio."
       },
       "AgentToolDescriptor": {
         "properties": {
@@ -515,7 +417,7 @@
           "model": {
             "type": "string",
             "title": "Model",
-            "default": "nastech-fish-s2"
+            "default": "nastech-compact-en-v1"
           },
           "input": {
             "type": "string",
@@ -526,7 +428,8 @@
           "voice": {
             "anyOf": [
               {
-                "type": "string"
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
               },
               {
                 "type": "null"
@@ -536,14 +439,14 @@
           },
           "response_format": {
             "type": "string",
-            "pattern": "^(wav|mp3|opus|pcm)$",
+            "pattern": "^wav$",
             "title": "Response Format",
             "default": "wav"
           },
           "speed": {
             "type": "number",
             "maximum": 2.0,
-            "minimum": 0.5,
+            "minimum": 0.7,
             "title": "Speed",
             "default": 1.0
           }

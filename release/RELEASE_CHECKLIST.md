@@ -1,19 +1,21 @@
-# Nastech TTS v0.3 Release Checklist
+# Nastech Compact v0.4 Release Checklist
 
 ## Verified in This Build
 
 | Check | Result |
 |---|---|
-| Unit tests | Passing without model weights or a provider credential |
-| Formatting and lint | Passing for active `src/` and `tests/` code |
-| Source distribution and wheel | Built as `nastech_tts-0.3.0.tar.gz` and `nastech_tts-0.3.0-py3-none-any.whl` |
-| Agent OpenAPI schema | Exported to `docs/openapi.json` |
+| Unit tests | Passing without any cloud provider credential |
+| Lint and formatting | Passing for active code, tests, and release scripts |
+| Real local synthesis | Verified with Supertonic ONNX on CPU |
+| Live local agent API | Verified with `POST /v1/agent/speech` returning real WAV bytes |
+| Source distribution and wheel | Built as `nastech_tts-0.4.0.tar.gz` and `nastech_tts-0.4.0-py3-none-any.whl` |
+| OpenAPI schema | Exported to `docs/openapi.json` |
 | Agent tool descriptor | Included at `agent_tools/nastech_tts_tool.json` |
-| Compile-only behavior path | Verified with `examples/fish_s2_agent_story.xml` |
+| Deployment budget | Verified below 1 GiB by `scripts/check_compact_budget.py` |
 
 ## Before Publishing to Git
 
-Confirm that `git status` contains no generated credentials, voice recordings, reference IDs intended to remain private, model weights, cache directories, or customer audio. Push the tagged source and release files only after reviewing `NOTICE.md` and the Fish Audio Research License terms.
+Confirm that `git status` contains no generated credentials, model caches, voice-style JSON files that should remain private, recordings, or generated customer audio. Preserve `LICENSE`, `NOTICE.md`, and the Supertonic model-license boundary.
 
 ## Before Publishing to PyPI
 
@@ -24,12 +26,12 @@ make verify
 python -m twine check dist/*
 ```
 
-Publish only the Nastech gateway package; do not distribute Fish model weights or provider tokens. Update the `Documentation` and `Source` URLs in `pyproject.toml` after the user supplies the repository destination.
+Publish the Nastech control package only. Do not distribute Supertonic model weights unless the upstream OpenRAIL-M terms and every host’s distribution requirements permit that deployment method. Update the placeholder package URLs after the user provides the Git destination.
 
 ## Before Publishing an npm Client
 
-Generate or hand-maintain an npm client from `docs/openapi.json`. Keep the npm package as an HTTP client for Nastech; it should not embed a provider token or attempt to ship model weights. Test it against `GET /v1/health`, `POST /v1/agent/compile`, and `POST /v1/agent/speech`.
+Generate or maintain an HTTP client from `docs/openapi.json`. The npm package should call the local Nastech API; it should not embed Python, model weights, or device-specific cache paths.
 
 ## Before Production Deployment
 
-Set `NASTECH_API_KEY`, use TLS and a reverse proxy, restrict the Fish provider to private networking, configure provider credentials only in a secret manager, and run a short behavior acceptance suite for the exact Fish S2 release and selected reference voices.
+Run the 1 GiB budget checker on the actual target image or runtime. Set `NASTECH_API_KEY`, use TLS and a reverse proxy for Internet-facing access, and perform a short listening acceptance test for every non-direct tag that product material intends to advertise.

@@ -1,18 +1,18 @@
-# Nastech TTS
+# Nastech Compact TTS
 
-**Nastech TTS** is an English-first **expressive-speech control plane** for Fish Audio S2. It gives agents one stable markup format, compiles that intent into Fish-native emotion and vocal-event controls, and exposes an authenticated local REST API for generation or dry-run inspection.
+**Nastech Compact** is a real, local, English expressive TTS project built around **Supertonic 3**, a 99M-parameter ONNX model. It runs on CPU, requires no cloud synthesis call or GPU, and exposes a local agent API with auditable behavior controls. [1] [2]
 
-> Nastech is **not** a separate 4B foundation model and does not redistribute Fish model weights. It is a production integration layer for a model family with documented, direct controls such as `[angry]`, `[sad]`, `[excited]`, `[laughing]`, `[sigh]`, `[whisper]`, and `[shouting]`. [1]
+> **Size commitment:** the verified local deployment is approximately **567 MiB** before generated audio: **386 MiB** of real Supertonic model assets plus **181 MiB** for the isolated Python runtime and dependencies. It is below the user-set **1 GiB maximum full deployment budget**.
 
-| Capability | Nastech v0.3 status |
+| Capability | Nastech Compact v0.4 status |
 |---|---|
-| Real named emotion controls | Compiles to Fish S2 provider-native inline tags |
-| Real vocal-event controls | Direct mappings for laugh, chuckle, sigh, gasp, groan, and cry |
-| Cough, sniffle, yawn | Compiled as free-form S2 tags and marked release-dependent in the manifest |
-| Agent calls | Native Nastech agent endpoints and OpenAI-compatible `/v1/audio/speech` |
-| Self-hosted inference | Routes to the official Fish local server on a GPU host |
-| Hosted inference | Routes to the official Fish cloud API when `FISH_AUDIO_API_KEY` is supplied |
-| Agent audit trail | Returns a request ID and offers a compile-only endpoint with the full provider payload |
+| Real local synthesis | Working through the official Supertonic ONNX runtime |
+| CPU-only operation | Supported; no provider account, GPU, or cloud request required |
+| Agent calls | Nastech compile and speech endpoints plus an OpenAI-compatible alias |
+| Direct documented expression events | `<laugh>` and `<sigh>` |
+| Additional native-tag requests | `<sad>`, `<angry>`, `<surprise>`, `<cough>`, and `<yawn>` are preserved and marked release-dependent until local acceptance-tested |
+| Output | 44.1 kHz WAV |
+| Deployment size target | 1 GiB maximum, measured below the cap |
 
 ## Architecture
 
@@ -21,19 +21,19 @@ Agent / workflow
       |
       | NastechML or REST JSON
       v
-Nastech Agent Gateway
+Nastech Compact API
   - validates English expressive markup
-  - compiles Fish S2 behavior tags
-  - validates provider controls and creates a manifest
+  - compiles local Supertonic expression tags
+  - creates a request manifest
       |
-      +---- fish-local ---> official Fish Speech S2 server (GPU)
-      |
-      +---- fish-cloud ---> official Fish Audio `/v1/tts` API
       v
-Audio bytes plus Nastech request ID
+Supertonic 3 ONNX runtime (local CPU)
+      |
+      v
+44.1 kHz WAV bytes
 ```
 
-Read [Fish S2 Architecture](docs/fish_s2_architecture.md), [Model Selection](docs/real_feature_model_selection.md), and [Provider Protocol](docs/fish_provider_protocol.md) for the complete technical and licensing boundaries.
+The model is downloaded into the local Supertonic cache on first use. Nastech does not distribute upstream model weights in its source package.
 
 ## Installation
 
@@ -44,90 +44,87 @@ source .venv/bin/activate
 pip install -e '.[dev]'
 ```
 
-Nastech itself is lightweight. A **real Fish S2 model server is a separate GPU workload**. Start an official local Fish server first, then point Nastech to it:
+The first synthesis automatically downloads the upstream model assets. Verify the current installed size before serving traffic:
 
 ```bash
-export NASTECH_PROVIDER=fish-local
-export FISH_BASE_URL=http://127.0.0.1:8080
 nastech-tts status
-nastech-tts serve --host 127.0.0.1 --port 8765
 ```
 
-For the official cloud route, set an API key that you obtain from Fish Audio; do not store it in source control:
+The status output includes `model_assets_mib` and `target_max_deployment_mib`.
+
+## Real Local Synthesis
 
 ```bash
-export NASTECH_PROVIDER=fish-cloud
-export FISH_AUDIO_API_KEY='your-provider-key'
-export FISH_CLOUD_MODEL=s2.1-pro-free
+nastech-tts synthesize examples/compact_agent_story.xml --output output/story.wav
+```
+
+This creates both `output/story.wav` and an auditable `output/story.wav.manifest.json`. The example performs real local CPU inference using the cached Supertonic model.
+
+## Agent API
+
+Start a local API server:
+
+```bash
+export NASTECH_API_KEY='choose-a-local-secret'
 nastech-tts serve --host 127.0.0.1 --port 8765
 ```
 
-Set `NASTECH_API_KEY` to protect the gateway's own API with bearer authentication.
-
-## Agent Calls
-
-An agent should first compile a request. This exposes the exact emotion and event controls that will be sent to Fish S2 without generating audio:
+An agent should compile intent first. This does not synthesize audio and lets the agent inspect every tag:
 
 ```bash
 curl --request POST http://127.0.0.1:8765/v1/agent/compile \
   --header 'content-type: application/json' \
+  --header 'authorization: Bearer choose-a-local-secret' \
   --data @- <<'JSON'
 {
-  "markup": "<speak><emotion name=\"sad\">I thought the lantern was gone.</emotion><sound type=\"sigh\"/><emotion name=\"happy\">But the sunrise brought it home.</emotion><sound type=\"laugh\"/></speak>",
-  "output_format": "wav"
+  "markup": "<speak voice=\"F1\"><emotion name=\"sad\">The lantern went dark.</emotion><sound type=\"sigh\"/><emotion name=\"happy\">Then sunrise filled the room.</emotion><sound type=\"laugh\"/></speak>"
 }
 JSON
 ```
 
-The resulting manifest includes a Fish-native payload similar to this:
+The compact compiler returns local Supertonic prompt text such as:
 
 ```text
-[sad] I thought the lantern was gone. [sigh] [delight] But the sunrise brought it home. [laughing]
+<sad> The lantern went dark. <sigh> Then sunrise filled the room. <laugh>
 ```
 
-When the output is approved, call `/v1/agent/speech` with the same JSON. The response body is audio and response headers include `X-Nastech-Request-Id` and `X-Nastech-Provider`.
+Generate audio by sending the same payload to `/v1/agent/speech`. The response is WAV bytes with `X-Nastech-Request-Id`, `X-Nastech-Runtime`, and `X-Nastech-Duration-Seconds` headers.
 
-Existing OpenAI-style clients can instead call:
+Existing agent clients can call the OpenAI-compatible `POST /v1/audio/speech` endpoint:
 
 ```bash
 curl --request POST http://127.0.0.1:8765/v1/audio/speech \
   --header 'content-type: application/json' \
-  --data '{"model":"nastech-fish-s2","input":"Hello from Nastech.","response_format":"wav"}' \
+  --data '{"model":"nastech-compact-en-v1","input":"Hello from Nastech.","voice":"F1"}' \
   --output hello.wav
 ```
 
-The complete agent tool descriptor is available at [agent_tools/nastech_tts_tool.json](agent_tools/nastech_tts_tool.json), or dynamically at `GET /v1/agent/tools`.
+The complete tool descriptor is at [agent_tools/nastech_tts_tool.json](agent_tools/nastech_tts_tool.json), and the generated OpenAPI contract is at [docs/openapi.json](docs/openapi.json).
 
 ## NastechML
 
 ```xml
-<speak voice="narrator-voice-id">
-  <emotion name="sad" intensity="0.70">I thought we had lost the way.</emotion>
+<speak voice="F1">
+  <emotion name="sad">The rain would not stop.</emotion>
   <sound type="sigh" />
-  <pause ms="400" />
-  <emotion name="angry" intensity="0.85">Then the storm tore down the sign.</emotion>
+  <pause ms="300" />
+  <emotion name="angry">I will not surrender to the storm.</emotion>
   <sound type="cough" />
-  <prosody rate="fast" volume="loud">
-    <emotion name="excited">But the lantern flared, and everyone cheered.</emotion>
-  </prosody>
+  <emotion name="happy">At dawn, the lantern shone again.</emotion>
   <sound type="laugh" />
 </speak>
 ```
 
-Use `nastech-tts compile examples/story.xml` to produce a local manifest before any provider call.
-
-## Deployment
-
-The default Manus sandbox is not a persistent service host and has no GPU. The gateway can run anywhere Python runs, but a self-hosted Fish S2 provider needs a separate persistent GPU server. The repository includes a Docker image for the Nastech gateway, compose templates, environment examples, health checks, and deployment instructions under `deploy/`.
+Nastech always reports whether a requested control is documented direct, release-dependent, or unavailable. Do not market a named emotion as deterministic until the pinned model build has passed a listening acceptance test for that control.
 
 ## License and Model Notice
 
-Nastech source code is Apache-2.0. The selected Fish Speech repository and Fish S2 weights are released under the **Fish Audio Research License**, which remains binding. Nastech does not bundle weights and is not a commercial-license substitute. Review [NOTICE.md](NOTICE.md) and the upstream terms before use.
+Nastech source is Apache-2.0. Supertonic code is MIT licensed, and Supertonic 3 model weights use the OpenRAIL-M license. Nastech does not relabel the upstream model as its own or bundle the weights. Review [NOTICE.md](NOTICE.md) and the upstream model terms before distribution. [2] [3]
 
 ## References
 
-[1] [Fish Speech official S2 repository](https://github.com/fishaudio/fish-speech)
+[1] [Supertonic official repository](https://github.com/supertone-inc/supertonic)
 
-[2] [Fish Speech local server documentation](https://speech.fish.audio/server/)
+[2] [Supertonic Python SDK and local server documentation](https://github.com/supertone-inc/supertonic-py)
 
-[3] [Fish Audio official `/v1/tts` API](https://docs.fish.audio/api-reference/endpoint/openapi-v1/text-to-speech)
+[3] [Supertonic 3 model card](https://huggingface.co/Supertone/supertonic-3)

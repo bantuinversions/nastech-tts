@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nastech-tts"
-version = "0.3.0"
-description = "Nastech TTS: an agent-ready expressive-speech gateway for Fish Audio S2."
+version = "0.4.0"
+description = "Nastech Compact: local expressive English TTS with Supertonic ONNX and an agent API."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
 authors = [{name = "Nastech"}]
-keywords = ["text-to-speech", "tts", "speech", "emotion", "agent", "fish-audio", "fastapi"]
+keywords = ["text-to-speech", "tts", "speech", "emotion", "agent", "supertonic", "onnx"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",
@@ -21,8 +21,8 @@ classifiers = [
 ]
 dependencies = [
   "fastapi>=0.115",
-  "httpx>=0.27",
   "pydantic>=2.8",
+  "supertonic>=1.3.1",
   "uvicorn[standard]>=0.30",
 ]
 

@@ -1,3 +1,5 @@
-676ab38c9bffda8895b895ce06c30593c19300942d51e0d6077190e2a63b1169  dist/nastech_tts-0.3.0-py3-none-any.whl
-5e107ef27fde2fcdbba389f4d35e3f3fdaf25fffe6131afb596da50dc245aa44  dist/nastech_tts-0.3.0.tar.gz
-0b25ab88e810db1d225232097ef3046b66589acab3aa5a8267db33d97003a958  docs/openapi.json
+efc331368524ec412f0d819fd92d6e9315ff6bbcccc9bba9eae01041a26a9cb0  dist/nastech_tts-0.4.0-py3-none-any.whl
+97dc77a352e9c21798012e7ce68ac8132e77beb98ce69f88e5be46c6f8e53308  dist/nastech_tts-0.4.0.tar.gz
+fac38dcdd0e49671052b8724ae4780460a5fd57553c32830ec9c88d84e24cd3f  docs/openapi.json
+a43d575334b399f93bc32c2800f8b3546322360d34659df2147ed7bad702f175  output/compact_story.wav
+606f73e84a4f789e2e8c1326d5bded4740fd8880a31f5b973b1ab046334ac21a  output/compact_agent_api.wav

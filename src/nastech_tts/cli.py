@@ -1,41 +1,38 @@
-"""Command-line interface for the Nastech Fish S2 agent gateway."""
+"""Command-line interface for Nastech Compact local Supertonic TTS."""
 
 from __future__ import annotations
 
 import argparse
-import asyncio
 import json
 from pathlib import Path
 
-from .fish import ProviderError, build_gateway_from_env
 from .markup import NastechMarkupError
+from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="nastech-tts", description="Nastech expressive TTS gateway for Fish S2."
+        prog="nastech-tts", description="Nastech Compact local expressive TTS."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     compile_command = subparsers.add_parser(
-        "compile", help="Compile NastechML into an auditable Fish S2 payload."
+        "compile", help="Compile NastechML into an auditable Supertonic prompt."
     )
     compile_command.add_argument("input", type=Path, help="Input NastechML document.")
     compile_command.add_argument("--output", type=Path, help="Optional JSON output path.")
-    compile_command.add_argument("--reference-id", help="Optional Fish reference voice ID.")
 
     synthesize = subparsers.add_parser(
-        "synthesize", help="Generate audio through the configured Fish provider."
+        "synthesize", help="Generate local WAV audio with Supertonic ONNX."
     )
     synthesize.add_argument("input", type=Path, help="Input NastechML document.")
-    synthesize.add_argument("--output", type=Path, required=True, help="Audio destination path.")
+    synthesize.add_argument("--output", type=Path, required=True, help="WAV destination path.")
     synthesize.add_argument("--manifest", type=Path, help="Optional manifest destination path.")
-    synthesize.add_argument("--reference-id", help="Optional Fish reference voice ID.")
 
-    subparsers.add_parser("status", help="Show Nastech and configured Fish provider health.")
+    subparsers.add_parser("status", help="Show local model cache, runtime, and budget status.")
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
 
-    serve = subparsers.add_parser("serve", help="Start the Nastech agent API.")
+    serve = subparsers.add_parser("serve", help="Start the local Nastech agent API.")
     serve.add_argument("--host", default="127.0.0.1", help="API bind address.")
     serve.add_argument("--port", type=int, default=8765, help="API bind port.")
     return parser
@@ -46,27 +43,15 @@ def _write_json(path: Path, payload: dict[str, object]) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
-async def _status() -> int:
-    gateway = build_gateway_from_env()
-    print(
-        json.dumps(
-            {
-                "service": "nastech-tts",
-                "version": "0.3.0",
-                "provider_mode": gateway.provider_mode,
-                "provider": await gateway.health(),
-            },
-            indent=2,
-        )
-    )
-    return 0
-
-
 def main() -> int:
     args = _parser().parse_args()
+    runtime = SupertonicRuntime()
 
     if args.command == "status":
-        return asyncio.run(_status())
+        print(
+            json.dumps({"service": "nastech-tts", "version": "0.4.0", **runtime.status()}, indent=2)
+        )
+        return 0
 
     if args.command == "serve":
         import uvicorn
@@ -98,13 +83,15 @@ def main() -> int:
 
     try:
         markup = args.input.read_text(encoding="utf-8")
-        gateway = build_gateway_from_env()
+        compiled = compile_nastechml(markup, runtime.settings)
         if args.command == "compile":
-            compiled = gateway.compile(markup, reference_id=args.reference_id)
             payload = {
                 "request_id": compiled.request_id,
-                "provider_mode": gateway.provider_mode,
-                "provider_payload": compiled.provider_payload,
+                "runtime": "supertonic-local",
+                "text": compiled.text,
+                "voice": compiled.voice,
+                "steps": compiled.steps,
+                "speed": compiled.speed,
                 "manifest": compiled.manifest,
             }
             if args.output:
@@ -115,9 +102,7 @@ def main() -> int:
             return 0
 
         if args.command == "synthesize":
-            audio, compiled = asyncio.run(
-                gateway.synthesize(markup, reference_id=args.reference_id)
-            )
+            audio = runtime.synthesize(compiled)
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_bytes(audio.data)
             manifest_path = args.manifest or args.output.with_suffix(
@@ -126,8 +111,9 @@ def main() -> int:
             _write_json(manifest_path, compiled.manifest)
             print(f"Audio: {args.output}")
             print(f"Manifest: {manifest_path}")
+            print(f"Duration: {audio.duration_seconds:.2f}s")
             return 0
-    except (OSError, ValueError, NastechMarkupError, ProviderError) as exc:
+    except (OSError, ValueError, NastechMarkupError, CompactRuntimeError) as exc:
         print(f"Nastech error: {exc}")
         return 2
 

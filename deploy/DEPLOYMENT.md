@@ -1,60 +1,58 @@
-# Nastech TTS Deployment
+# Nastech Compact Deployment
 
-## What Deploys Where
+Nastech Compact is a **single local service**. It contains the Nastech agent API and uses Supertonic 3 ONNX assets on the same CPU host. It has no cloud TTS dependency and needs no GPU.
 
-Nastech has two separate services. The **Nastech Agent Gateway** is a small Python/HTTP service. The **Fish S2 provider** is a GPU model server that performs actual expressive speech generation. Separating them makes the agent API portable while allowing the heavy model to run on dedicated GPU infrastructure.
+## Size Contract
 
-| Service | Minimum responsibility | Runtime requirement |
-|---|---|---|
-| Nastech Gateway | NastechML, authentication, behavior compilation, manifests, API routing | Python 3.10+ or Docker |
-| Fish S2 Provider | Real emotion/event synthesis and voice generation | Persistent GPU-capable host with official Fish Speech setup |
-
-## Self-hosted Provider Mode
-
-First, deploy Fish Speech S2 on a GPU machine by following the [official server guide](https://speech.fish.audio/server/). Protect that server with its own `--api-key` when it is reachable outside a private network.
-
-Then deploy the Nastech gateway on a host that can reach the Fish server:
+The target maximum full deployment budget is **1 GiB**. On this cloud, the actual Supertonic model cache is 386 MiB and the isolated Python environment is 181 MiB, yielding a measured local runtime subtotal of 567 MiB before generated audio. Use the included budget script after every dependency or model update.
 
 ```bash
-cp deploy/.env.example deploy/.env
-# Edit deploy/.env:
-# NASTECH_PROVIDER=fish-local
-# FISH_BASE_URL=http://fish-s2.internal:8080
-# FISH_LOCAL_API_KEY=...
-# NASTECH_API_KEY=...
-
-docker compose --env-file deploy/.env -f deploy/docker-compose.gateway.yml up -d --build
-curl http://127.0.0.1:8765/v1/health
+python scripts/check_compact_budget.py \
+  --runtime /path/to/.venv \
+  --model-cache ~/.cache/supertonic3 \
+  --limit-mib 1024
 ```
 
-## Hosted Provider Mode
+Generated WAV files are runtime data; keep them in a mounted output directory or object storage rather than in a model image.
 
-For the official managed route, do not add a provider token to this repository. Set it only in the deployment secret manager or runtime environment:
+## Python Deployment
 
 ```bash
-export NASTECH_PROVIDER=fish-cloud
-export FISH_AUDIO_API_KEY='provider-key-from-fish-audio'
-export FISH_CLOUD_MODEL=s2.1-pro-free
-export NASTECH_API_KEY='gateway-secret'
+python -m venv .venv
+source .venv/bin/activate
+pip install 'nastech-tts[dev]'
+export NASTECH_API_KEY='choose-a-secret'
+nastech-tts status
 nastech-tts serve --host 127.0.0.1 --port 8765
 ```
 
-The Fish cloud route follows the official `/v1/tts` API. Nastech forwards a W3C `traceparent` header when an agent includes one.
+The first real synthesis downloads the model assets. Run a short synthesis during image or deployment preparation so traffic does not pay the first-download cost.
+
+## Docker Deployment
+
+The Dockerfile pre-downloads the actual Supertonic assets at build time. Build and measure it locally:
+
+```bash
+docker build -t nastech-compact:0.4.0 .
+docker images nastech-compact:0.4.0
+
+docker run --rm -p 8765:8765 \
+  -e NASTECH_API_KEY='choose-a-secret' \
+  nastech-compact:0.4.0
+```
+
+Check readiness with `GET /v1/health`, then make one `POST /v1/agent/compile` call before routing requests to the instance.
 
 ## Agent Authentication
 
-Set `NASTECH_API_KEY` in production. Client requests must then include:
+Set `NASTECH_API_KEY` outside source control. Protected endpoints require:
 
 ```text
 Authorization: Bearer <NASTECH_API_KEY>
 ```
 
-Place the public gateway behind TLS and a reverse proxy. Do not expose a self-hosted Fish model port publicly unless it is separately authenticated and network-restricted.
+Put any Internet-facing deployment behind TLS and a reverse proxy. If a local device is the deployment target, bind to loopback by default and explicitly opt in to a network interface only when needed.
 
-## Health and Readiness
+## Persistent-Service Boundary
 
-The Nastech health endpoint is `GET /v1/health`. It reports the configured provider mode and, for a local provider, checks the upstream `GET /v1/health` endpoint. `POST /v1/agent/compile` is the safest readiness check because it validates NastechML and produces the exact provider payload without generating audio.
-
-## Persistence Boundary
-
-The default sandbox is for development and verification only; it hibernates and does not offer GPU hosting. Production requires a persistent deployment target for the gateway and a GPU-capable environment for a self-hosted Fish S2 provider, or the official hosted provider route.
+The current sandbox can build and test the compact system but hibernates when inactive. For a persistent API, deploy the same package or Docker image to a persistent CPU server. No GPU system is required for the selected Supertonic runtime.

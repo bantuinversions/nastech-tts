@@ -1,0 +1,9 @@
+<speak voice="F1">
+  <emotion name="sad">Mara held the dark lantern and listened to the rain.</emotion>
+  <sound type="sigh" />
+  <pause ms="350" />
+  <emotion name="angry">I will not let this storm choose my future, she said.</emotion>
+  <pause ms="250" />
+  <emotion name="happy">Then a warm light returned to the glass.</emotion>
+  <sound type="laugh" />
+</speak>

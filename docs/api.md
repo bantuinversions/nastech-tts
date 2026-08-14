@@ -1,66 +1,67 @@
-# Nastech Agent API
+# Nastech Compact Agent API
 
-The Nastech gateway exposes a stable agent-facing API. All behavior controls are expressed in English NastechML and compiled to Fish S2 before a provider call.
+Nastech Compact runs a local Supertonic ONNX model on CPU. An agent can compile English NastechML into an auditable local expression plan, then synthesize WAV audio without a cloud provider call.
 
 ## Authentication
 
-When `NASTECH_API_KEY` is set, call protected endpoints with:
+When `NASTECH_API_KEY` is set, protect agent endpoints with:
 
 ```text
 Authorization: Bearer <NASTECH_API_KEY>
 ```
 
-The health endpoint is intentionally unauthenticated so orchestration systems can monitor readiness.
+`GET /v1/health` remains available for local readiness checks.
 
 ## Endpoints
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/v1/health` | Nastech and configured provider status |
-| `GET` | `/v1/capabilities` | Supported English controls and output formats |
-| `GET` | `/v1/agent/tools` | Machine-readable tool descriptors |
-| `POST` | `/v1/agent/compile` | Compile NastechML without a provider call |
-| `POST` | `/v1/agent/speech` | Generate expressive audio from NastechML |
-| `POST` | `/v1/audio/speech` | OpenAI-compatible plain-text synthesis alias |
+| `GET` | `/v1/health` | Local runtime and model-asset size status |
+| `GET` | `/v1/capabilities` | Direct, release-dependent, and unavailable behavior controls |
+| `GET` | `/v1/agent/tools` | Machine-readable agent tool descriptors |
+| `POST` | `/v1/agent/compile` | Compile NastechML without audio generation |
+| `POST` | `/v1/agent/speech` | Generate local WAV audio from NastechML |
+| `POST` | `/v1/audio/speech` | OpenAI-compatible plain-text local synthesis alias |
 
-## Compile Before Generation
-
-Agents should compile when they need a visible audit of what the provider will receive.
+## Compile Endpoint
 
 ```json
 {
-  "markup": "<speak><emotion name=\"angry\">Do not leave me here.</emotion><sound type=\"sigh\" /></speak>",
-  "reference_id": "optional-voice-id",
-  "output_format": "wav",
-  "latency": "normal",
-  "temperature": 0.7
+  "markup": "<speak voice=\"F1\"><emotion name=\"sad\">The lantern went dark.</emotion><sound type=\"sigh\"/><sound type=\"laugh\"/></speak>",
+  "steps": 8
 }
 ```
 
-The compile response includes `provider_payload.text`, a request ID, and a manifest containing each mapped control. For the example above, the compiled text starts with `[angry]` and includes `[sigh]`.
+The compact compiler returns an auditable plan similar to:
 
-## Generate Audio
+```text
+<sad> The lantern went dark. <sigh> <laugh>
+```
 
-Send the same request body to `POST /v1/agent/speech`. The response is raw audio bytes. Store the `X-Nastech-Request-Id` response header with downstream workflow records; it links the audio output to the compile manifest. `X-Nastech-Provider` identifies `fish-local` or `fish-cloud`.
+Every requested control is tagged as `direct`, `approximated`, or `unavailable` in the manifest. `<laugh>` and `<sigh>` are documented Supertonic controls. Other preserved tags, including `<sad>`, `<angry>`, `<cough>`, and `<yawn>`, require model-release acceptance testing before deterministic claims are made. [1] [2]
+
+## Synthesis Endpoint
+
+Send the same payload to `POST /v1/agent/speech`. The API returns `audio/wav` bytes at 44.1 kHz. It includes `X-Nastech-Request-Id`, `X-Nastech-Runtime: supertonic-local`, and `X-Nastech-Duration-Seconds` headers.
 
 ## OpenAI-Compatible Alias
 
-`POST /v1/audio/speech` accepts this smaller request shape:
-
 ```json
 {
-  "model": "nastech-fish-s2",
-  "input": "The story begins at dawn.",
-  "voice": "optional-voice-id",
+  "model": "nastech-compact-en-v1",
+  "input": "The lantern is bright again.",
+  "voice": "F1",
   "response_format": "wav",
   "speed": 1.0
 }
 ```
 
-This path intentionally accepts plain text only. Use `/v1/agent/speech` for real Fish S2 emotion and event controls.
+Use `/v1/agent/speech` rather than this alias whenever the agent needs structured emotional or non-speech controls.
 
-## Reference Voices
+The full versioned schema is available in [openapi.json](openapi.json).
 
-The self-hosted Fish server accepts a single saved `reference_id` per Nastech request. The Fish cloud S2 API can support multi-speaker requests with an array of reference IDs and `<|speaker:n|>` tokens; use the cloud provider only after checking its current terms and model availability.
+## References
 
-The complete versioned schema is available in [openapi.json](openapi.json).
+[1] [Supertonic official repository](https://github.com/supertone-inc/supertonic)
+
+[2] [Supertonic Python SDK](https://github.com/supertone-inc/supertonic-py)

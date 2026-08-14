@@ -1,4 +1,4 @@
-"""Nastech's agent-facing HTTP API for real Fish S2 expressive controls."""
+"""Nastech Compact agent API backed by a local Supertonic ONNX runtime."""
 
 from __future__ import annotations
 
@@ -7,36 +7,34 @@ import os
 from typing import Annotated, Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
+from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from .fish import NastechGateway, ProviderError, build_gateway_from_env
 from .markup import NastechMarkupError
+from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
 
 class AgentCompileRequest(BaseModel):
-    """A structured agent request expressed in stable NastechML."""
+    """A structured NastechML request with local-runtime controls."""
 
     markup: str = Field(min_length=1, max_length=12000)
-    reference_id: str | list[str] | None = None
-    output_format: str = Field(default="wav", pattern="^(wav|mp3|opus|pcm)$")
-    sample_rate: int | None = Field(default=44100, ge=8000, le=48000)
-    latency: str = Field(default="normal", pattern="^(low|balanced|normal)$")
-    temperature: float = Field(default=0.7, ge=0.0, le=1.0)
+    voice: str | None = Field(default=None, pattern="^[A-Za-z0-9_-]{1,64}$")
+    steps: int | None = Field(default=None, ge=5, le=12)
 
 
 class AgentSpeechRequest(AgentCompileRequest):
-    """NastechML request that produces a provider audio response."""
+    """NastechML request that produces local Supertonic audio."""
 
 
 class OpenAISpeechRequest(BaseModel):
     """Small OpenAI-compatible request shape for existing agent clients."""
 
-    model: str = "nastech-fish-s2"
+    model: str = "nastech-compact-en-v1"
     input: str = Field(min_length=1, max_length=12000)
-    voice: str | None = None
-    response_format: str = Field(default="wav", pattern="^(wav|mp3|opus|pcm)$")
-    speed: float = Field(default=1.0, ge=0.5, le=2.0)
+    voice: str | None = Field(default=None, pattern="^[A-Za-z0-9_-]{1,64}$")
+    response_format: str = Field(default="wav", pattern="^wav$")
+    speed: float = Field(default=1.0, ge=0.7, le=2.0)
 
 
 class AgentToolDescriptor(BaseModel):
@@ -50,7 +48,6 @@ def _authorization_required() -> bool:
 
 
 def require_agent_key(authorization: Annotated[str | None, Header()] = None) -> None:
-    """Require bearer auth only when NASTECH_API_KEY has been configured."""
     expected = os.getenv("NASTECH_API_KEY")
     if not expected:
         return
@@ -62,6 +59,10 @@ def require_agent_key(authorization: Annotated[str | None, Header()] = None) -> 
         )
 
 
+def _runtime(request: Request) -> SupertonicRuntime:
+    return request.app.state.runtime
+
+
 def _text_to_markup(text: str, voice: str | None = None, speed: float = 1.0) -> str:
     safe_text = html.escape(text)
     voice_attr = f' voice="{html.escape(voice, quote=True)}"' if voice else ""
@@ -69,54 +70,56 @@ def _text_to_markup(text: str, voice: str | None = None, speed: float = 1.0) -> 
     return f'<speak{voice_attr}><prosody rate="{rate}">{safe_text}</prosody></speak>'
 
 
-def _compile_options(payload: AgentCompileRequest, traceparent: str | None) -> dict[str, Any]:
-    return {
-        "reference_id": payload.reference_id,
-        "output_format": payload.output_format,
-        "sample_rate": payload.sample_rate,
-        "latency": payload.latency,
-        "temperature": payload.temperature,
-        "traceparent": traceparent,
-    }
-
-
-def _gateway(request: Request) -> NastechGateway:
-    return request.app.state.gateway
+def _compiled(payload: AgentCompileRequest, runtime: SupertonicRuntime):
+    settings = runtime.settings
+    if payload.voice:
+        settings = type(settings)(
+            default_voice=payload.voice,
+            language=settings.language,
+            total_steps=payload.steps or settings.total_steps,
+            speed=settings.speed,
+            cache_dir=settings.cache_dir,
+        )
+    elif payload.steps:
+        settings = type(settings)(
+            default_voice=settings.default_voice,
+            language=settings.language,
+            total_steps=payload.steps,
+            speed=settings.speed,
+            cache_dir=settings.cache_dir,
+        )
+    return compile_nastechml(payload.markup, settings)
 
 
 def _error_response(exc: Exception) -> JSONResponse:
     if isinstance(exc, NastechMarkupError):
         code = status.HTTP_422_UNPROCESSABLE_ENTITY
-    elif isinstance(exc, ProviderError):
+    elif isinstance(exc, CompactRuntimeError):
         code = status.HTTP_503_SERVICE_UNAVAILABLE
     else:
         code = status.HTTP_500_INTERNAL_SERVER_ERROR
     return JSONResponse(status_code=code, content={"detail": str(exc)})
 
 
-def create_app(gateway: NastechGateway | None = None) -> FastAPI:
-    """Create an independently testable FastAPI application."""
+def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
+    """Create a local and independently testable Nastech Compact application."""
     app = FastAPI(
-        title="Nastech TTS Agent Gateway",
-        version="0.3.0",
+        title="Nastech Compact TTS",
+        version="0.4.0",
         description=(
-            "A structured expressive-speech gateway that compiles NastechML to Fish S2 controls. "
-            "Use /v1/agent/compile before synthesis when an agent needs auditable provider intent."
+            "A local agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. "
+            "Use /v1/agent/compile for an auditable behavior plan before synthesis."
         ),
     )
-    app.state.gateway = gateway or build_gateway_from_env()
+    app.state.runtime = runtime or SupertonicRuntime()
 
     @app.get("/v1/health")
-    async def health(service: NastechGateway = Depends(_gateway)) -> dict[str, Any]:
-        provider_health = await service.health()
+    async def health(local_runtime: SupertonicRuntime = Depends(_runtime)) -> dict[str, Any]:
         return {
-            "status": "ok"
-            if provider_health.get("status") in {"ok", "configured", "compile_only"}
-            else "degraded",
+            "status": "ok",
             "service": "nastech-tts",
-            "version": "0.3.0",
-            "provider_mode": service.provider_mode,
-            "provider": provider_health,
+            "version": "0.4.0",
+            "runtime": local_runtime.status(),
             "authentication_required": _authorization_required(),
         }
 
@@ -124,21 +127,14 @@ def create_app(gateway: NastechGateway | None = None) -> FastAPI:
     async def capabilities(_: None = Depends(require_agent_key)) -> dict[str, Any]:
         return {
             "language": "en",
-            "model_family": "fish-s2",
+            "model_family": "supertonic-3",
+            "inference": "local-onnx-cpu",
             "agent_endpoints": ["/v1/agent/compile", "/v1/agent/speech", "/v1/audio/speech"],
-            "emotions": [
-                "angry",
-                "sad",
-                "happy",
-                "excited",
-                "fearful",
-                "disgusted",
-                "frustrated",
-                "calm",
-            ],
-            "direct_events": ["laugh", "chuckle", "sigh", "gasp", "groan", "cry"],
-            "release_dependent_events": ["cough", "sniffle", "yawn"],
-            "formats": ["wav", "mp3", "opus", "pcm"],
+            "documented_direct_events": ["laugh", "sigh"],
+            "documented_native_tags": ["laugh", "breath", "sigh"],
+            "release_dependent_tags": ["sad", "angry", "surprise", "cough", "yawn"],
+            "formats": ["wav"],
+            "max_deployment_mib": 1024,
         }
 
     @app.get("/v1/agent/tools", response_model=list[AgentToolDescriptor])
@@ -146,18 +142,12 @@ def create_app(gateway: NastechGateway | None = None) -> FastAPI:
         return [
             AgentToolDescriptor(
                 name="nastech_compile_speech",
-                description=(
-                    "Compile English NastechML into an auditable Fish S2 request "
-                    "without generating audio."
-                ),
+                description="Compile English NastechML into a local Supertonic expression plan.",
                 input_schema=AgentCompileRequest.model_json_schema(),
             ),
             AgentToolDescriptor(
                 name="nastech_generate_speech",
-                description=(
-                    "Generate English expressive speech from NastechML through the "
-                    "configured Fish S2 provider."
-                ),
+                description="Generate local English expressive WAV audio with Supertonic ONNX.",
                 input_schema=AgentSpeechRequest.model_json_schema(),
             ),
         ]
@@ -165,68 +155,66 @@ def create_app(gateway: NastechGateway | None = None) -> FastAPI:
     @app.post("/v1/agent/compile")
     async def compile_speech(
         payload: AgentCompileRequest,
-        traceparent: Annotated[str | None, Header()] = None,
         _: None = Depends(require_agent_key),
-        service: NastechGateway = Depends(_gateway),
+        local_runtime: SupertonicRuntime = Depends(_runtime),
     ) -> dict[str, Any]:
         try:
-            compiled = service.compile(payload.markup, **_compile_options(payload, traceparent))
+            compiled = _compiled(payload, local_runtime)
         except (NastechMarkupError, ValueError) as exc:
             return _error_response(exc)
         return {
             "request_id": compiled.request_id,
-            "provider_mode": service.provider_mode,
-            "provider_payload": compiled.provider_payload,
+            "runtime": "supertonic-local",
+            "text": compiled.text,
+            "voice": compiled.voice,
+            "steps": compiled.steps,
+            "speed": compiled.speed,
             "manifest": compiled.manifest,
         }
 
     @app.post("/v1/agent/speech")
     async def synthesize_speech(
         payload: AgentSpeechRequest,
-        traceparent: Annotated[str | None, Header()] = None,
         _: None = Depends(require_agent_key),
-        service: NastechGateway = Depends(_gateway),
+        local_runtime: SupertonicRuntime = Depends(_runtime),
     ) -> Response:
         try:
-            audio, compiled = await service.synthesize(
-                payload.markup, **_compile_options(payload, traceparent)
-            )
-        except (NastechMarkupError, ProviderError, ValueError) as exc:
-            return _error_response(exc)
-        headers = {
-            "X-Nastech-Request-Id": compiled.request_id,
-            "X-Nastech-Provider": service.provider_mode,
-            "X-Nastech-Manifest-Endpoint": "/v1/agent/compile",
-        }
-        if audio.provider_request_id:
-            headers["X-Provider-Request-Id"] = audio.provider_request_id
-        return Response(content=audio.data, media_type=audio.content_type, headers=headers)
-
-    @app.post("/v1/audio/speech")
-    async def openai_compatible_speech(
-        payload: OpenAISpeechRequest,
-        traceparent: Annotated[str | None, Header()] = None,
-        _: None = Depends(require_agent_key),
-        service: NastechGateway = Depends(_gateway),
-    ) -> Response:
-        markup = _text_to_markup(payload.input, payload.voice, payload.speed)
-        request = AgentSpeechRequest(
-            markup=markup,
-            reference_id=payload.voice,
-            output_format=payload.response_format,
-        )
-        try:
-            audio, compiled = await service.synthesize(
-                request.markup, **_compile_options(request, traceparent)
-            )
-        except (NastechMarkupError, ProviderError, ValueError) as exc:
+            compiled = _compiled(payload, local_runtime)
+            audio = await run_in_threadpool(local_runtime.synthesize, compiled)
+        except (NastechMarkupError, CompactRuntimeError, ValueError) as exc:
             return _error_response(exc)
         return Response(
             content=audio.data,
             media_type=audio.content_type,
             headers={
                 "X-Nastech-Request-Id": compiled.request_id,
-                "X-Nastech-Provider": service.provider_mode,
+                "X-Nastech-Runtime": "supertonic-local",
+                "X-Nastech-Duration-Seconds": f"{audio.duration_seconds:.2f}",
+                "X-Nastech-Manifest-Endpoint": "/v1/agent/compile",
+            },
+        )
+
+    @app.post("/v1/audio/speech")
+    async def openai_compatible_speech(
+        payload: OpenAISpeechRequest,
+        _: None = Depends(require_agent_key),
+        local_runtime: SupertonicRuntime = Depends(_runtime),
+    ) -> Response:
+        request = AgentSpeechRequest(
+            markup=_text_to_markup(payload.input, payload.voice, payload.speed),
+            voice=payload.voice,
+        )
+        try:
+            compiled = _compiled(request, local_runtime)
+            audio = await run_in_threadpool(local_runtime.synthesize, compiled)
+        except (NastechMarkupError, CompactRuntimeError, ValueError) as exc:
+            return _error_response(exc)
+        return Response(
+            content=audio.data,
+            media_type=audio.content_type,
+            headers={
+                "X-Nastech-Request-Id": compiled.request_id,
+                "X-Nastech-Runtime": "supertonic-local",
             },
         )
 
