@@ -1,0 +1,44 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Build and test outputs
+build/
+dist/
+.coverage
+.pytest_cache/
+ruff_cache/
+
+# Runtime artifacts
+output/
+artifacts/
+*.wav
+*.mp3
+*.flac
+*.manifest.json
+*.log
+
+# Model and dataset assets
+models/
+data/
+cache/
+.huggingface/
+*.gguf
+*.safetensors
+*.onnx
+
+# Secrets and consent records
+.env
+.env.*
+*.key
+*.pem
+consent/
+private/
+
+# Operating system and editors
+.DS_Store
+.vscode/
+.idea/

@@ -1,0 +1,76 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nastech-tts"
+version = "0.2.0"
+description = "Nastech TTS: English expressive speech derived from one parameter-efficiently adaptable Orpheus model family."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
+authors = [{name = "Nastech"}]
+keywords = ["text-to-speech", "tts", "speech", "emotion", "orpheus", "lora"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+  "numpy>=1.26",
+  "soundfile>=0.12",
+]
+
+[project.optional-dependencies]
+local = [
+  "orpheus-cpp==0.0.3",
+  "llama-cpp-python>=0.3.34",
+]
+api = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+]
+train = [
+  "accelerate>=1.0",
+  "datasets>=3.0",
+  "peft>=0.13",
+  "transformers>=4.45",
+  "trl>=0.12",
+]
+dev = [
+  "build>=1.2",
+  "pytest>=8.3",
+  "ruff>=0.7",
+]
+all = [
+  "orpheus-cpp==0.0.3",
+  "llama-cpp-python>=0.3.34",
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "accelerate>=1.0",
+  "datasets>=3.0",
+  "peft>=0.13",
+  "transformers>=4.45",
+  "trl>=0.12",
+]
+
+[project.urls]
+Documentation = "https://example.invalid/nastech-tts"
+Source = "https://example.invalid/nastech-tts"
+
+[project.scripts]
+nastech-tts = "nastech_tts.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

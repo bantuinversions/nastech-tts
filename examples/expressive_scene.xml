@@ -1,0 +1,7 @@
+<speak voice="tara">
+  <emotion name="angry" intensity="0.80">I told you not to touch that.</emotion>
+  <sound type="cough" />
+  <pause ms="250" />
+  <emotion name="sad" intensity="0.70">I am sorry that I hurt you.</emotion>
+  <sound type="laugh" />
+</speak>

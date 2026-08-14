@@ -1,0 +1,31 @@
+{
+  "suite": "nastech-behavior-v1",
+  "language": "en",
+  "cases": [
+    {
+      "id": "neutral_speech",
+      "markup": "<speak voice=\"tara\">The delivery is clear and natural.</speak>",
+      "expected_fidelity": "direct"
+    },
+    {
+      "id": "cough",
+      "markup": "<speak voice=\"tara\">Please excuse me.<sound type=\"cough\" /></speak>",
+      "expected_fidelity": "direct"
+    },
+    {
+      "id": "laugh",
+      "markup": "<speak voice=\"tara\">That was unexpected.<sound type=\"laugh\" /></speak>",
+      "expected_fidelity": "direct"
+    },
+    {
+      "id": "sadness",
+      "markup": "<speak voice=\"tara\"><emotion name=\"sad\" intensity=\"0.70\">I am sorry this happened.</emotion></speak>",
+      "expected_fidelity": "approximated"
+    },
+    {
+      "id": "anger",
+      "markup": "<speak voice=\"tara\"><emotion name=\"angry\" intensity=\"0.80\">I asked you not to do that.</emotion></speak>",
+      "expected_fidelity": "approximated"
+    }
+  ]
+}
