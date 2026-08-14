@@ -4,15 +4,22 @@ from __future__ import annotations
 
 import argparse
 import json
+import statistics
+import time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from typing import Any
 
+from .cpu import CpuConfigurationError
 from .markup import NastechMarkupError
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
+
+VERSION = "0.5.0"
 
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="nastech-tts", description="Nastech Compact local expressive TTS."
+        prog="nastech-tts", description="Nastech Compact local expressive CPU TTS."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -29,8 +36,26 @@ def _parser() -> argparse.ArgumentParser:
     synthesize.add_argument("--output", type=Path, required=True, help="WAV destination path.")
     synthesize.add_argument("--manifest", type=Path, help="Optional manifest destination path.")
 
-    subparsers.add_parser("status", help="Show local model cache, runtime, and budget status.")
+    subparsers.add_parser("status", help="Show model, CPU policy, cache, and runtime status.")
+    subparsers.add_parser(
+        "warmup", help="Load ONNX sessions and generate a short local audio warm-up."
+    )
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
+
+    benchmark = subparsers.add_parser(
+        "benchmark", help="Measure warmed local ONNX synthesis with cache disabled per run."
+    )
+    benchmark.add_argument("input", type=Path, help="Input NastechML document.")
+    benchmark.add_argument(
+        "--runs", type=int, default=3, help="Measured runs after warm-up (default: 3)."
+    )
+    benchmark.add_argument(
+        "--no-warmup", action="store_true", help="Include model-load cost in first run."
+    )
+    benchmark.add_argument(
+        "--concurrency", type=int, default=1, help="Parallel requests to schedule (default: 1)."
+    )
+    benchmark.add_argument("--output", type=Path, help="Optional JSON report destination.")
 
     serve = subparsers.add_parser("serve", help="Start the local Nastech agent API.")
     serve.add_argument("--host", default="127.0.0.1", help="API bind address.")
@@ -38,56 +63,123 @@ def _parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _write_json(path: Path, payload: dict[str, object]) -> None:
+def _write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
+def _benchmark(
+    runtime: SupertonicRuntime,
+    markup: str,
+    runs: int,
+    warmup: bool,
+    concurrency: int,
+) -> dict[str, Any]:
+    if runs < 1 or runs > 100:
+        raise ValueError("--runs must be between 1 and 100.")
+    if concurrency < 1 or concurrency > 16:
+        raise ValueError("--concurrency must be between 1 and 16.")
+    warmup_result = runtime.warmup() if warmup else None
+
+    def measure() -> dict[str, float]:
+        compiled = compile_nastechml(markup, runtime.settings)
+        started = time.perf_counter()
+        audio = runtime.synthesize(compiled, use_cache=False)
+        elapsed = time.perf_counter() - started
+        return {
+            "elapsed_seconds": round(elapsed, 4),
+            "audio_seconds": round(audio.duration_seconds, 4),
+            "real_time_factor": round(elapsed / audio.duration_seconds, 4),
+        }
+
+    batch_started = time.perf_counter()
+    with ThreadPoolExecutor(max_workers=concurrency) as executor:
+        measurements = list(executor.map(lambda _: measure(), range(runs)))
+    wall_clock_seconds = time.perf_counter() - batch_started
+    elapsed = [measurement["elapsed_seconds"] for measurement in measurements]
+    rtf = [measurement["real_time_factor"] for measurement in measurements]
+    return {
+        "service": "nastech-tts",
+        "version": VERSION,
+        "warmup": warmup_result,
+        "runs": measurements,
+        "summary": {
+            "count": len(measurements),
+            "requested_concurrency": concurrency,
+            "wall_clock_seconds": round(wall_clock_seconds, 4),
+            "requests_per_second": round(len(measurements) / wall_clock_seconds, 4),
+            "mean_elapsed_seconds": round(statistics.fmean(elapsed), 4),
+            "median_elapsed_seconds": round(statistics.median(elapsed), 4),
+            "best_elapsed_seconds": round(min(elapsed), 4),
+            "mean_real_time_factor": round(statistics.fmean(rtf), 4),
+            "cpu": runtime.cpu.as_dict(),
+        },
+    }
+
+
 def main() -> int:
     args = _parser().parse_args()
-    runtime = SupertonicRuntime()
-
-    if args.command == "status":
-        print(
-            json.dumps({"service": "nastech-tts", "version": "0.4.0", **runtime.status()}, indent=2)
-        )
-        return 0
-
-    if args.command == "serve":
-        import uvicorn
-
-        uvicorn.run("nastech_tts.api:app", host=args.host, port=args.port, reload=False)
-        return 0
-
-    if args.command == "agent-tools":
-        from .api import AgentCompileRequest, AgentSpeechRequest
-
-        print(
-            json.dumps(
-                {
-                    "tools": [
-                        {
-                            "name": "nastech_compile_speech",
-                            "input_schema": AgentCompileRequest.model_json_schema(),
-                        },
-                        {
-                            "name": "nastech_generate_speech",
-                            "input_schema": AgentSpeechRequest.model_json_schema(),
-                        },
-                    ]
-                },
-                indent=2,
-            )
-        )
-        return 0
-
     try:
+        runtime = SupertonicRuntime()
+
+        if args.command == "status":
+            payload = {"service": "nastech-tts", "version": VERSION, **runtime.status()}
+            print(json.dumps(payload, indent=2))
+            return 0
+
+        if args.command == "serve":
+            import uvicorn
+
+            uvicorn.run("nastech_tts.api:app", host=args.host, port=args.port, reload=False)
+            return 0
+
+        if args.command == "warmup":
+            print(json.dumps(runtime.warmup(), indent=2))
+            return 0
+
+        if args.command == "agent-tools":
+            from .api import AgentCompileRequest, AgentSpeechRequest
+
+            print(
+                json.dumps(
+                    {
+                        "tools": [
+                            {
+                                "name": "nastech_compile_speech",
+                                "input_schema": AgentCompileRequest.model_json_schema(),
+                            },
+                            {
+                                "name": "nastech_generate_speech",
+                                "input_schema": AgentSpeechRequest.model_json_schema(),
+                            },
+                        ]
+                    },
+                    indent=2,
+                )
+            )
+            return 0
+
         markup = args.input.read_text(encoding="utf-8")
+        if args.command == "benchmark":
+            report = _benchmark(
+                runtime,
+                markup,
+                args.runs,
+                warmup=not args.no_warmup,
+                concurrency=args.concurrency,
+            )
+            if args.output:
+                _write_json(args.output, report)
+                print(args.output)
+            else:
+                print(json.dumps(report, indent=2))
+            return 0
+
         compiled = compile_nastechml(markup, runtime.settings)
         if args.command == "compile":
             payload = {
                 "request_id": compiled.request_id,
-                "runtime": "supertonic-local",
+                "runtime": "supertonic-local-onnx-cpu",
                 "text": compiled.text,
                 "voice": compiled.voice,
                 "steps": compiled.steps,
@@ -113,7 +205,13 @@ def main() -> int:
             print(f"Manifest: {manifest_path}")
             print(f"Duration: {audio.duration_seconds:.2f}s")
             return 0
-    except (OSError, ValueError, NastechMarkupError, CompactRuntimeError) as exc:
+    except (
+        CpuConfigurationError,
+        OSError,
+        ValueError,
+        NastechMarkupError,
+        CompactRuntimeError,
+    ) as exc:
         print(f"Nastech error: {exc}")
         return 2
 

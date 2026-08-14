@@ -1,5 +1,6 @@
 """Nastech Compact: local English expressive TTS powered by Supertonic ONNX."""
 
+from .cpu import CpuConfigurationError, CpuTuning
 from .markup import NastechMarkupError, parse_nastechml
 from .supertonic import (
     CompactAudio,
@@ -12,6 +13,8 @@ from .supertonic import (
 
 __all__ = [
     "CompactAudio",
+    "CpuConfigurationError",
+    "CpuTuning",
     "CompactCompiledRequest",
     "CompactRuntimeError",
     "CompactSettings",
@@ -21,4 +24,4 @@ __all__ = [
     "parse_nastechml",
 ]
 
-__version__ = "0.4.0"
+__version__ = "0.5.0"

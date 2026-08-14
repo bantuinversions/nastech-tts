@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Nastech Compact TTS",
-    "description": "A local agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. Use /v1/agent/compile for an auditable behavior plan before synthesis.",
-    "version": "0.4.0"
+    "description": "A local, CPU-tuned, agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. Use /v1/agent/compile for an auditable behavior plan before synthesis.",
+    "version": "0.5.0"
   },
   "paths": {
     "/v1/health": {
@@ -58,6 +58,98 @@
                   "additionalProperties": true,
                   "title": "Response Capabilities V1 Capabilities Get"
                 }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runtime/diagnostics": {
+      "get": {
+        "summary": "Diagnostics",
+        "operationId": "diagnostics_v1_runtime_diagnostics_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Diagnostics V1 Runtime Diagnostics Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/runtime/warmup": {
+      "post": {
+        "summary": "Warmup",
+        "operationId": "warmup_v1_runtime_warmup_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -161,11 +253,7 @@
             "description": "Successful Response",
             "content": {
               "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": true,
-                  "title": "Response Compile Speech V1 Agent Compile Post"
-                }
+                "schema": {}
               }
             }
           },

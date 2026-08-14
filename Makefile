@@ -1,4 +1,4 @@
-.PHONY: install lint test build verify compile-example synthesize-example budget openapi serve
+.PHONY: install lint test build verify compile-example synthesize-example budget openapi serve warmup benchmark benchmark-throughput
 
 install:
 	python -m pip install -e '.[dev]'
@@ -27,6 +27,15 @@ compile-example:
 
 synthesize-example:
 	nastech-tts synthesize examples/compact_agent_story.xml --output output/compact_agent_story.wav
+
+warmup:
+	nastech-tts warmup
+
+benchmark:
+	NASTECH_CPU_PROFILE=$${NASTECH_CPU_PROFILE:-balanced} nastech-tts benchmark examples/compact_agent_story.xml --runs $${RUNS:-3}
+
+benchmark-throughput:
+	NASTECH_CPU_PROFILE=throughput nastech-tts benchmark examples/compact_agent_story.xml --runs $${RUNS:-4} --concurrency 2
 
 serve:
 	nastech-tts serve --host 127.0.0.1 --port 8765

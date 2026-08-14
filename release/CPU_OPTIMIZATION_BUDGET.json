@@ -1,0 +1,17 @@
+{
+  "limit_mib": 1024.0,
+  "parts_bytes": {
+    "python_runtime": 273346390,
+    "model_assets": 403520887,
+    "release_assets": 2097593
+  },
+  "parts_mib": {
+    "python_runtime": 260.68,
+    "model_assets": 384.83,
+    "release_assets": 2.0
+  },
+  "total_bytes": 678964870,
+  "total_mib": 647.51,
+  "remaining_mib": 376.49,
+  "passes": true
+}

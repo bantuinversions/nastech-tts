@@ -1,9 +1,11 @@
-"""Nastech Compact agent API backed by a local Supertonic ONNX runtime."""
+"""Nastech Compact agent API backed by a local tuned Supertonic ONNX runtime."""
 
 from __future__ import annotations
 
 import html
+import logging
 import os
+from contextlib import asynccontextmanager
 from typing import Annotated, Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
@@ -13,6 +15,8 @@ from pydantic import BaseModel, Field
 
 from .markup import NastechMarkupError
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
+
+logger = logging.getLogger(__name__)
 
 
 class AgentCompileRequest(BaseModel):
@@ -101,15 +105,40 @@ def _error_response(exc: Exception) -> JSONResponse:
     return JSONResponse(status_code=code, content={"detail": str(exc)})
 
 
+def _audio_response(audio: Any, request_id: str) -> Response:
+    return Response(
+        content=audio.data,
+        media_type=audio.content_type,
+        headers={
+            "X-Nastech-Request-Id": request_id,
+            "X-Nastech-Runtime": "supertonic-local-onnx-cpu",
+            "X-Nastech-Duration-Seconds": f"{audio.duration_seconds:.2f}",
+            "X-Nastech-Manifest-Endpoint": "/v1/agent/compile",
+        },
+    )
+
+
 def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
     """Create a local and independently testable Nastech Compact application."""
+
+    @asynccontextmanager
+    async def lifespan(application: FastAPI):
+        if os.getenv("NASTECH_WARMUP_ON_START", "0").lower() in {"1", "true", "yes"}:
+            try:
+                await run_in_threadpool(application.state.runtime.warmup)
+                logger.info("Nastech CPU runtime warm-up completed.")
+            except CompactRuntimeError as exc:
+                logger.warning("Nastech CPU runtime warm-up failed: %s", exc)
+        yield
+
     app = FastAPI(
         title="Nastech Compact TTS",
-        version="0.4.0",
+        version="0.5.0",
         description=(
-            "A local agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. "
-            "Use /v1/agent/compile for an auditable behavior plan before synthesis."
+            "A local, CPU-tuned, agent-ready expressive TTS API backed by Supertonic 3 ONNX "
+            "assets. Use /v1/agent/compile for an auditable behavior plan before synthesis."
         ),
+        lifespan=lifespan,
     )
     app.state.runtime = runtime or SupertonicRuntime()
 
@@ -118,7 +147,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         return {
             "status": "ok",
             "service": "nastech-tts",
-            "version": "0.4.0",
+            "version": "0.5.0",
             "runtime": local_runtime.status(),
             "authentication_required": _authorization_required(),
         }
@@ -129,13 +158,42 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             "language": "en",
             "model_family": "supertonic-3",
             "inference": "local-onnx-cpu",
-            "agent_endpoints": ["/v1/agent/compile", "/v1/agent/speech", "/v1/audio/speech"],
+            "agent_endpoints": [
+                "/v1/agent/compile",
+                "/v1/agent/speech",
+                "/v1/audio/speech",
+            ],
+            "runtime_endpoints": ["/v1/runtime/diagnostics", "/v1/runtime/warmup"],
+            "cpu_optimizations": [
+                "ORT_ENABLE_ALL graph optimization",
+                "configurable ONNX thread pools",
+                "bounded CPU synthesis queue",
+                "bounded in-memory WAV cache",
+                "optional startup warm-up",
+            ],
             "documented_direct_events": ["laugh", "sigh"],
             "documented_native_tags": ["laugh", "breath", "sigh"],
             "release_dependent_tags": ["sad", "angry", "surprise", "cough", "yawn"],
             "formats": ["wav"],
             "max_deployment_mib": 1024,
         }
+
+    @app.get("/v1/runtime/diagnostics")
+    async def diagnostics(
+        _: None = Depends(require_agent_key),
+        local_runtime: SupertonicRuntime = Depends(_runtime),
+    ) -> dict[str, Any]:
+        return {"service": "nastech-tts", "version": "0.5.0", "runtime": local_runtime.status()}
+
+    @app.post("/v1/runtime/warmup", response_model=None)
+    async def warmup(
+        _: None = Depends(require_agent_key),
+        local_runtime: SupertonicRuntime = Depends(_runtime),
+    ) -> dict[str, Any] | JSONResponse:
+        try:
+            return await run_in_threadpool(local_runtime.warmup)
+        except CompactRuntimeError as exc:
+            return _error_response(exc)
 
     @app.get("/v1/agent/tools", response_model=list[AgentToolDescriptor])
     async def agent_tools(_: None = Depends(require_agent_key)) -> list[AgentToolDescriptor]:
@@ -152,19 +210,19 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             ),
         ]
 
-    @app.post("/v1/agent/compile")
+    @app.post("/v1/agent/compile", response_model=None)
     async def compile_speech(
         payload: AgentCompileRequest,
         _: None = Depends(require_agent_key),
         local_runtime: SupertonicRuntime = Depends(_runtime),
-    ) -> dict[str, Any]:
+    ) -> dict[str, Any] | JSONResponse:
         try:
             compiled = _compiled(payload, local_runtime)
         except (NastechMarkupError, ValueError) as exc:
             return _error_response(exc)
         return {
             "request_id": compiled.request_id,
-            "runtime": "supertonic-local",
+            "runtime": "supertonic-local-onnx-cpu",
             "text": compiled.text,
             "voice": compiled.voice,
             "steps": compiled.steps,
@@ -183,16 +241,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             audio = await run_in_threadpool(local_runtime.synthesize, compiled)
         except (NastechMarkupError, CompactRuntimeError, ValueError) as exc:
             return _error_response(exc)
-        return Response(
-            content=audio.data,
-            media_type=audio.content_type,
-            headers={
-                "X-Nastech-Request-Id": compiled.request_id,
-                "X-Nastech-Runtime": "supertonic-local",
-                "X-Nastech-Duration-Seconds": f"{audio.duration_seconds:.2f}",
-                "X-Nastech-Manifest-Endpoint": "/v1/agent/compile",
-            },
-        )
+        return _audio_response(audio, compiled.request_id)
 
     @app.post("/v1/audio/speech")
     async def openai_compatible_speech(
@@ -209,14 +258,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             audio = await run_in_threadpool(local_runtime.synthesize, compiled)
         except (NastechMarkupError, CompactRuntimeError, ValueError) as exc:
             return _error_response(exc)
-        return Response(
-            content=audio.data,
-            media_type=audio.content_type,
-            headers={
-                "X-Nastech-Request-Id": compiled.request_id,
-                "X-Nastech-Runtime": "supertonic-local",
-            },
-        )
+        return _audio_response(audio, compiled.request_id)
 
     return app
 

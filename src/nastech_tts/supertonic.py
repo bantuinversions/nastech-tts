@@ -1,17 +1,22 @@
 """Local Supertonic runtime for Nastech Compact.
 
-The runtime loads one small ONNX model family locally. It does not call a cloud
-provider and does not bundle any upstream model weights in the Nastech package.
+The runtime loads one ONNX model family locally. It never proxies synthesis to a
+cloud provider and exposes bounded CPU execution appropriate for small servers.
 """
 
 from __future__ import annotations
 
+import hashlib
 import io
 import os
+import threading
+import time
+from collections import OrderedDict
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
+from .cpu import CpuTuning
 from .markup import parse_nastechml
 from .types import AudioSpan, Fidelity, SpanKind
 
@@ -62,70 +67,38 @@ class CompactAudio:
 
 
 _EMOTION_TAGS: dict[str, tuple[str | None, Fidelity, str]] = {
-    "angry": (
-        "<angry>",
-        Fidelity.APPROXIMATED,
-        "Native tag request; confirm on the pinned model release.",
-    ),
-    "sad": (
-        "<sad>",
-        Fidelity.APPROXIMATED,
-        "Native tag request; confirm on the pinned model release.",
-    ),
-    "happy": (
-        None,
-        Fidelity.APPROXIMATED,
-        "No documented deterministic happy tag in the compact runtime.",
-    ),
+    "angry": ("<angry>", Fidelity.APPROXIMATED, "Native tag request; confirm on pinned release."),
+    "sad": ("<sad>", Fidelity.APPROXIMATED, "Native tag request; confirm on pinned release."),
+    "happy": (None, Fidelity.APPROXIMATED, "No deterministic happy tag in compact runtime."),
     "excited": (
         "<surprise>",
         Fidelity.APPROXIMATED,
-        "Native tag request; confirm on the pinned model release.",
+        "Native tag request; confirm on pinned release.",
     ),
     "fearful": (
         "<surprise>",
         Fidelity.APPROXIMATED,
-        "Native tag request; confirm on the pinned model release.",
+        "Native tag request; confirm on pinned release.",
     ),
-    "disgusted": (
-        None,
-        Fidelity.UNAVAILABLE,
-        "No documented compact-model control for this emotion.",
-    ),
+    "disgusted": (None, Fidelity.UNAVAILABLE, "No compact-model control for this emotion."),
     "frustrated": ("<angry>", Fidelity.APPROXIMATED, "Mapped to an anger tag request."),
     "neutral": (None, Fidelity.DIRECT, "Neutral speech requires no expression tag."),
-    "calm": (
-        "<breath>",
-        Fidelity.APPROXIMATED,
-        "Breath cue may support a calmer delivery but is not deterministic.",
-    ),
+    "calm": ("<breath>", Fidelity.APPROXIMATED, "Breath cue may support a calmer delivery."),
 }
 _SOUND_TAGS: dict[str, tuple[str, Fidelity, str]] = {
     "laugh": ("<laugh>", Fidelity.DIRECT, "Officially documented Supertonic expression tag."),
     "sigh": ("<sigh>", Fidelity.DIRECT, "Officially documented Supertonic expression tag."),
-    "chuckle": ("<laugh>", Fidelity.APPROXIMATED, "Mapped to the documented laugh tag."),
+    "chuckle": ("<laugh>", Fidelity.APPROXIMATED, "Mapped to documented laugh tag."),
     "gasp": (
         "<surprise>",
         Fidelity.APPROXIMATED,
-        "Native tag request; confirm on the pinned model release.",
+        "Native tag request; confirm on pinned release.",
     ),
-    "cough": (
-        "<cough>",
-        Fidelity.APPROXIMATED,
-        "Native tag request; confirm on the pinned model release.",
-    ),
-    "sniffle": ("<breath>", Fidelity.APPROXIMATED, "Mapped to the documented breath tag."),
-    "groan": ("<sigh>", Fidelity.APPROXIMATED, "Mapped to the documented sigh tag."),
-    "yawn": (
-        "<yawn>",
-        Fidelity.APPROXIMATED,
-        "Native tag request; confirm on the pinned model release.",
-    ),
-    "cry": (
-        "<sad>",
-        Fidelity.APPROXIMATED,
-        "Mapped to a sad tag request; no documented direct cry event.",
-    ),
+    "cough": ("<cough>", Fidelity.APPROXIMATED, "Native tag request; confirm on pinned release."),
+    "sniffle": ("<breath>", Fidelity.APPROXIMATED, "Mapped to documented breath tag."),
+    "groan": ("<sigh>", Fidelity.APPROXIMATED, "Mapped to documented sigh tag."),
+    "yawn": ("<yawn>", Fidelity.APPROXIMATED, "Native tag request; confirm on pinned release."),
+    "cry": ("<sad>", Fidelity.APPROXIMATED, "Mapped to sad tag request; no direct cry event."),
 }
 _RATE_MAP = {"slow": 0.82, "normal": 1.0, "fast": 1.18}
 
@@ -225,11 +198,31 @@ def compile_nastechml(
 
 @dataclass
 class SupertonicRuntime:
-    """Lazy local inference runtime backed by the official Supertonic Python SDK."""
+    """Lazy Supertonic runtime with tuned ONNX sessions and bounded CPU work."""
 
     settings: CompactSettings = field(default_factory=CompactSettings.from_env)
+    cpu: CpuTuning = field(default_factory=CpuTuning.from_env)
     _tts: Any = field(default=None, init=False, repr=False)
     _styles: dict[str, Any] = field(default_factory=dict, init=False, repr=False)
+    _audio_cache: OrderedDict[str, CompactAudio] = field(default_factory=OrderedDict, init=False)
+    _cache_bytes: int = field(default=0, init=False)
+    _synthesis_slots: threading.BoundedSemaphore = field(init=False, repr=False)
+    _state_lock: threading.Lock = field(default_factory=threading.Lock, init=False, repr=False)
+    _started_at: float = field(default_factory=time.monotonic, init=False, repr=False)
+    _metrics: dict[str, float | int] = field(
+        default_factory=lambda: {
+            "synthesis_requests": 0,
+            "synthesis_failures": 0,
+            "audio_cache_hits": 0,
+            "total_queue_wait_seconds": 0.0,
+            "total_synthesis_seconds": 0.0,
+        },
+        init=False,
+        repr=False,
+    )
+
+    def __post_init__(self) -> None:
+        self._synthesis_slots = threading.BoundedSemaphore(self.cpu.max_parallel_synthesis)
 
     def _load(self) -> Any:
         if self._tts is not None:
@@ -241,7 +234,13 @@ class SupertonicRuntime:
                 "Supertonic is not installed. Install Nastech with the compact extra."
             ) from exc
         try:
-            self._tts = TTS(auto_download=True)
+            self._tts = TTS(
+                model="supertonic-3",
+                model_dir=self.settings.cache_dir,
+                auto_download=True,
+                intra_op_num_threads=self.cpu.intra_op_threads,
+                inter_op_num_threads=self.cpu.inter_op_threads,
+            )
         except Exception as exc:
             raise CompactRuntimeError(
                 f"Unable to initialize local Supertonic assets: {exc}"
@@ -258,7 +257,46 @@ class SupertonicRuntime:
                 ) from exc
         return self._styles[voice]
 
+    @staticmethod
+    def _cache_key(compiled: CompactCompiledRequest) -> str:
+        source = f"{compiled.text}\x00{compiled.voice}\x00{compiled.speed}\x00{compiled.steps}"
+        return hashlib.sha256(source.encode("utf-8")).hexdigest()
+
+    def _read_cached_audio(self, key: str) -> CompactAudio | None:
+        with self._state_lock:
+            audio = self._audio_cache.get(key)
+            if audio is not None:
+                self._audio_cache.move_to_end(key)
+                self._metrics["audio_cache_hits"] = int(self._metrics["audio_cache_hits"]) + 1
+            return audio
+
+    def _store_cached_audio(self, key: str, audio: CompactAudio) -> None:
+        max_bytes = self.cpu.audio_cache_mib * 1024 * 1024
+        if len(audio.data) > max_bytes:
+            return
+        with self._state_lock:
+            previous = self._audio_cache.pop(key, None)
+            if previous is not None:
+                self._cache_bytes -= len(previous.data)
+            self._audio_cache[key] = audio
+            self._cache_bytes += len(audio.data)
+            while (
+                len(self._audio_cache) > self.cpu.audio_cache_entries
+                or self._cache_bytes > max_bytes
+            ):
+                _, evicted = self._audio_cache.popitem(last=False)
+                self._cache_bytes -= len(evicted.data)
+
+    def _record(self, name: str, value: int | float = 1) -> None:
+        with self._state_lock:
+            self._metrics[name] = self._metrics[name] + value
+
     def status(self) -> dict[str, Any]:
+        with self._state_lock:
+            metrics = dict(self._metrics)
+            cache_entries = len(self._audio_cache)
+            cache_bytes = self._cache_bytes
+        requests = int(metrics["synthesis_requests"])
         return {
             "provider": "supertonic-local",
             "model_family": "supertonic-3",
@@ -267,29 +305,99 @@ class SupertonicRuntime:
             "model_assets_bytes": _cache_size_bytes(self.settings.cache_dir),
             "model_assets_mib": round(_cache_size_bytes(self.settings.cache_dir) / 1024 / 1024, 2),
             "target_max_deployment_mib": 1024,
+            "cpu": self.cpu.as_dict(),
+            "audio_cache": {
+                "entries": cache_entries,
+                "bytes": cache_bytes,
+                "mib": round(cache_bytes / 1024 / 1024, 4),
+            },
+            "metrics": {
+                **metrics,
+                "mean_synthesis_seconds": round(
+                    float(metrics["total_synthesis_seconds"]) / requests, 4
+                )
+                if requests
+                else 0.0,
+                "uptime_seconds": round(time.monotonic() - self._started_at, 3),
+            },
         }
 
-    def synthesize(self, compiled: CompactCompiledRequest) -> CompactAudio:
-        tts = self._load()
-        try:
-            audio, duration = tts.synthesize(
-                text=compiled.text,
-                lang=self.settings.language,
-                voice_style=self._style(compiled.voice),
-                total_steps=compiled.steps,
-                speed=compiled.speed,
-            )
-        except Exception as exc:
-            raise CompactRuntimeError(f"Local Supertonic synthesis failed: {exc}") from exc
-        try:
-            import soundfile as sf
+    def clear_audio_cache(self) -> None:
+        """Discard cached WAV responses without unloading the local ONNX sessions."""
+        with self._state_lock:
+            self._audio_cache.clear()
+            self._cache_bytes = 0
 
-            buffer = io.BytesIO()
-            sf.write(buffer, audio.squeeze(), 44100, format="WAV")
-        except Exception as exc:
-            raise CompactRuntimeError(f"Unable to encode Supertonic audio: {exc}") from exc
-        return CompactAudio(
-            data=buffer.getvalue(),
-            content_type="audio/wav",
-            duration_seconds=float(duration[0]),
+    def warmup(self) -> dict[str, Any]:
+        """Load ONNX sessions, voice vectors, and run one short local synthesis."""
+        started = time.perf_counter()
+        compiled = compile_nastechml(
+            f'<speak voice="{self.settings.default_voice}">Nastech is ready.</speak>', self.settings
         )
+        audio = self.synthesize(compiled)
+        return {
+            "status": "ready",
+            "warmup_seconds": round(time.perf_counter() - started, 4),
+            "audio_duration_seconds": round(audio.duration_seconds, 4),
+            "runtime": self.status(),
+        }
+
+    def synthesize(
+        self, compiled: CompactCompiledRequest, *, use_cache: bool = True
+    ) -> CompactAudio:
+        """Generate local WAV audio, optionally bypassing the bounded response cache."""
+        key = self._cache_key(compiled)
+        if use_cache:
+            cached = self._read_cached_audio(key)
+            if cached is not None:
+                return cached
+
+        queue_started = time.perf_counter()
+        acquired = self._synthesis_slots.acquire(timeout=self.cpu.queue_timeout_seconds)
+        queue_wait = time.perf_counter() - queue_started
+        if not acquired:
+            self._record("synthesis_failures")
+            raise CompactRuntimeError(
+                "Timed out waiting for CPU synthesis capacity. Reduce clients or increase "
+                "NASTECH_MAX_PARALLEL_SYNTHESIS."
+            )
+        try:
+            # A request may have completed while this request waited in the queue.
+            if use_cache:
+                cached = self._read_cached_audio(key)
+                if cached is not None:
+                    return cached
+            started = time.perf_counter()
+            tts = self._load()
+            try:
+                waveform, duration = tts.synthesize(
+                    text=compiled.text,
+                    lang=self.settings.language,
+                    voice_style=self._style(compiled.voice),
+                    total_steps=compiled.steps,
+                    speed=compiled.speed,
+                )
+            except Exception as exc:
+                self._record("synthesis_failures")
+                raise CompactRuntimeError(f"Local Supertonic synthesis failed: {exc}") from exc
+            try:
+                import soundfile as sf
+
+                buffer = io.BytesIO()
+                sf.write(buffer, waveform.squeeze(), 44100, format="WAV")
+            except Exception as exc:
+                self._record("synthesis_failures")
+                raise CompactRuntimeError(f"Unable to encode Supertonic audio: {exc}") from exc
+            audio = CompactAudio(
+                data=buffer.getvalue(),
+                content_type="audio/wav",
+                duration_seconds=float(duration[0]),
+            )
+            if use_cache:
+                self._store_cached_audio(key, audio)
+            self._record("synthesis_requests")
+            self._record("total_queue_wait_seconds", queue_wait)
+            self._record("total_synthesis_seconds", time.perf_counter() - started)
+            return audio
+        finally:
+            self._synthesis_slots.release()

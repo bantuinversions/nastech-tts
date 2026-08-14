@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nastech-tts"
-version = "0.4.0"
+version = "0.5.0"
 description = "Nastech Compact: local expressive English TTS with Supertonic ONNX and an agent API."
 readme = "README.md"
 requires-python = ">=3.10"

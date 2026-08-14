@@ -4,7 +4,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     HOME=/opt/nastech \
-    NASTECH_MODEL_CACHE=/opt/nastech/.cache/supertonic3
+    NASTECH_MODEL_CACHE=/opt/nastech/.cache/supertonic3 \
+    NASTECH_CPU_PROFILE=balanced \
+    NASTECH_WARMUP_ON_START=1
 
 WORKDIR /app
 
