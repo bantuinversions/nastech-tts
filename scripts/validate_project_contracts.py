@@ -60,7 +60,7 @@ def main() -> int:
     }
     _require(agent.get("service") == "nastech-tts", "Agent catalog has an invalid service name.")
     _require(agent.get("publisher") == "Nastech Research", "Agent catalog publisher mismatch.")
-    _require(agent.get("version") == "0.9.0", "Agent catalog version mismatch.")
+    _require(agent.get("version") == "0.9.1", "Agent catalog version mismatch.")
     _require(agent.get("provider_catalog_size") == 50, "Provider catalog size mismatch.")
     _require(
         agent.get("default_provider_id") == "nastech-native-onnx",
@@ -94,7 +94,7 @@ def main() -> int:
 
     summary = _read_yaml(ROOT / "project-summary.yml")
     _require(summary["project"]["package"] == "nastech-tts", "Project summary package mismatch.")
-    _require(summary["project"]["version"] == "0.9.0", "Project summary version mismatch.")
+    _require(summary["project"]["version"] == "0.9.1", "Project summary version mismatch.")
     _require(summary["project"]["publisher"] == "Nastech Research", "Project publisher mismatch.")
     _require(summary["runtime"]["provider_catalog_size"] == 50, "Provider catalog mismatch.")
     _require(

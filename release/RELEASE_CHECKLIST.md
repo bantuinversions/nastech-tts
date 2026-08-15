@@ -8,11 +8,12 @@
 | Deterministic Python quality suite | `pytest -q` | **115 tests passing** without model download, GPU, managed-TTS credentials, or a live network service |
 | Capability roadmap | `make catalog && git diff --exit-code -- docs/CAPABILITY_CATALOG_*.md` | Exact 500-record foundation, 500-record expansion, and 1,000-record master roadmap are current and reproducible |
 | JSON and YAML contracts | `make openapi && make contract` | Thirteen agent tools, provider routes, portability routes, project summary, workflow templates, and daily CI schedule validate |
-| Source and wheel build | `make build` | `nastech_tts-0.9.0.tar.gz` and `nastech_tts-0.9.0-py3-none-any.whl` build successfully |
+| Source and wheel build | `make build` | `nastech_tts-0.9.1.tar.gz` and `nastech_tts-0.9.1-py3-none-any.whl` build successfully |
 | Distribution metadata | `python -m twine check dist/*` | Package long description and metadata validate |
 | Deployment budget | `make budget` | Full bundle remains at or below 1 GiB |
 | Real local synthesis | `nastech-tts synthesize examples/compact_agent_story.xml --output output/release_story.wav --clean` | Active local provider returns valid 44.1 kHz WAV, manifest, and cleanup report |
 | Release voice fixtures | `python scripts/generate_release_voice_fixtures.py` then `python scripts/validate_release_voice_fixtures.py` | Real local English voice fixtures, PCM-level reports, and checksummed manifest validate |
+| Long-form continuity | `python scripts/generate_longform_continuity_test.py --target-seconds 1800 --output-dir release/longform_continuity --max-chunks 96` | Exactly 30 minutes of unique local English synthesis plus M1/M3/F1/F3 auditions, level report, and SHA-256 manifest validate |
 | Local cleanup smoke test | `nastech-tts clean output/release_story.wav --output output/release_story.cleaned.wav` | Mono signed-16-bit PCM WAV remains readable and cleanup report is auditable |
 | Agent API smoke test | Provider inventory/preflight, story, plan, standard speech, chunked transfer, cleanup, platform inventory/preflight, diagnostics, warm-up, and cache-clear endpoints | Nastech endpoint contracts and headers match OpenAPI/agent catalog |
 | CPU portability evidence | `nastech-tts platforms` and `nastech-tts preflight python-cpu` | CPU profile reports as verified only after local runtime acceptance |

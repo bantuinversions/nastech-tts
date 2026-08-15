@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.9.1 — 2026-08-15
+
+Nastech Compact adds a reproducible **real local 30-minute continuity test**. The generator renders unique NastechML narrative segments locally, cleans every PCM segment, and joins the resulting frames only up to the requested duration; it does not loop, pad, or time-stretch audio. The completed F1 continuity run produced exactly 1,800 seconds of mono 16-bit PCM 44.1 kHz audio with no digital full-scale clipping. Four short verified preset-style auditions—M1, M3, F1, and F3—are also generated as release evidence without regional-accent claims.
+
+The tag-only release-audio workflow now regenerates and uploads the 30-minute continuity artifact, its source markup, four auditions, and the complete machine-readable manifest alongside the existing expressive fixture suite. The long WAV is a release asset rather than Git history, keeping source clones practical while preserving the evidence and checksum in the draft release.
+
 ## 0.9.0 — 2026-08-15
 
 Nastech Compact becomes a **Nastech provider-mixer platform**. Its public API, CLI, OpenAPI contract, and agent descriptor now expose a 50-target provider catalog, explicit `provider_id` selection, strict no-fallback routing, a network-disabled default, and zero-side-effect provider preflights. The verified local core remains active as `nastech-native-onnx`; every other target is accurately classified as adapter-available, licence-review, or credential-required until separately installed, reviewed, and accepted. A Coqui-compatible local command, Python, HTTP, and container path is cataloged without bundling an incompatible runtime or unreviewed model.

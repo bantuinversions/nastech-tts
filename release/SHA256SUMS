@@ -1,4 +1,3 @@
-30859072edefdf45b81635ec3a194bddb754e65cc2f52f1a7310648df09a8220  dist/nastech_tts-0.9.0.tar.gz
-38569b2634c47b03c46462f6a62605828b18f4ddb64d3251b81c30088e84426b  dist/nastech_tts-0.9.0-py3-none-any.whl
-52a7e5d897700e9d08684ddf53693534b55ae5a007c08cb8f47e123b7d362107  docs/openapi.json
-61b8694e3bc3584dc01f023f21347d44bc246877c1fd47eec79f55cd9fbac894  release/voice_fixtures/release-fixtures.json
+2533f209a888e0a6c5e80c3a6f4bbf45a6b5dad6ecdf40043b23293dd4069df0  dist/nastech_tts-0.9.1.tar.gz
+b4d7341e6ff1aab8ad2883a239b21aa02da4f9365233cea211c2c01992a4dd69  dist/nastech_tts-0.9.1-py3-none-any.whl
+6e06b8187d91de77dbb65bca427bbd133fa73e052e36b93d635092b1ba639566  docs/openapi.json

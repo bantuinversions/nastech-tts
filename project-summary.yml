@@ -2,7 +2,7 @@ schema_version: "1.2"
 project:
   name: "Nastech Compact TTS"
   package: "nastech-tts"
-  version: "0.9.0"
+  version: "0.9.1"
   publisher: "Nastech Research"
   repository: "https://github.com/bantuinversions/nastech-tts"
   license: "Apache-2.0"
@@ -77,8 +77,8 @@ quality:
     dependency_updates: ".github/dependabot.yml"
 deployment_budget:
   maximum_mib: 1024
-  latest_verified_mib: 682.62
-  remaining_mib: 341.38
+  latest_verified_mib: 841.59
+  remaining_mib: 182.41
 agent_contract:
   descriptor: "agent_tools/nastech_tts_tool.json"
   openapi: "docs/openapi.json"
@@ -104,3 +104,4 @@ agent_contract:
   provider_catalog: "docs/PROVIDER_CATALOG_50.md"
   provider_architecture: "docs/PROVIDER_ARCHITECTURE.md"
   voice_inventory_policy: "docs/VOICE_INVENTORY.md"
+  longform_continuity_evidence: "release/LONGFORM_CONTINUITY_TEST.md"

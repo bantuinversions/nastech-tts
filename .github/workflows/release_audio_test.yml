@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       ref:
-        description: "Tag or commit to verify with real local Supertonic synthesis"
+        description: "Tag or commit to verify with real local Nastech synthesis"
         required: true
         type: string
 
@@ -18,8 +18,8 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  local-supertonic-audio:
-    name: Real local voice fixtures
+  local-nastech-audio:
+    name: Real local voice and continuity fixtures
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -43,6 +43,14 @@ jobs:
         run: |
           python scripts/generate_release_voice_fixtures.py --overwrite
 
+      - name: Generate real 30-minute local continuity and preset auditions
+        run: |
+          python scripts/generate_longform_continuity_test.py \
+            --target-seconds 1800 \
+            --output-dir release/longform_continuity \
+            --max-chunks 96 \
+            --overwrite
+
       - name: Validate WAV format and deterministic levels
         run: |
           python scripts/validate_release_voice_fixtures.py \
@@ -53,5 +61,13 @@ jobs:
         with:
           name: nastech-release-voice-fixtures-${{ github.ref_name }}
           path: release/voice_fixtures/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload long-form continuity evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nastech-release-longform-continuity-${{ github.ref_name }}
+          path: release/longform_continuity/
           if-no-files-found: error
           retention-days: 90

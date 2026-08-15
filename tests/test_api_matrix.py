@@ -183,7 +183,7 @@ def test_health_remains_available_and_reports_authentication(monkeypatch) -> Non
 
     assert response.status_code == 200
     assert response.json()["authentication_required"] is True
-    assert response.json()["version"] == "0.9.0"
+    assert response.json()["version"] == "0.9.1"
 
 
 def test_agent_plan_exposes_local_execution_and_fidelity_summary(monkeypatch) -> None:

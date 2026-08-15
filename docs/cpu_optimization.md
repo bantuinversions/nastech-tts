@@ -2,7 +2,7 @@
 
 ## Scope
 
-Nastech Compact v0.9.0 runs the verified **Nastech native local provider** through ONNX Runtime on CPU. The optimizer layer preserves real local inference for the active provider; it does not introduce a cloud proxy, GPU dependency, model merge, unreviewed fallback, or silent provider substitution. The local loader exposes ONNX Runtime intra-operation and inter-operation thread controls and enables full graph optimization for its model sessions. [1]
+Nastech Compact v0.9.1 runs the verified **Nastech native local provider** through ONNX Runtime on CPU. The optimizer layer preserves real local inference for the active provider; it does not introduce a cloud proxy, GPU dependency, model merge, unreviewed fallback, or silent provider substitution. The local loader exposes ONNX Runtime intra-operation and inter-operation thread controls and enables full graph optimization for its model sessions. [1]
 
 ## Implemented Controls
 
@@ -26,9 +26,9 @@ The upstream model’s execution stage is sequential because its ONNX modules ha
 | Available RAM | 23 GiB |
 | Model assets | 384.83 MiB |
 | Python runtime and quality-tool dependencies | 289.15 MiB |
-| Release assets | 8.65 MiB |
-| Full measured deployment | **682.62 MiB** |
-| Headroom below 1 GiB | **341.38 MiB** |
+| Release assets, including 30-minute evidence | 167.61 MiB |
+| Full measured deployment | **841.59 MiB** |
+| Headroom below 1 GiB | **182.41 MiB** |
 
 ## Benchmark Evidence
 

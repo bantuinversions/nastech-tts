@@ -1,6 +1,6 @@
 # Nastech TTS API Reference
 
-Nastech Compact v0.9.0 is a **local-first, English expressive TTS provider mixer** published by Nastech Research. It presents a single NastechML request contract, routes each synthesis request through one explicitly selected active provider, applies deterministic optional WAV cleanup, and returns auditable provider metadata. The default core is real local CPU synthesis; network providers are disabled by default and inactive catalog entries cannot synthesize.
+Nastech Compact v0.9.1 is a **local-first, English expressive TTS provider mixer** published by Nastech Research. It presents a single NastechML request contract, routes each synthesis request through one explicitly selected active provider, applies deterministic optional WAV cleanup, and returns auditable provider metadata. The default core is real local CPU synthesis; network providers are disabled by default and inactive catalog entries cannot synthesize.
 
 > **Provider honesty:** a target in the 50-provider catalog is not necessarily installed, configured, licenced for a particular use, or eligible for synthesis. Call `POST /v1/providers/preflight` to receive its zero-side-effect activation requirements. See [PROVIDER_CATALOG_50.md](PROVIDER_CATALOG_50.md) and [PROVIDER_ARCHITECTURE.md](PROVIDER_ARCHITECTURE.md).
 
@@ -73,7 +73,7 @@ The response identifies **Nastech Agent** and **Nastech Research** but does not 
 
 `POST /v1/audio/clean` accepts `Content-Type: audio/wav`, up to 64 MiB, and supports **mono signed-16-bit PCM WAV**. It applies DC-offset removal, near-silence gating, peak limiting when required to prevent clipping, and short edge fades. It is not voice conversion, a learned denoiser, speaker cloning, or mastering.
 
-The deterministic level analyser checks channel count, sample rate, duration, peak, RMS, clipping, and DC offset. Real local release voices are generated only in the tag-only workflow, stored as audited fixtures, and revalidated from checksum-bearing manifests. See [release/voice_fixtures](../release/voice_fixtures/) and [RELEASE_CHECKLIST.md](../release/RELEASE_CHECKLIST.md).
+The deterministic level analyser checks channel count, sample rate, duration, peak, RMS, clipping, and DC offset. Real local release voices are generated only in the tag-only workflow, stored as audited fixtures, and revalidated from checksum-bearing manifests. The same workflow runs `generate_longform_continuity_test.py` to create an exact 1,800-second local continuity WAV from unique rendered segments plus M1, M3, F1, and F3 preset-style auditions. See [LONGFORM_CONTINUITY_TEST.md](../release/LONGFORM_CONTINUITY_TEST.md), [release/voice_fixtures](../release/voice_fixtures/), and [RELEASE_CHECKLIST.md](../release/RELEASE_CHECKLIST.md).
 
 ## Portability Discovery
 

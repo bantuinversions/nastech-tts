@@ -39,6 +39,19 @@ The first real synthesis prepares the configured local provider assets in the lo
 nastech-tts synthesize examples/compact_agent_story.xml --output output/story.wav
 ```
 
+## Verified 30-Minute Continuity Test
+
+Nastech v0.9.1 includes a real local long-form release test. It synthesizes distinct English NastechML narrative segments locally until exactly **1,800 seconds**, applies deterministic PCM cleanup to each segment, and joins only the real PCM output. It does not loop, pad, time-stretch, or repeat a WAV. The current F1 test passed at 44.1 kHz mono 16-bit PCM with zero full-scale clipped samples. Four short M1, M3, F1, and F3 preset-style auditions are generated alongside the long-form WAV; these are style IDs, not regional-accent labels.
+
+```bash
+python scripts/generate_longform_continuity_test.py \
+  --target-seconds 1800 \
+  --output-dir release/longform_continuity \
+  --max-chunks 96
+```
+
+The resulting 30-minute WAV is published as a release artifact rather than committed into Git history. See [release/LONGFORM_CONTINUITY_TEST.md](release/LONGFORM_CONTINUITY_TEST.md) for exact measurements, checksum, and the current listening evidence.
+
 ## Local CLI
 
 | Command | Purpose |

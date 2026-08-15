@@ -24,7 +24,7 @@ from .platforms import PlatformPlanError, host_platform_report, platform_preflig
 from .providers import ProviderActivationError, provider_inventory, provider_preflight
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
-VERSION = "0.9.0"
+VERSION = "0.9.1"
 
 
 def _parser() -> argparse.ArgumentParser:
