@@ -31,8 +31,13 @@ def main() -> int:
     tools = agent.get("tools", [])
     tool_names = {tool.get("name") for tool in tools}
     expected_tools = {
+        "nastech_plan_speech",
         "nastech_compile_speech",
         "nastech_generate_speech",
+        "nastech_stream_speech",
+        "nastech_clean_wav",
+        "nastech_list_platforms",
+        "nastech_platform_preflight",
         "nastech_runtime_diagnostics",
         "nastech_warmup_runtime",
         "nastech_clear_runtime_cache",
@@ -46,9 +51,14 @@ def main() -> int:
         "/v1/health",
         "/v1/capabilities",
         "/v1/agent/tools",
+        "/v1/agent/plan",
         "/v1/agent/compile",
         "/v1/agent/speech",
+        "/v1/agent/speech/stream",
         "/v1/audio/speech",
+        "/v1/audio/clean",
+        "/v1/platforms",
+        "/v1/platforms/preflight",
         "/v1/runtime/diagnostics",
         "/v1/runtime/warmup",
         "/v1/runtime/cache/clear",
@@ -57,7 +67,13 @@ def main() -> int:
 
     summary = _read_yaml(ROOT / "project-summary.yml")
     _require(summary["project"]["package"] == "nastech-tts", "Project summary package mismatch.")
-    _require(summary["quality"]["test_target"] == 72, "Project summary test target mismatch.")
+    _require(summary["project"]["version"] == "0.8.0", "Project summary version mismatch.")
+    _require(summary["quality"]["test_target"] == 90, "Project summary test target mismatch.")
+    catalog = (ROOT / "docs" / "CAPABILITY_CATALOG_500.md").read_text(encoding="utf-8")
+    _require(catalog.count("| ") >= 500, "Capability catalog has fewer than 500 records.")
+    _require(
+        "**Generated record count:** 500." in catalog, "Capability catalog count marker mismatch."
+    )
 
     yaml_paths = [
         ROOT / ".github" / "dependabot.yml",
@@ -70,6 +86,14 @@ def main() -> int:
     ]
     for path in yaml_paths:
         _require(_read_yaml(path) is not None, f"YAML contract is empty: {path.relative_to(ROOT)}")
+
+    ci = _read_yaml(ROOT / ".github" / "workflows" / "ci.yml")
+    triggers = ci.get("on", ci.get(True, {}))
+    schedules = triggers.get("schedule", [])
+    _require(
+        any(item.get("cron") == "17 3 * * *" for item in schedules),
+        "Daily CI schedule is missing.",
+    )
 
     print("Validated Nastech JSON and YAML project contracts.")
     return 0

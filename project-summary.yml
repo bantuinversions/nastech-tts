@@ -1,8 +1,8 @@
-schema_version: "1.0"
+schema_version: "1.2"
 project:
   name: "Nastech Compact TTS"
   package: "nastech-tts"
-  version: "0.6.0"
+  version: "0.8.0"
   repository: "https://github.com/bantuinversions/nastech-tts"
   license: "Apache-2.0"
   language_scope: "English only"
@@ -19,33 +19,70 @@ runtime:
     - latency
     - throughput
     - auto
+  cross_platform:
+    verified_profiles:
+      - python-cpu
+    planned_profiles:
+      - python-cuda
+      - python-tensorrt
+      - windows-directml
+      - intel-openvino
+      - android-cpu-xnnpack
+      - android-nnapi
+      - ios-coreml
+      - web-webgpu
+    rule: "A planned profile requires real target-provider synthesis, audio validity, latency, memory, package-size, and relevant device evidence before verification."
+  agent_execution:
+    planning_endpoint: "/v1/agent/plan"
+    streaming_endpoint: "/v1/agent/speech/stream"
+    streaming_semantics: "Post-synthesis WAV chunks; not incremental model inference."
+  voice_cleanup:
+    processor: "nastech-local-pcm-cleanup"
+    model_required: false
+    supported_input: "mono signed-16-bit PCM WAV"
+    operations:
+      - DC offset removal
+      - near-silence gate
+      - peak limiting
+      - edge fades
   operational_endpoints:
     - "/v1/health"
     - "/v1/capabilities"
+    - "/v1/platforms"
+    - "/v1/platforms/preflight"
     - "/v1/runtime/diagnostics"
     - "/v1/runtime/warmup"
     - "/v1/runtime/cache/clear"
 quality:
-  test_target: 72
+  test_target: 90
   commands:
     lint: "make lint"
     tests: "pytest -q"
     package: "make build"
     full_verification: "make verify"
+    capability_catalog: "make catalog"
   automation:
-    - ".github/workflows/ci.yml"
-    - ".github/workflows/release.yml"
-    - ".github/dependabot.yml"
+    workflows:
+      - ".github/workflows/ci.yml"
+      - ".github/workflows/release.yml"
+    daily_ci_utc: "03:17"
+    dependency_updates: ".github/dependabot.yml"
 deployment_budget:
   maximum_mib: 1024
-  latest_verified_mib: 676.14
-  remaining_mib: 347.86
+  latest_verified_mib: 676.42
+  remaining_mib: 347.58
 agent_contract:
   descriptor: "agent_tools/nastech_tts_tool.json"
   openapi: "docs/openapi.json"
+  capability_catalog: "docs/CAPABILITY_CATALOG_500.md"
   tools:
+    - nastech_plan_speech
     - nastech_compile_speech
     - nastech_generate_speech
+    - nastech_stream_speech
+    - nastech_clean_wav
+    - nastech_list_platforms
+    - nastech_platform_preflight
     - nastech_runtime_diagnostics
     - nastech_warmup_runtime
     - nastech_clear_runtime_cache

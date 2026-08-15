@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.0 — 2026-08-15
+
+Nastech Compact adds a provider-aware portability layer. Local users and agents can inspect host ONNX providers through `nastech-tts platforms` or `GET /v1/platforms`, and create evidence-gated CPU, GPU, Android, iOS, and browser activation plans through `nastech-tts preflight TARGET` or `POST /v1/platforms/preflight`. Python CPU remains the sole verified runtime. All accelerator and mobile targets explicitly remain planned until real target-provider synthesis, audio, latency, memory, package, and relevant device evidence are recorded.
+
+The repository adds a generated, exact 500-record capability catalog across 20 product domains, with every record labelled by delivery/validation status instead of being falsely claimed as implemented. The deterministic suite expands to 90 tests and hosted CI now rejects drift in both the catalog and OpenAPI contract during its daily and event-driven quality workflow.
+
+## 0.7.0 — 2026-08-15
+
+Nastech Compact adds an auditable local agent planning endpoint, a chunked WAV-delivery endpoint with explicit post-synthesis semantics, and an opt-in deterministic local PCM cleanup stage. The cleanup tool removes DC offset, gates near-digital-silence samples, prevents clipping when necessary, and applies short edge fades; it does not introduce a second learned model or perform voice conversion.
+
+The command-line interface adds `plan` and `clean`. The agent catalog now documents eight local operations. The Python suite expands to 81 tests, including cleanup, planning, chunked-transfer, and CLI coverage. GitHub Actions now executes the complete deterministic quality workflow daily at 03:17 UTC in addition to existing push, pull-request, and manual triggers.
+
 ## 0.6.0 — 2026-08-14
 
 Nastech Compact now provides a GitHub-ready maintenance layer. It includes 69 deterministic Python tests across markup validation, compiler fidelity, CPU configuration, runtime cache behavior, authenticated API behavior, and agent tool discovery. The package adds `validate` and `clear-cache` CLI commands plus an authenticated `POST /v1/runtime/cache/clear` operation.

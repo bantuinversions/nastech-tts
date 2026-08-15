@@ -4,7 +4,7 @@ Nastech Compact is a **single local service**. It contains the Nastech agent API
 
 ## Size Contract
 
-The target maximum full deployment budget is **1 GiB**. The verified release measurement is **676.14 MiB**, consisting of 384.83 MiB of real Supertonic assets, 289.15 MiB of runtime and quality-tool dependencies, and 2.16 MiB of Nastech release assets. This leaves 347.86 MiB of headroom. Run the budget check after every dependency or model update.
+The target maximum full deployment budget is **1 GiB**. The verified release measurement is **676.42 MiB**, consisting of 384.83 MiB of real Supertonic assets, 289.15 MiB of runtime and quality-tool dependencies, and 2.44 MiB of Nastech release assets. This leaves 347.58 MiB of headroom. Run the budget check after every dependency or model update.
 
 ```bash
 python scripts/check_compact_budget.py \
@@ -64,12 +64,12 @@ The benchmark reports elapsed time, audio duration, real-time factor, wall-clock
 The Dockerfile pre-downloads the real Supertonic assets, selects the balanced CPU profile, and enables startup warm-up. Build and run it locally:
 
 ```bash
-docker build -t nastech-compact:0.5.0 .
-docker images nastech-compact:0.5.0
+docker build -t nastech-compact:0.8.0 .
+docker images nastech-compact:0.8.0
 
 docker run --rm -p 8765:8765 \
   -e NASTECH_API_KEY='choose-a-secret' \
-  nastech-compact:0.5.0
+  nastech-compact:0.8.0
 ```
 
 Override the CPU profile or cap the container’s CPU allocation explicitly when required by the host policy. If Docker CPU limits are used, set matching Nastech thread values rather than assuming host-wide logical CPU detection reflects the container’s quota.
@@ -80,7 +80,7 @@ docker run --rm -p 8765:8765 --cpus=4 \
   -e NASTECH_CPU_PROFILE=balanced \
   -e NASTECH_INTRA_OP_THREADS=4 \
   -e NASTECH_INTER_OP_THREADS=1 \
-  nastech-compact:0.5.0
+  nastech-compact:0.8.0
 ```
 
 ## Agent Authentication

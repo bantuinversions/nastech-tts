@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Nastech Compact TTS",
-    "description": "A local, CPU-tuned, agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. Use /v1/agent/compile for an auditable behavior plan before synthesis.",
-    "version": "0.6.0"
+    "description": "A local, CPU-tuned, agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. Agent plans and chunked delivery remain auditable and local.",
+    "version": "0.8.0"
   },
   "paths": {
     "/v1/health": {
@@ -58,6 +58,108 @@
                   "additionalProperties": true,
                   "title": "Response Capabilities V1 Capabilities Get"
                 }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/platforms": {
+      "get": {
+        "summary": "List Platforms",
+        "operationId": "list_platforms_v1_platforms_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response List Platforms V1 Platforms Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/platforms/preflight": {
+      "post": {
+        "summary": "Preflight Platform",
+        "operationId": "preflight_platform_v1_platforms_preflight_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlatformPreflightRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -264,6 +366,60 @@
         }
       }
     },
+    "/v1/agent/plan": {
+      "post": {
+        "summary": "Plan Speech",
+        "operationId": "plan_speech_v1_agent_plan_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentPlanRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/agent/compile": {
       "post": {
         "summary": "Compile Speech",
@@ -350,6 +506,104 @@
             }
           }
         },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent/speech/stream": {
+      "post": {
+        "summary": "Stream Speech",
+        "operationId": "stream_speech_v1_agent_speech_stream_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentStreamRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/audio/clean": {
+      "post": {
+        "summary": "Clean Audio",
+        "operationId": "clean_audio_v1_audio_clean_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful Response",
@@ -470,6 +724,65 @@
         "title": "AgentCompileRequest",
         "description": "A structured NastechML request with local-runtime controls."
       },
+      "AgentPlanRequest": {
+        "properties": {
+          "markup": {
+            "type": "string",
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Markup"
+          },
+          "voice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice"
+          },
+          "steps": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 12.0,
+                "minimum": 5.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps"
+          },
+          "cleanup": {
+            "type": "boolean",
+            "title": "Cleanup",
+            "default": false
+          },
+          "objective": {
+            "type": "string",
+            "maxLength": 280,
+            "minLength": 1,
+            "title": "Objective",
+            "default": "Generate an auditable local expressive English WAV response."
+          },
+          "delivery": {
+            "type": "string",
+            "pattern": "^(wav|chunked-wav)$",
+            "title": "Delivery",
+            "default": "wav"
+          }
+        },
+        "type": "object",
+        "required": [
+          "markup"
+        ],
+        "title": "AgentPlanRequest",
+        "description": "Agent-facing plan request that compiles speech without creating audio."
+      },
       "AgentSpeechRequest": {
         "properties": {
           "markup": {
@@ -502,6 +815,11 @@
               }
             ],
             "title": "Steps"
+          },
+          "cleanup": {
+            "type": "boolean",
+            "title": "Cleanup",
+            "default": false
           }
         },
         "type": "object",
@@ -510,6 +828,59 @@
         ],
         "title": "AgentSpeechRequest",
         "description": "NastechML request that produces local Supertonic audio."
+      },
+      "AgentStreamRequest": {
+        "properties": {
+          "markup": {
+            "type": "string",
+            "maxLength": 12000,
+            "minLength": 1,
+            "title": "Markup"
+          },
+          "voice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice"
+          },
+          "steps": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 12.0,
+                "minimum": 5.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps"
+          },
+          "cleanup": {
+            "type": "boolean",
+            "title": "Cleanup",
+            "default": false
+          },
+          "chunk_bytes": {
+            "type": "integer",
+            "maximum": 1048576.0,
+            "minimum": 4096.0,
+            "title": "Chunk Bytes",
+            "default": 65536
+          }
+        },
+        "type": "object",
+        "required": [
+          "markup"
+        ],
+        "title": "AgentStreamRequest",
+        "description": "Chunked WAV delivery request.\n\nAudio is synthesized completely by the local model before it is emitted as\nchunks. This preserves one-model inference and WAV correctness; it is not\nfalsely advertised as token- or frame-level TTS streaming."
       },
       "AgentToolDescriptor": {
         "properties": {
@@ -596,6 +967,11 @@
             "minimum": 0.7,
             "title": "Speed",
             "default": 1.0
+          },
+          "cleanup": {
+            "type": "boolean",
+            "title": "Cleanup",
+            "default": false
           }
         },
         "type": "object",
@@ -604,6 +980,23 @@
         ],
         "title": "OpenAISpeechRequest",
         "description": "Small OpenAI-compatible request shape for existing agent clients."
+      },
+      "PlatformPreflightRequest": {
+        "properties": {
+          "target": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z0-9-]+$",
+            "title": "Target"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target"
+        ],
+        "title": "PlatformPreflightRequest",
+        "description": "Named portable runtime target to evaluate against the current host."
       },
       "ValidationError": {
         "properties": {

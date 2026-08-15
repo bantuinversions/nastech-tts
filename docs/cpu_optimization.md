@@ -2,7 +2,7 @@
 
 ## Scope
 
-Nastech Compact v0.5.0 runs **Supertonic 3** locally through ONNX Runtime on CPU. The optimizer layer preserves one model family and real local inference; it does not introduce a cloud proxy, GPU dependency, model merge, quantization substitute, or second fallback model. Supertonic’s loader exposes ONNX Runtime intra-operation and inter-operation thread controls and enables full graph optimization for its model sessions. [1]
+Nastech Compact v0.8.0 runs **Supertonic 3** locally through ONNX Runtime on CPU. The optimizer layer preserves one model family and real local inference; it does not introduce a cloud proxy, GPU dependency, model merge, quantization substitute, or second fallback model. Supertonic’s loader exposes ONNX Runtime intra-operation and inter-operation thread controls and enables full graph optimization for its model sessions. [1]
 
 ## Implemented Controls
 
@@ -26,9 +26,9 @@ The upstream model’s execution stage is sequential because its ONNX modules ha
 | Available RAM | 23 GiB |
 | Model assets | 384.83 MiB |
 | Python runtime and quality-tool dependencies | 289.15 MiB |
-| Release assets | 2.16 MiB |
-| Full measured deployment | **676.14 MiB** |
-| Headroom below 1 GiB | **347.86 MiB** |
+| Release assets | 2.44 MiB |
+| Full measured deployment | **676.42 MiB** |
+| Headroom below 1 GiB | **347.58 MiB** |
 
 ## Benchmark Evidence
 

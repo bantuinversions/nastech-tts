@@ -1,4 +1,4 @@
-.PHONY: install lint test contract build verify compile-example validate-example synthesize-example budget openapi serve warmup clear-cache benchmark benchmark-throughput
+.PHONY: install lint test catalog contract build verify compile-example validate-example plan-example synthesize-example clean-example budget openapi serve warmup clear-cache platforms preflight benchmark benchmark-throughput
 
 install:
 	python -m pip install -e '.[dev]'
@@ -9,6 +9,9 @@ lint:
 
 test:
 	pytest -q
+
+catalog:
+	python scripts/generate_capability_catalog.py
 
 contract:
 	python scripts/validate_project_contracts.py
@@ -23,7 +26,7 @@ openapi:
 budget:
 	python scripts/check_compact_budget.py --runtime $${VIRTUAL_ENV:?activate a virtual environment} --model-cache $${NASTECH_MODEL_CACHE:-$$HOME/.cache/supertonic3} --release . --limit-mib 1024
 
-verify: lint test contract build openapi budget
+verify: lint test catalog openapi contract build budget
 
 compile-example:
 	nastech-tts compile examples/compact_agent_story.xml --output output/compact_agent_story.compile.json
@@ -31,14 +34,26 @@ compile-example:
 validate-example:
 	nastech-tts validate examples/compact_agent_story.xml --output output/compact_agent_story.validate.json
 
+plan-example:
+	nastech-tts plan examples/compact_agent_story.xml --delivery chunked-wav --clean --output output/compact_agent_story.plan.json
+
 synthesize-example:
 	nastech-tts synthesize examples/compact_agent_story.xml --output output/compact_agent_story.wav
+
+clean-example:
+	nastech-tts clean output/compact_agent_story.wav --output output/compact_agent_story.cleaned.wav --report output/compact_agent_story.cleanup.json
 
 warmup:
 	nastech-tts warmup
 
 clear-cache:
 	nastech-tts clear-cache
+
+platforms:
+	nastech-tts platforms
+
+preflight:
+	nastech-tts preflight $${TARGET:-python-cuda}
 
 benchmark:
 	NASTECH_CPU_PROFILE=$${NASTECH_CPU_PROFILE:-balanced} nastech-tts benchmark examples/compact_agent_story.xml --runs $${RUNS:-3}

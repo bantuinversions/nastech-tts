@@ -10,11 +10,13 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from typing import Any
 
+from .cleanup import VoiceCleanupError, clean_wav
 from .cpu import CpuConfigurationError
 from .markup import NastechMarkupError
+from .platforms import PlatformPlanError, host_platform_report, platform_preflight
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
-VERSION = "0.6.0"
+VERSION = "0.8.0"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -29,6 +31,19 @@ def _parser() -> argparse.ArgumentParser:
     compile_command.add_argument("input", type=Path, help="Input NastechML document.")
     compile_command.add_argument("--output", type=Path, help="Optional JSON output path.")
 
+    plan = subparsers.add_parser(
+        "plan", help="Build an auditable local agent execution plan without generating audio."
+    )
+    plan.add_argument("input", type=Path, help="Input NastechML document.")
+    plan.add_argument("--output", type=Path, help="Optional JSON plan output path.")
+    plan.add_argument("--objective", default="Generate an auditable local expressive English WAV.")
+    plan.add_argument("--delivery", choices=["wav", "chunked-wav"], default="wav")
+    plan.add_argument("--voice", help="Optional local Supertonic voice override.")
+    plan.add_argument(
+        "--steps", type=int, choices=range(5, 13), help="Optional local step override."
+    )
+    plan.add_argument("--clean", action="store_true", help="Request local PCM cleanup in the plan.")
+
     validate = subparsers.add_parser(
         "validate", help="Validate English NastechML without loading or synthesizing the model."
     )
@@ -41,6 +56,21 @@ def _parser() -> argparse.ArgumentParser:
     synthesize.add_argument("input", type=Path, help="Input NastechML document.")
     synthesize.add_argument("--output", type=Path, required=True, help="WAV destination path.")
     synthesize.add_argument("--manifest", type=Path, help="Optional manifest destination path.")
+    synthesize.add_argument(
+        "--clean",
+        action="store_true",
+        help="Apply conservative local PCM WAV cleanup after synthesis.",
+    )
+    synthesize.add_argument(
+        "--clean-report", type=Path, help="Optional JSON cleanup report destination."
+    )
+
+    clean = subparsers.add_parser(
+        "clean", help="Clean an existing mono 16-bit PCM WAV without a model or cloud service."
+    )
+    clean.add_argument("input", type=Path, help="Input mono signed-16-bit PCM WAV.")
+    clean.add_argument("--output", type=Path, required=True, help="Cleaned WAV destination path.")
+    clean.add_argument("--report", type=Path, help="Optional JSON cleanup report destination.")
 
     subparsers.add_parser("status", help="Show model, CPU policy, cache, and runtime status.")
     subparsers.add_parser(
@@ -50,6 +80,13 @@ def _parser() -> argparse.ArgumentParser:
         "clear-cache", help="Discard local WAV cache entries without unloading ONNX."
     )
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
+    subparsers.add_parser("platforms", help="Report local ONNX providers and portability profiles.")
+    preflight = subparsers.add_parser(
+        "preflight", help="Plan CPU, GPU, Android, iOS, or browser target activation."
+    )
+    preflight.add_argument(
+        "target", help="Platform target, for example python-cuda or android-nnapi."
+    )
 
     benchmark = subparsers.add_parser(
         "benchmark", help="Measure warmed local ONNX synthesis with cache disabled per run."
@@ -138,6 +175,14 @@ def _benchmark(
     }
 
 
+def _print_or_write(payload: dict[str, Any], output: Path | None) -> None:
+    if output:
+        _write_json(output, payload)
+        print(output)
+    else:
+        print(json.dumps(payload, indent=2))
+
+
 def main() -> int:
     args = _parser().parse_args()
     try:
@@ -162,6 +207,14 @@ def main() -> int:
             print(json.dumps({"status": "cleared", **runtime.clear_audio_cache()}, indent=2))
             return 0
 
+        if args.command == "platforms":
+            print(json.dumps(host_platform_report(), indent=2))
+            return 0
+
+        if args.command == "preflight":
+            print(json.dumps(platform_preflight(args.target), indent=2))
+            return 0
+
         if args.command == "agent-tools":
             from .api import agent_tool_descriptors
 
@@ -170,6 +223,14 @@ def main() -> int:
                     {"tools": [item.model_dump() for item in agent_tool_descriptors()]}, indent=2
                 )
             )
+            return 0
+
+        if args.command == "clean":
+            cleaned = clean_wav(args.input.read_bytes())
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_bytes(cleaned.data)
+            report = {"input": str(args.input), "output": str(args.output), **cleaned.report}
+            _print_or_write(report, args.report)
             return 0
 
         markup = args.input.read_text(encoding="utf-8")
@@ -181,11 +242,21 @@ def main() -> int:
                 warmup=not args.no_warmup,
                 concurrency=args.concurrency,
             )
-            if args.output:
-                _write_json(args.output, report)
-                print(args.output)
-            else:
-                print(json.dumps(report, indent=2))
+            _print_or_write(report, args.output)
+            return 0
+
+        if args.command == "plan":
+            from .api import AgentPlanRequest, _agent_plan, _compiled
+
+            request = AgentPlanRequest(
+                markup=markup,
+                voice=args.voice,
+                steps=args.steps,
+                cleanup=args.clean,
+                objective=args.objective,
+                delivery=args.delivery,
+            )
+            _print_or_write(_agent_plan(request, _compiled(request, runtime)), args.output)
             return 0
 
         compiled = compile_nastechml(markup, runtime.settings)
@@ -196,20 +267,11 @@ def main() -> int:
                 "span_count": len(compiled.manifest["decisions"]),
                 **_compiled_payload(compiled),
             }
-            if args.output:
-                _write_json(args.output, payload)
-                print(args.output)
-            else:
-                print(json.dumps(payload, indent=2))
+            _print_or_write(payload, args.output)
             return 0
 
         if args.command == "compile":
-            payload = _compiled_payload(compiled)
-            if args.output:
-                _write_json(args.output, payload)
-                print(args.output)
-            else:
-                print(json.dumps(payload, indent=2))
+            _print_or_write(_compiled_payload(compiled), args.output)
             return 0
 
         if args.command == "synthesize":
@@ -223,6 +285,14 @@ def main() -> int:
             print(f"Audio: {args.output}")
             print(f"Manifest: {manifest_path}")
             print(f"Duration: {audio.duration_seconds:.2f}s")
+            if args.clean:
+                cleaned = clean_wav(audio.data)
+                args.output.write_bytes(cleaned.data)
+                report_path = args.clean_report or args.output.with_suffix(
+                    args.output.suffix + ".cleanup.json"
+                )
+                _write_json(report_path, cleaned.report)
+                print(f"Cleanup report: {report_path}")
             return 0
     except (
         CpuConfigurationError,
@@ -230,6 +300,8 @@ def main() -> int:
         ValueError,
         NastechMarkupError,
         CompactRuntimeError,
+        VoiceCleanupError,
+        PlatformPlanError,
     ) as exc:
         print(f"Nastech error: {exc}")
         return 2

@@ -2,58 +2,53 @@
 
 ## Quality Objective
 
-Nastech Compact maintains **72 collected Python tests**. The suite is intentionally structured around deterministic behavior that can run without model download, GPU access, cloud credentials, or a live network service. Real local synthesis, API smoke tests, package builds, and budget checks remain available as separate release verification commands.
+Nastech Compact maintains **81 collected deterministic Python tests**. The suite is designed to run without model download, GPU access, cloud credentials, or a running network service. Real local synthesis, optional cleanup, API smoke checks, builds, and budget enforcement remain separate release-verification steps.
 
 | Test area | Focus | Coverage style |
 |---|---|---|
-| NastechML baseline | Speech, emotions, sounds, pauses, and English validation | Existing unit tests |
-| NastechML matrix | Every allowed sound and emotion, supported prosody, invalid shapes | Parameterized parser tests |
-| Compiler baseline | Direct tags, release-dependent warnings, and prosody mapping | Existing unit tests |
-| Compiler matrix | Default voice aliases, direct/approximate sound compilation, emotion fidelity | Parameterized compiler tests |
-| CPU tuning | Profiles, overrides, and invalid policy configuration | Unit tests |
-| Runtime cache | Cache-key isolation, retrieval, LRU eviction, byte bounds, status, and clearing | Unit tests without model loading |
-| Agent API baseline | Compile, WAV response, OpenAI alias, diagnostics, and warm-up contracts | Existing FastAPI test-client tests |
-| Agent API matrix | Bearer authentication, tool discovery, cache endpoint, invalid markup, capability discovery, and speed mapping | FastAPI test-client tests |
+| NastechML | Valid English markup, all supported sounds/emotions/prosody, and invalid-document boundaries | Unit and parameterized parser tests |
+| Compiler | Voice aliases, local expression-tag mapping, rate conversion, and honest fidelity reporting | Unit and parameterized compiler tests |
+| CPU/runtime | Profiles, queue/cache bounds, cache keys, cache clear reporting, and status fields | Unit tests without model loading |
+| Local cleanup | Readable PCM output, audit report, DC removal, near-silence gating, and unsupported-format rejection | Deterministic WAV fixture tests |
+| CLI | Validation, cache management, agent tool discovery, planning, and WAV cleanup commands | CLI integration tests with local fakes/fixtures |
+| Agent API | Bearer protection, planning, compilation, plain WAV, chunked transfer, cleanup input validation, diagnostics, warm-up, and capability contracts | FastAPI test-client tests |
+| Machine-readable contracts | Agent catalog, OpenAPI paths, project summary, YAML templates, and daily CI schedule | `scripts/validate_project_contracts.py` |
 
 ## Required Local Commands
 
 ```bash
-# Formatting and static analysis.
 make lint
-
-# All 72 deterministic Python tests.
 pytest -q
-
-# Confirm exact collection count when changing tests.
 pytest --collect-only -q
-
-# Build source and wheel distributions, regenerate OpenAPI, and measure bundle size.
+make contract
 make verify
 ```
 
 ## Runtime Verification Commands
 
-The deterministic suite intentionally does not load the real ONNX model. Run these commands on a machine with Supertonic assets when validating a release candidate.
+The deterministic suite deliberately does not load the real ONNX model. Run these checks on a host with Supertonic assets when validating a release candidate.
 
 ```bash
-# Inspect the active local CPU policy and model cache.
+# Inspect local CPU policy, model cache, response cache, and metrics.
 nastech-tts status
 
-# Load sessions and create a short local WAV.
-nastech-tts warmup
-
-# Validate and compile an example without synthesis.
+# Validate and prepare an agent plan before synthesis.
 nastech-tts validate examples/compact_agent_story.xml
-nastech-tts compile examples/compact_agent_story.xml
+nastech-tts plan examples/compact_agent_story.xml --delivery chunked-wav --clean
 
-# Synthesize a real local WAV and its manifest.
-nastech-tts synthesize examples/compact_agent_story.xml --output output/release_story.wav
+# Run one real local synthesis, then run cleanup as a separate auditable stage.
+nastech-tts synthesize examples/compact_agent_story.xml --output output/release_story.wav --clean
+nastech-tts clean output/release_story.wav --output output/release_story.cleaned.wav
 
-# Measure uncached local CPU work.
+# Measure uncached local synthesis.
 NASTECH_CPU_PROFILE=balanced \
   nastech-tts benchmark examples/compact_agent_story.xml --runs 3
 ```
 
+## Daily Hosted Verification
+
+`.github/workflows/ci.yml` runs the full deterministic workflow automatically at **03:17 UTC every day** as well as on pushes, pull requests, and manual dispatch. It runs the 3-version test matrix, validates JSON/YAML contracts, regenerates the OpenAPI schema to detect drift, builds distributions, and validates package metadata. It does not incur model-download or cloud-synthesis work.
+
 ## Contribution Gate
 
-Every pull request should preserve or improve meaningful test coverage. A behavior change must include a test that would have failed before the change, rather than only a test that repeats an existing assertion. Changes to runtime dependencies, package contents, or model assets must also pass `make budget` against the actual target environment.
+Every behavior change must include a focused test that would have failed before the change. Changes to package contents, dependencies, or local model assets must also pass `make budget` against the intended target environment. API or agent-catalog changes must regenerate `docs/openapi.json` and pass `make contract`.

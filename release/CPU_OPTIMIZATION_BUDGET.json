@@ -3,15 +3,15 @@
   "parts_bytes": {
     "python_runtime": 303197568,
     "model_assets": 403520887,
-    "release_assets": 2263613
+    "release_assets": 2561111
   },
   "parts_mib": {
     "python_runtime": 289.15,
     "model_assets": 384.83,
-    "release_assets": 2.16
+    "release_assets": 2.44
   },
-  "total_bytes": 708982068,
-  "total_mib": 676.14,
-  "remaining_mib": 347.86,
+  "total_bytes": 709279566,
+  "total_mib": 676.42,
+  "remaining_mib": 347.58,
   "passes": true
 }
