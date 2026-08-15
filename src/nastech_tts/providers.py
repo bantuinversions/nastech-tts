@@ -31,6 +31,7 @@ class ProviderDefinition:
     route_type: str
     state: str
     supports_english: bool
+    language_codes: tuple[str, ...]
     activation_boundary: str
 
     def as_dict(self) -> dict[str, Any]:
@@ -43,13 +44,15 @@ def _provider(
     route_type: str,
     state: str,
     activation_boundary: str,
+    language_codes: tuple[str, ...] = ("en",),
 ) -> ProviderDefinition:
     return ProviderDefinition(
         id=provider_id,
         label=label,
         route_type=route_type,
         state=state,
-        supports_english=True,
+        supports_english="en" in language_codes,
+        language_codes=language_codes,
         activation_boundary=activation_boundary,
     )
 
@@ -82,6 +85,84 @@ _PROVIDER_ROWS = (
         "local-command",
         ADAPTER_AVAILABLE,
         "Use a separately managed compatible environment, executable, and model.",
+    ),
+    _provider(
+        "coqui-luganda-openbible",
+        "Luganda OpenBible VITS local pack",
+        "local-command",
+        ADAPTER_AVAILABLE,
+        (
+            "Install the reviewed isolated Luganda VITS environment, select an approved "
+            "training-set speaker, preserve CC-BY-SA attribution, and complete native review."
+        ),
+        ("lg",),
+    ),
+    _provider(
+        "mms-luganda-eval",
+        "MMS Luganda evaluation pack",
+        "local-python",
+        LICENSE_REVIEW,
+        "CC-BY-NC-4.0 model; non-commercial evaluation only until separately reviewed.",
+        ("lg",),
+    ),
+    _provider(
+        "mms-shona-eval",
+        "MMS Shona evaluation pack",
+        "local-python",
+        LICENSE_REVIEW,
+        "CC-BY-NC-4.0 model; non-commercial evaluation only until separately reviewed.",
+        ("sn",),
+    ),
+    _provider(
+        "mms-kinyarwanda-eval",
+        "MMS Kinyarwanda evaluation pack",
+        "local-python",
+        LICENSE_REVIEW,
+        "CC-BY-NC-4.0 model; non-commercial evaluation only until separately reviewed.",
+        ("rw",),
+    ),
+    _provider(
+        "mms-kirundi-eval",
+        "MMS Kirundi evaluation pack",
+        "local-python",
+        LICENSE_REVIEW,
+        "CC-BY-NC-4.0 model; non-commercial evaluation only until separately reviewed.",
+        ("rn",),
+    ),
+    _provider(
+        "mms-gikuyu-eval",
+        "MMS Gikuyu evaluation pack",
+        "local-python",
+        LICENSE_REVIEW,
+        "CC-BY-NC-4.0 model; non-commercial evaluation only until separately reviewed.",
+        ("ki",),
+    ),
+    _provider(
+        "mms-chichewa-eval",
+        "MMS Chichewa evaluation pack",
+        "local-python",
+        LICENSE_REVIEW,
+        "CC-BY-NC-4.0 model; non-commercial evaluation only until separately reviewed.",
+        ("ny",),
+    ),
+    _provider(
+        "mms-tsonga-eval",
+        "MMS Xitsonga evaluation pack",
+        "local-python",
+        LICENSE_REVIEW,
+        "CC-BY-NC-4.0 model; non-commercial evaluation only until separately reviewed.",
+        ("ts",),
+    ),
+    _provider(
+        "usoal-orpheus-luganda-family",
+        "USOAL Ugandan language optional pack",
+        "local-command",
+        LICENSE_REVIEW,
+        (
+            "Review the 3B model pack licence, runtime, resource profile, and native language "
+            "fixtures before enabling Runyankole, Acholi, or Ateso."
+        ),
+        ("nyn", "ach", "teo"),
     ),
     _provider(
         "coqui-python",
@@ -421,6 +502,13 @@ def _configured_coqui_adapter() -> Any | None:
     return CoquiCommandAdapter.from_env()
 
 
+def _configured_luganda_adapter() -> Any | None:
+    """Return the optional reviewed local Luganda provider adapter."""
+    from .luganda_adapter import LugandaCommandAdapter
+
+    return LugandaCommandAdapter.from_env()
+
+
 def _resolved_provider(provider: ProviderDefinition) -> ProviderDefinition:
     """Apply an explicit local adapter activation without changing catalog membership."""
     if provider.id == "coqui-cli":
@@ -433,6 +521,23 @@ def _resolved_provider(provider: ProviderDefinition) -> ProviderDefinition:
                 activation_boundary=(
                     "Operator-configured local Coqui-compatible command; verify output and "
                     "combined budget before production use."
+                ),
+            )
+    if provider.id == "coqui-luganda-openbible":
+        adapter = _configured_luganda_adapter()
+        configuration = adapter.preflight() if adapter else {"configured": False}
+        if (
+            configuration.get("executable_exists")
+            and configuration.get("normalizer_exists")
+            and configuration.get("model_id_accepted")
+            and configuration.get("speaker_configured")
+        ):
+            return replace(
+                provider,
+                state=ACTIVE_LOCAL,
+                activation_boundary=(
+                    "Operator-configured reviewed Luganda VITS local pack; native language review "
+                    "and combined-budget evidence remain required before production promotion."
                 ),
             )
     return provider
@@ -479,6 +584,20 @@ def require_active_provider(provider_id: str | None) -> ProviderDefinition:
     return provider
 
 
+def require_active_provider_for_language(
+    provider_id: str | None, language: str
+) -> ProviderDefinition:
+    """Require an active provider that explicitly declares the selected language."""
+    provider = require_active_provider(provider_id)
+    if language not in provider.language_codes:
+        supported = ", ".join(provider.language_codes)
+        raise ProviderActivationError(
+            f"Provider '{provider.id}' does not declare language '{language}'. "
+            f"Supported: {supported}."
+        )
+    return provider
+
+
 def provider_preflight(provider_id: str) -> dict[str, Any]:
     """Return a zero-side-effect activation plan for one catalog entry."""
     provider = get_provider(provider_id)
@@ -486,7 +605,14 @@ def provider_preflight(provider_id: str) -> dict[str, Any]:
     if provider.id == "coqui-cli":
         adapter = _configured_coqui_adapter()
         coqui_configuration = adapter.preflight() if adapter else {"configured": False}
-    actions = ["Confirm English test coverage and provider-specific output acceptance."]
+    if provider.id == "coqui-luganda-openbible":
+        adapter = _configured_luganda_adapter()
+        coqui_configuration = adapter.preflight() if adapter else {"configured": False}
+    languages = ", ".join(provider.language_codes)
+    actions = [
+        f"Confirm language-specific test coverage for: {languages}.",
+        "Confirm provider-specific output acceptance and native-language review where required.",
+    ]
     if provider.state == ACTIVE_LOCAL:
         readiness = "ready-local"
         actions = ["Use this active local provider through the Nastech synthesis endpoints."]
@@ -531,10 +657,11 @@ def synthesize_with_provider(
     runtime: Any,
     compiled: Any,
     *,
+    language: str = "en",
     use_cache: bool = True,
 ) -> Any:
     """Synthesize through one selected active provider without fallback routing."""
-    provider = require_active_provider(provider_id)
+    provider = require_active_provider_for_language(provider_id, language)
     if provider.id == DEFAULT_PROVIDER_ID:
         if use_cache:
             return runtime.synthesize(compiled)
@@ -543,5 +670,10 @@ def synthesize_with_provider(
         adapter = _configured_coqui_adapter()
         if adapter is None:
             raise ProviderActivationError("Coqui-compatible adapter is not configured.")
+        return adapter.synthesize(compiled)
+    if provider.id == "coqui-luganda-openbible":
+        adapter = _configured_luganda_adapter()
+        if adapter is None:
+            raise ProviderActivationError("Luganda OpenBible adapter is not configured.")
         return adapter.synthesize(compiled)
     raise ProviderActivationError(f"Provider '{provider.id}' has no installed adapter.")

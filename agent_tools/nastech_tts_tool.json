@@ -1,17 +1,25 @@
 {
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "service": "nastech-tts",
   "publisher": "Nastech Research",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "provider_mixer": "nastech",
-  "provider_catalog_size": 50,
+  "provider_catalog_size": 59,
+  "language_registry_size": 23,
   "default_provider_id": "nastech-native-onnx",
+  "default_language": "en",
   "network_default": "disabled",
   "max_deployment_mib": 1024,
   "authentication": {
     "environment_variable": "NASTECH_API_KEY",
     "scheme": "Bearer",
     "health_endpoint_is_public": true
+  },
+  "language_contract": {
+    "verified_local": ["en"],
+    "configured_optional_local": ["lg"],
+    "claim_boundary": "A language is not advertised as pure or quality-verified until it has local fixture, digital audio, licence, and native-review evidence.",
+    "registry_endpoint": "/v1/languages"
   },
   "portability_contract": {
     "verified_profile": "python-cpu",
@@ -25,49 +33,57 @@
   "tools": [
     {
       "name": "nastech_list_providers",
-      "description": "List the Nastech 50-provider catalog and truthful activation states.",
+      "description": "List the Nastech 59-provider catalog and truthful activation states.",
       "http": {"method": "GET", "path": "/v1/providers"},
       "input": {"type": "object", "properties": {}, "additionalProperties": false}
+    },
+    {
+      "name": "nastech_list_languages",
+      "description": "List Bantu-language targets with evidence states and provider routes.",
+      "http": {"method": "GET", "path": "/v1/languages"},
+      "input": {"type": "object", "properties": {}, "additionalProperties": false}
+    },
+    {
+      "name": "nastech_language_preflight",
+      "description": "Inspect a language target's provider, licence, native-review, and activation requirements without side effects.",
+      "http": {"method": "POST", "path": "/v1/languages/preflight"},
+      "input": {"type": "object", "required": ["language"], "properties": {"language": {"type": "string", "example": "lg"}}}
     },
     {
       "name": "nastech_provider_preflight",
       "description": "Create a zero-side-effect activation plan for one Nastech provider target.",
       "http": {"method": "POST", "path": "/v1/providers/preflight"},
-      "input": {
-        "type": "object",
-        "required": ["provider_id"],
-        "properties": {"provider_id": {"type": "string", "example": "coqui-cli"}}
-      }
+      "input": {"type": "object", "required": ["provider_id"], "properties": {"provider_id": {"type": "string", "example": "coqui-luganda-openbible"}}}
     },
     {
       "name": "nastech_compose_story",
-      "description": "Compose a deterministic Nastech Agent English story and optionally render it locally.",
+      "description": "Compose a deterministic English Nastech Agent story and optionally render it locally.",
       "http": {"method": "POST", "path": "/v1/agent/story"},
       "input": {"type": "object", "properties": {"theme": {"type": "string", "example": "innovation"}}}
     },
     {
       "name": "nastech_plan_speech",
-      "description": "Compile English NastechML into an auditable provider-selected execution plan without generating audio.",
+      "description": "Compile NastechML for an explicitly selected local provider and registered language without generating audio.",
       "http": {"method": "POST", "path": "/v1/agent/plan"},
-      "input": {"type": "object", "required": ["markup"]}
+      "input": {"type": "object", "required": ["markup"], "properties": {"language": {"type": "string", "default": "en"}}}
     },
     {
       "name": "nastech_compile_speech",
-      "description": "Compile English NastechML into an active Nastech provider request and fidelity manifest.",
+      "description": "Compile NastechML into a provider- and language-aware request with a fidelity manifest.",
       "http": {"method": "POST", "path": "/v1/agent/compile"},
-      "input": {"type": "object", "required": ["markup"]}
+      "input": {"type": "object", "required": ["markup"], "properties": {"language": {"type": "string", "default": "en"}}}
     },
     {
       "name": "nastech_generate_speech",
-      "description": "Generate completed local English expressive WAV audio through an active Nastech provider.",
+      "description": "Generate completed local WAV audio through an active Nastech provider that declares the selected language.",
       "http": {"method": "POST", "path": "/v1/agent/speech", "response": "audio/wav"},
-      "input": {"type": "object", "required": ["markup"]}
+      "input": {"type": "object", "required": ["markup"], "properties": {"language": {"type": "string", "default": "en"}}}
     },
     {
       "name": "nastech_stream_speech",
       "description": "Transfer a completed local WAV in bounded post-synthesis chunks; not incremental inference.",
       "http": {"method": "POST", "path": "/v1/agent/speech/stream", "response": "chunked audio/wav"},
-      "input": {"type": "object", "required": ["markup"]}
+      "input": {"type": "object", "required": ["markup"], "properties": {"language": {"type": "string", "default": "en"}}}
     },
     {
       "name": "nastech_clean_wav",
@@ -85,11 +101,7 @@
       "name": "nastech_platform_preflight",
       "description": "Build a CPU, GPU, mobile, or browser activation plan with evidence requirements.",
       "http": {"method": "POST", "path": "/v1/platforms/preflight"},
-      "input": {
-        "type": "object",
-        "required": ["target"],
-        "properties": {"target": {"type": "string", "example": "python-cuda"}}
-      }
+      "input": {"type": "object", "required": ["target"], "properties": {"target": {"type": "string", "example": "python-cuda"}}}
     },
     {
       "name": "nastech_runtime_diagnostics",

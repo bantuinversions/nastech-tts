@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.10.0 — 2026-08-15
+
+Nastech Compact adds a 23-target **Bantu-language registry**, language-aware NastechML compilation, API and CLI inventory/preflight commands, and a 59-entry strict no-fallback provider catalog. English remains the verified native local synthesis path. Luganda now has an explicitly configured optional local OpenBible VITS route exposed only as a `configured-local` technical preview; it is not claimed as native-speaker verified and remains subject to licence, repeatability, and competent Luganda review gates.
+
+This release also records real local expressive English evidence for sadness, anger, happiness, sigh, cough, and laugh markup, plus isolated local Luganda technical-preview fixtures. The tag-only audio workflow regenerates the expressive English WAV and its compiler/level reports. Deterministic coverage now contains **125 passing tests**; the measured compact core remains below the 1 GiB deployment budget, excluding the separately managed Luganda language pack.
+
 ## 0.9.1 — 2026-08-15
 
 Nastech Compact adds a reproducible **real local 30-minute continuity test**. The generator renders unique NastechML narrative segments locally, cleans every PCM segment, and joins the resulting frames only up to the requested duration; it does not loop, pad, or time-stretch audio. The completed F1 continuity run produced exactly 1,800 seconds of mono 16-bit PCM 44.1 kHz audio with no digital full-scale clipping. Four short verified preset-style auditions—M1, M3, F1, and F3—are also generated as release evidence without regional-accent claims.

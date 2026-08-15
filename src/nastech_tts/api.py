@@ -16,20 +16,22 @@ from pydantic import BaseModel, Field
 
 from .agent_identity import agent_identity, generate_nastech_story_markup
 from .cleanup import VoiceCleanupError, clean_wav
+from .languages import LanguageRegistryError, get_language, language_inventory
+from .luganda_adapter import LugandaAdapterError
 from .markup import NastechMarkupError
 from .platforms import PlatformPlanError, host_platform_report, platform_preflight
 from .providers import (
     ProviderActivationError,
     provider_inventory,
     provider_preflight,
-    require_active_provider,
+    require_active_provider_for_language,
     synthesize_with_provider,
 )
 from .supertonic import CompactAudio, CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
 logger = logging.getLogger(__name__)
 MAX_CLEANUP_BYTES = 64 * 1024 * 1024
-VERSION = "0.9.1"
+VERSION = "0.10.0"
 
 
 class AgentCompileRequest(BaseModel):
@@ -39,6 +41,7 @@ class AgentCompileRequest(BaseModel):
     voice: str | None = Field(default=None, pattern="^[A-Za-z0-9_-]{1,64}$")
     steps: int | None = Field(default=None, ge=5, le=12)
     provider_id: str | None = Field(default=None, pattern="^[a-z0-9-]{1,64}$")
+    language: str = Field(default="en", min_length=2, max_length=16, pattern="^[A-Za-z0-9_-]+$")
 
 
 class AgentSpeechRequest(AgentCompileRequest):
@@ -85,6 +88,12 @@ class ProviderPreflightRequest(BaseModel):
     provider_id: str = Field(min_length=1, max_length=64, pattern="^[a-z0-9-]+$")
 
 
+class LanguagePreflightRequest(BaseModel):
+    """Named language target to inspect without activating a provider."""
+
+    language: str = Field(min_length=2, max_length=16, pattern="^[A-Za-z0-9_-]+$")
+
+
 class PlatformPreflightRequest(BaseModel):
     """Named portable runtime target to evaluate against the current host."""
 
@@ -100,6 +109,8 @@ class OpenAISpeechRequest(BaseModel):
     response_format: str = Field(default="wav", pattern="^wav$")
     speed: float = Field(default=1.0, ge=0.7, le=2.0)
     cleanup: bool = False
+    language: str = Field(default="en", min_length=2, max_length=16, pattern="^[A-Za-z0-9_-]+$")
+    provider_id: str | None = Field(default=None, pattern="^[a-z0-9-]{1,64}$")
 
 
 class AgentToolDescriptor(BaseModel):
@@ -127,6 +138,22 @@ def agent_tool_descriptors() -> list[AgentToolDescriptor]:
             method="GET",
             path="/v1/providers",
             input_schema=empty_input,
+        ),
+        AgentToolDescriptor(
+            name="nastech_list_languages",
+            description="List Bantu-language targets and truthful local-provider evidence states.",
+            method="GET",
+            path="/v1/languages",
+            input_schema=empty_input,
+        ),
+        AgentToolDescriptor(
+            name="nastech_language_preflight",
+            description=(
+                "Inspect language-specific provider, licence, and local evidence requirements."
+            ),
+            method="POST",
+            path="/v1/languages/preflight",
+            input_schema=LanguagePreflightRequest.model_json_schema(),
         ),
         AgentToolDescriptor(
             name="nastech_provider_preflight",
@@ -254,7 +281,8 @@ def _text_to_markup(text: str, voice: str | None = None, speed: float = 1.0) -> 
 
 
 def _compiled(payload: AgentCompileRequest, runtime: SupertonicRuntime):
-    provider = require_active_provider(payload.provider_id)
+    language = get_language(payload.language)
+    provider = require_active_provider_for_language(payload.provider_id, language.code)
     settings = runtime.settings
     if payload.voice:
         settings = type(settings)(
@@ -272,7 +300,9 @@ def _compiled(payload: AgentCompileRequest, runtime: SupertonicRuntime):
             speed=settings.speed,
             cache_dir=settings.cache_dir,
         )
-    compiled = compile_nastechml(payload.markup, settings)
+    compiled = compile_nastechml(payload.markup, settings, language=language.code)
+    compiled.manifest["language"] = language.code
+    compiled.manifest["language_definition"] = language.as_dict()
     compiled.manifest["provider"] = provider.as_dict()
     compiled.manifest["provider_mixer"] = "nastech"
     return compiled
@@ -310,7 +340,7 @@ def _agent_plan(payload: AgentPlanRequest, compiled: Any) -> dict[str, Any]:
             "delivery_endpoint": delivery_path,
             "voice_cleanup_requested": payload.cleanup,
             "steps": [
-                "Validate English NastechML.",
+                "Validate NastechML against the selected language registry entry.",
                 "Select one eligible Nastech provider without silent fallback.",
                 "Compile controls into the active local-provider request.",
                 "Run one bounded local synthesis request.",
@@ -342,6 +372,7 @@ def _story_payload(
             voice=payload.voice,
             steps=payload.steps,
             provider_id=payload.provider_id,
+            language=payload.language,
         ),
         runtime,
     )
@@ -371,6 +402,8 @@ def _error_response(exc: Exception) -> JSONResponse:
             VoiceCleanupError,
             PlatformPlanError,
             ProviderActivationError,
+            LanguageRegistryError,
+            LugandaAdapterError,
             ValueError,
         ),
     ):
@@ -464,13 +497,15 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
     async def capabilities(_: None = Depends(require_agent_key)) -> dict[str, Any]:
         return {
             "publisher": "Nastech Research",
-            "language": "en",
+            "default_language": "en",
+            "language_inventory": language_inventory(),
             "provider_mixer": "nastech",
             "default_provider_id": provider_inventory()["default_provider_id"],
             "inference": "local-first; configured provider selection",
             "agent_endpoints": [
                 "/v1/providers",
                 "/v1/providers/preflight",
+                "/v1/languages",
                 "/v1/agent/identity",
                 "/v1/agent/story",
                 "/v1/agent/plan",
@@ -524,6 +559,27 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             },
             "nastech_agent": agent_identity(),
             "max_deployment_mib": 1024,
+        }
+
+    @app.get("/v1/languages")
+    async def list_languages(_: None = Depends(require_agent_key)) -> dict[str, Any]:
+        return language_inventory()
+
+    @app.post("/v1/languages/preflight", response_model=None)
+    async def preflight_language(
+        payload: LanguagePreflightRequest,
+        _: None = Depends(require_agent_key),
+    ) -> dict[str, Any] | JSONResponse:
+        try:
+            language = get_language(payload.language)
+        except LanguageRegistryError as exc:
+            return _error_response(exc)
+        return {
+            "language": language.as_dict(),
+            "provider_preflights": [
+                provider_preflight(provider_id) for provider_id in language.provider_ids
+            ],
+            "network_request_made": False,
         }
 
     @app.get("/v1/providers")
@@ -602,6 +658,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
                 payload.provider_id,
                 local_runtime,
                 compiled,
+                language=compiled.manifest["language"],
             )
             audio, cleanup_report = await run_in_threadpool(
                 _maybe_clean_audio, audio, payload.cleanup
@@ -655,6 +712,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
                 payload.provider_id,
                 local_runtime,
                 compiled,
+                language=compiled.manifest["language"],
             )
             audio, cleanup_report = await run_in_threadpool(
                 _maybe_clean_audio, audio, payload.cleanup
@@ -676,6 +734,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
                 payload.provider_id,
                 local_runtime,
                 compiled,
+                language=compiled.manifest["language"],
             )
             audio, cleanup_report = await run_in_threadpool(
                 _maybe_clean_audio, audio, payload.cleanup
@@ -731,7 +790,8 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             markup=_text_to_markup(payload.input, payload.voice, payload.speed),
             voice=payload.voice,
             cleanup=payload.cleanup,
-            provider_id=None,
+            provider_id=payload.provider_id,
+            language=payload.language,
         )
         try:
             compiled = _compiled(request, local_runtime)

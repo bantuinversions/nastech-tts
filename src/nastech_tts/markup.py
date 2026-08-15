@@ -1,12 +1,15 @@
-"""NastechML parsing and validation.
+"""NastechML parsing and language-aware validation.
 
 NastechML keeps a stable application-facing syntax even when synthesis backends
-use different prompt conventions.
+use different prompt conventions. English remains ASCII-only in the default
+Nastech core. A multilingual adapter must explicitly select a registered
+non-English language before native-script or accented input is accepted.
 """
 
 from __future__ import annotations
 
 import re
+import unicodedata
 import xml.etree.ElementTree as ET
 from dataclasses import replace
 
@@ -43,20 +46,27 @@ _ALLOWED_RATES = {"slow", "normal", "fast"}
 _ALLOWED_VOLUMES = {"soft", "normal", "loud"}
 
 
-def _validate_english(value: str) -> None:
-    if any(ord(character) > 127 for character in value):
+def _validate_text(value: str, language: str) -> None:
+    """Preserve English-core ASCII gating while rejecting unsafe Unicode controls."""
+    if language == "en" and any(ord(character) > 127 for character in value):
         raise NastechMarkupError(
-            "Nastech TTS 0.1 accepts English/ASCII text only. Non-ASCII input was found."
+            "Nastech English core accepts ASCII text only. Select a registered multilingual "
+            "language provider before submitting non-ASCII input."
         )
+    for character in value:
+        if unicodedata.category(character) in {"Cc", "Cs"} and character not in "\n\r\t":
+            raise NastechMarkupError("NastechML text contains an unsupported control character.")
 
 
-def _append_text(spans: list[AudioSpan], text: str | None, voice: str, style: SpeechStyle) -> None:
+def _append_text(
+    spans: list[AudioSpan], text: str | None, voice: str, style: SpeechStyle, language: str
+) -> None:
     if text is None:
         return
     normalized = re.sub(r"\s+", " ", text).strip()
     if not normalized:
         return
-    _validate_english(normalized)
+    _validate_text(normalized, language)
     spans.append(AudioSpan(kind=SpanKind.SPEECH, value=normalized, voice=voice, style=style))
 
 
@@ -77,6 +87,7 @@ def _walk(
     voice: str,
     style: SpeechStyle,
     spans: list[AudioSpan],
+    language: str,
 ) -> None:
     tag = element.tag
     if tag == "sound":
@@ -107,7 +118,7 @@ def _walk(
         raise NastechMarkupError(f"Unsupported NastechML element <{tag}>.")
 
     local_voice = element.attrib.get("voice", voice)
-    _validate_english(local_voice)
+    _validate_text(local_voice, "en")
     local_style = style
 
     if tag == "emotion":
@@ -129,15 +140,16 @@ def _walk(
             raise NastechMarkupError("Prosody volume must be soft, normal, or loud.")
         local_style = replace(style, rate=rate, volume=volume)
 
-    _append_text(spans, element.text, local_voice, local_style)
+    _append_text(spans, element.text, local_voice, local_style, language)
     for child in element:
-        _walk(child, local_voice, local_style, spans)
-        _append_text(spans, child.tail, local_voice, local_style)
+        _walk(child, local_voice, local_style, spans, language)
+        _append_text(spans, child.tail, local_voice, local_style, language)
 
 
-def parse_nastechml(markup: str) -> tuple[str, list[AudioSpan]]:
+def parse_nastechml(markup: str, *, language: str = "en") -> tuple[str, list[AudioSpan]]:
     """Parse a NastechML document into a preferred voice and typed audio spans."""
-    _validate_english(markup)
+    normalized_language = language.strip().lower().replace("_", "-").split("-", maxsplit=1)[0]
+    _validate_text(markup, normalized_language)
     try:
         root = ET.fromstring(markup.strip())
     except ET.ParseError as exc:
@@ -146,9 +158,9 @@ def parse_nastechml(markup: str) -> tuple[str, list[AudioSpan]]:
         raise NastechMarkupError("NastechML must have one <speak> root element.")
 
     voice = root.attrib.get("voice", "tara")
-    _validate_english(voice)
+    _validate_text(voice, "en")
     spans: list[AudioSpan] = []
-    _walk(root, voice, SpeechStyle(), spans)
+    _walk(root, voice, SpeechStyle(), spans, normalized_language)
     if not spans:
         raise NastechMarkupError("NastechML did not contain any speech, sounds, or pauses.")
     return voice, spans

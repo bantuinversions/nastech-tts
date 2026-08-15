@@ -10,11 +10,11 @@ from nastech_tts.providers import (
 )
 
 
-def test_provider_catalog_has_fifty_nastech_adapter_targets() -> None:
+def test_provider_catalog_has_fifty_nine_nastech_adapter_targets() -> None:
     inventory = provider_inventory()
 
-    assert inventory["provider_catalog_size"] == 50
-    assert len(inventory["providers"]) == 50
+    assert inventory["provider_catalog_size"] == 59
+    assert len(inventory["providers"]) == 59
     assert inventory["default_provider_id"] == "nastech-native-onnx"
     assert inventory["network_default"] == "disabled"
     assert inventory["states"][ACTIVE_LOCAL] == 1

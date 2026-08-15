@@ -43,6 +43,10 @@ jobs:
         run: |
           python scripts/generate_release_voice_fixtures.py --overwrite
 
+      - name: Generate real expressive local audition
+        run: |
+          python scripts/generate_expressive_release_fixture.py --overwrite
+
       - name: Generate real 30-minute local continuity and preset auditions
         run: |
           python scripts/generate_longform_continuity_test.py \
@@ -61,6 +65,18 @@ jobs:
         with:
           name: nastech-release-voice-fixtures-${{ github.ref_name }}
           path: release/voice_fixtures/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload expressive local evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nastech-release-expressive-audition-${{ github.ref_name }}
+          path: |
+            release/multilingual_fixtures/nastech-expressive-audition.xml
+            release/multilingual_fixtures/nastech-expressive-audition.wav
+            release/multilingual_fixtures/nastech-expressive-audition.manifest.json
+            release/multilingual_fixtures/nastech-expressive-audition.levels.json
           if-no-files-found: error
           retention-days: 90
 

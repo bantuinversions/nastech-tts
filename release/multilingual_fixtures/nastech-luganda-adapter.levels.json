@@ -1,0 +1,15 @@
+{
+  "processor": "nastech-local-pcm-cleanup",
+  "format": "mono-16-bit-pcm-wav",
+  "sample_rate": 44100,
+  "duration_seconds": 11.0193,
+  "dc_offset_removed": -3.0672,
+  "noise_gate_dbfs": -52.0,
+  "noise_gate_samples": 209412,
+  "peak_before": 32767,
+  "peak_after": 31473,
+  "limiter_gain": 0.960509,
+  "fade_milliseconds": 6.0,
+  "input_bytes": 971982,
+  "output_bytes": 971948
+}

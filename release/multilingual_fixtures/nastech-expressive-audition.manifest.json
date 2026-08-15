@@ -1,0 +1,98 @@
+{
+  "request_id": "2d40e3472f3cc603fd63f788",
+  "language": "en",
+  "model_family": "supertonic-3",
+  "source_markup": "<speak voice=\"F3\">\n  <emotion name=\"sad\" intensity=\"0.70\">At dusk, the workshop grew quiet. Nastech Agent paused, remembered the difficult days, and spoke with care.</emotion>\n  <sound type=\"sigh\" />\n  <pause ms=\"650\" />\n  <emotion name=\"angry\" intensity=\"0.75\">Then a warning arrived. The team would not abandon the work, and every test would be faced directly.</emotion>\n  <sound type=\"cough\" />\n  <pause ms=\"450\" />\n  <emotion name=\"happy\" intensity=\"0.80\">Soon the final signal was clear. The local voice returned, the measurements passed, and the room filled with hopeful laughter.</emotion>\n  <sound type=\"laugh\" />\n</speak>\n",
+  "compiled_text": "<sad> At dusk, the workshop grew quiet. Nastech Agent paused, remembered the difficult days, and spoke with care. <sigh> <breath> <angry> Then a warning arrived. The team would not abandon the work, and every test would be faced directly. <cough> <breath> Soon the final signal was clear. The local voice returned, the measurements passed, and the room filled with hopeful laughter. <laugh>",
+  "voice": "F3",
+  "steps": 8,
+  "speed": 1.0,
+  "decisions": [
+    {
+      "span_index": 0,
+      "kind": "speech",
+      "requested_behavior": "sad",
+      "compiled_controls": [
+        "<sad>"
+      ],
+      "fidelity": "approximated",
+      "reason": "Native tag request; confirm on pinned release."
+    },
+    {
+      "span_index": 1,
+      "kind": "sound",
+      "requested_behavior": "sigh",
+      "compiled_controls": [
+        "<sigh>"
+      ],
+      "fidelity": "direct",
+      "reason": "Officially documented Supertonic expression tag."
+    },
+    {
+      "span_index": 2,
+      "kind": "pause",
+      "requested_behavior": "pause",
+      "compiled_controls": [
+        "<breath>"
+      ],
+      "fidelity": "approximated",
+      "reason": "Compact runtime maps pauses to a documented breath cue."
+    },
+    {
+      "span_index": 3,
+      "kind": "speech",
+      "requested_behavior": "angry",
+      "compiled_controls": [
+        "<angry>"
+      ],
+      "fidelity": "approximated",
+      "reason": "Native tag request; confirm on pinned release."
+    },
+    {
+      "span_index": 4,
+      "kind": "sound",
+      "requested_behavior": "cough",
+      "compiled_controls": [
+        "<cough>"
+      ],
+      "fidelity": "approximated",
+      "reason": "Native tag request; confirm on pinned release."
+    },
+    {
+      "span_index": 5,
+      "kind": "pause",
+      "requested_behavior": "pause",
+      "compiled_controls": [
+        "<breath>"
+      ],
+      "fidelity": "approximated",
+      "reason": "Compact runtime maps pauses to a documented breath cue."
+    },
+    {
+      "span_index": 6,
+      "kind": "speech",
+      "requested_behavior": "happy",
+      "compiled_controls": [],
+      "fidelity": "approximated",
+      "reason": "No deterministic happy tag in compact runtime."
+    },
+    {
+      "span_index": 7,
+      "kind": "sound",
+      "requested_behavior": "laugh",
+      "compiled_controls": [
+        "<laugh>"
+      ],
+      "fidelity": "direct",
+      "reason": "Officially documented Supertonic expression tag."
+    }
+  ],
+  "warnings": [
+    "Native tag request; confirm on pinned release.",
+    "Compact runtime maps pauses to a documented breath cue.",
+    "Native tag request; confirm on pinned release.",
+    "Native tag request; confirm on pinned release.",
+    "Compact runtime maps pauses to a documented breath cue.",
+    "No deterministic happy tag in compact runtime."
+  ]
+}

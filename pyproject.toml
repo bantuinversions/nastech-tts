@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "nastech-tts"
-version = "0.9.1"
-description = "Nastech Compact: local-first expressive English TTS with a provider mixer and agent API."
+version = "0.10.0"
+description = "Nastech Compact: local-first expressive multilingual TTS with a provider mixer and agent API."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "Apache-2.0"
 authors = [{name = "Nastech Research"}]
 maintainers = [{name = "Nastech Research"}]
-keywords = ["text-to-speech", "tts", "speech", "emotion", "agent", "provider-mixer", "onnx"]
+keywords = ["text-to-speech", "tts", "speech", "emotion", "multilingual", "luganda", "agent", "provider-mixer", "onnx"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Developers",

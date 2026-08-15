@@ -1,0 +1,34 @@
+{
+  "processor": "nastech-local-pcm-cleanup",
+  "cleanup": {
+    "processor": "nastech-local-pcm-cleanup",
+    "format": "mono-16-bit-pcm-wav",
+    "sample_rate": 44100,
+    "duration_seconds": 25.5169,
+    "dc_offset_removed": -21.7648,
+    "noise_gate_dbfs": -52.0,
+    "noise_gate_samples": 413110,
+    "peak_before": 18172,
+    "peak_after": 18172,
+    "limiter_gain": 1.0,
+    "fade_milliseconds": 6.0,
+    "input_bytes": 2250632,
+    "output_bytes": 2250632
+  },
+  "level_report": {
+    "format": "mono-16-bit-pcm-wav",
+    "channels": 1,
+    "sample_width_bytes": 2,
+    "sample_rate_hz": 44100,
+    "frames": 1125294,
+    "duration_seconds": 25.5169,
+    "peak_pcm": 18172,
+    "peak_dbfs": -5.1207,
+    "rms_pcm": 1654.8393,
+    "rms_dbfs": -25.9336,
+    "dc_offset_pcm": 0.8547,
+    "clipped_samples": 0
+  },
+  "source": "release/multilingual_fixtures/nastech-expressive-audition.xml",
+  "output": "release/multilingual_fixtures/nastech-expressive-audition.wav"
+}

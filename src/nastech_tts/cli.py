@@ -19,12 +19,18 @@ from .agent_identity import (
 )
 from .cleanup import VoiceCleanupError, clean_wav
 from .cpu import CpuConfigurationError
+from .languages import get_language, language_inventory
 from .markup import NastechMarkupError
 from .platforms import PlatformPlanError, host_platform_report, platform_preflight
-from .providers import ProviderActivationError, provider_inventory, provider_preflight
+from .providers import (
+    ProviderActivationError,
+    provider_inventory,
+    provider_preflight,
+    synthesize_with_provider,
+)
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
-VERSION = "0.9.1"
+VERSION = "0.10.0"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -39,6 +45,9 @@ def _parser() -> argparse.ArgumentParser:
     compile_command.add_argument("input", type=Path, help="Input NastechML document.")
     compile_command.add_argument("--output", type=Path, help="Optional JSON output path.")
     compile_command.add_argument("--provider", help="Nastech provider ID (default: active local).")
+    compile_command.add_argument(
+        "--language", default="en", help="Nastech language code (default: en)."
+    )
 
     plan = subparsers.add_parser(
         "plan", help="Build an auditable local agent execution plan without generating audio."
@@ -49,6 +58,7 @@ def _parser() -> argparse.ArgumentParser:
     plan.add_argument("--delivery", choices=["wav", "chunked-wav"], default="wav")
     plan.add_argument("--voice", help="Optional active-provider voice override.")
     plan.add_argument("--provider", help="Nastech provider ID (default: active local).")
+    plan.add_argument("--language", default="en", help="Nastech language code (default: en).")
     plan.add_argument(
         "--steps", type=int, choices=range(5, 13), help="Optional local step override."
     )
@@ -94,6 +104,7 @@ def _parser() -> argparse.ArgumentParser:
     )
     validate.add_argument("input", type=Path, help="Input NastechML document.")
     validate.add_argument("--output", type=Path, help="Optional JSON validation report path.")
+    validate.add_argument("--language", default="en", help="Nastech language code (default: en).")
 
     synthesize = subparsers.add_parser(
         "synthesize", help="Generate local WAV audio through an active Nastech provider."
@@ -102,6 +113,7 @@ def _parser() -> argparse.ArgumentParser:
     synthesize.add_argument("--output", type=Path, required=True, help="WAV destination path.")
     synthesize.add_argument("--manifest", type=Path, help="Optional manifest destination path.")
     synthesize.add_argument("--provider", help="Nastech provider ID (default: active local).")
+    synthesize.add_argument("--language", default="en", help="Nastech language code (default: en).")
     synthesize.add_argument(
         "--clean",
         action="store_true",
@@ -127,6 +139,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
     subparsers.add_parser("providers", help="List all Nastech provider-mixer targets.")
+    subparsers.add_parser("languages", help="List Bantu-language targets and evidence states.")
+    language_check = subparsers.add_parser(
+        "language-preflight", help="Inspect language provider requirements without side effects."
+    )
+    language_check.add_argument("language", help="Nastech language code, for example lg or zu.")
     provider_check = subparsers.add_parser(
         "provider-preflight", help="Inspect a provider activation plan without side effects."
     )
@@ -267,6 +284,22 @@ def main() -> int:
             print(json.dumps(provider_inventory(), indent=2))
             return 0
 
+        if args.command == "languages":
+            print(json.dumps(language_inventory(), indent=2))
+            return 0
+
+        if args.command == "language-preflight":
+            language = get_language(args.language)
+            payload = {
+                "language": language.as_dict(),
+                "provider_preflights": [
+                    provider_preflight(provider_id) for provider_id in language.provider_ids
+                ],
+                "network_request_made": False,
+            }
+            print(json.dumps(payload, indent=2))
+            return 0
+
         if args.command == "provider-preflight":
             print(json.dumps(provider_preflight(args.provider_id), indent=2))
             return 0
@@ -307,6 +340,7 @@ def main() -> int:
                     voice=args.voice,
                     steps=args.steps,
                     provider_id=args.provider,
+                    language="en",
                 ),
                 runtime,
             )
@@ -326,7 +360,12 @@ def main() -> int:
                 args.markup_output.write_text(markup + "\n", encoding="utf-8")
                 report["markup_output"] = str(args.markup_output)
             if args.output:
-                audio = runtime.synthesize(compiled)
+                audio = synthesize_with_provider(
+                    args.provider,
+                    runtime,
+                    compiled,
+                    language=compiled.manifest["language"],
+                )
                 args.output.parent.mkdir(parents=True, exist_ok=True)
                 args.output.write_bytes(audio.data)
                 manifest_path = args.manifest or args.output.with_suffix(
@@ -366,23 +405,29 @@ def main() -> int:
                 objective=args.objective,
                 delivery=args.delivery,
                 provider_id=args.provider,
+                language=args.language,
             )
             _print_or_write(_agent_plan(request, _compiled(request, runtime)), args.output)
             return 0
 
         if args.command == "validate":
-            compiled = compile_nastechml(markup, runtime.settings)
+            language = get_language(args.language)
+            compiled = compile_nastechml(markup, runtime.settings, language=language.code)
         else:
             from .api import AgentCompileRequest, _compiled
 
             compiled = _compiled(
-                AgentCompileRequest(markup=markup, provider_id=args.provider),
+                AgentCompileRequest(
+                    markup=markup,
+                    provider_id=args.provider,
+                    language=args.language,
+                ),
                 runtime,
             )
         if args.command == "validate":
             payload = {
                 "valid": True,
-                "language": "en",
+                "language": compiled.manifest["language"],
                 "span_count": len(compiled.manifest["decisions"]),
                 **_compiled_payload(compiled),
             }
@@ -394,7 +439,12 @@ def main() -> int:
             return 0
 
         if args.command == "synthesize":
-            audio = runtime.synthesize(compiled)
+            audio = synthesize_with_provider(
+                args.provider,
+                runtime,
+                compiled,
+                language=compiled.manifest["language"],
+            )
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_bytes(audio.data)
             manifest_path = args.manifest or args.output.with_suffix(

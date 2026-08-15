@@ -3,22 +3,23 @@
 [![CI](https://github.com/bantuinversions/nastech-tts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bantuinversions/nastech-tts/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-Apache--2.0-4D8CC9)](LICENSE)
-[![Provider mixer](https://img.shields.io/badge/providers-50%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
+[![Provider mixer](https://img.shields.io/badge/providers-59%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
 
-**Nastech Compact TTS** is a Nastech Research, local-first, English expressive text-to-speech platform. Version **0.9.0** introduces a Nastech provider mixer with one stable request format, **50 provider targets**, strict explicit provider selection, and a network-disabled default. The verified core remains a real CPU-only local renderer; unconfigured adapters never download a model, contact a provider, or claim to be active.
+**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.10.0** adds a Bantu-language registry to the Nastech provider mixer, with one stable request format, **59 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
 
 > **Deployment contract:** The full verified environment remains below the strict **1 GiB** cap. Run `make budget` for the exact target-host measurement before any production deployment.
 
 | Capability | What it does |
 |---|---|
 | Local expressive synthesis | Produces real 44.1 kHz WAV through the active Nastech local provider |
-| English NastechML | Validates `<speak>`, `<emotion>`, `<sound>`, `<pause>`, and `<prosody>` markup |
+| Language-aware NastechML | Validates `<speak>`, `<emotion>`, `<sound>`, `<pause>`, and `<prosody>` markup against the selected provider and language route |
+| Bantu-language registry | Lists Luganda, isiZulu, isiXhosa, Sesotho, Setswana, Shona, Tshivenda, and other East/Southern African targets with explicit evidence states |
 | Agent planning | Inspects compilation, fidelity, intended delivery, and optional cleanup before spending synthesis CPU time |
 | Chunked transfer | Sends a completed local WAV in bounded byte chunks without falsely claiming incremental model streaming |
 | Local voice cleanup | Applies conservative mono PCM hygiene: DC removal, near-silence gate, clipping protection, and edge fades |
 | Operations | Bounded CPU queue, configurable threads, response cache, warm-up, diagnostics, cache management, and benchmarks |
 | Portability planner | Reports registered ONNX providers and preflights CPU, GPU, Android, iOS, and browser targets with evidence requirements |
-| Provider mixer | Catalogs 50 local and managed integration targets, blocks inactive selections, and preflights every activation without side effects |
+| Provider mixer | Catalogs 59 local and managed integration targets, blocks inactive selections, and preflights every activation without side effects |
 | Automated quality | Deterministic tests, a Python 3.10–3.12 CI matrix, source/wheel checks, contract validation, 1,000-roadmap drift checks, and daily scheduled verification |
 
 ## Install
@@ -52,18 +53,33 @@ python scripts/generate_longform_continuity_test.py \
 
 The resulting 30-minute WAV is published as a release artifact rather than committed into Git history. See [release/LONGFORM_CONTINUITY_TEST.md](release/LONGFORM_CONTINUITY_TEST.md) for exact measurements, checksum, and the current listening evidence.
 
+## Expressive Audio and Luganda Technical Preview
+
+The neutral continuity test isolates duration and PCM stability. Its separate [expressive audition](release/multilingual_fixtures/nastech-expressive-audition.xml) exercises sadness, anger, happiness, sighing, coughing, and laughter through the real local Nastech runtime, with a generated decision manifest and deterministic WAV-level report.
+
+Nastech also includes a real local **Luganda** technical preview through a separately installed OpenBible VITS provider pack. It uses a declared training-set speaker, performs CPU-only local inference, and normalizes the provider output to Nastech mono 16-bit PCM at 44.1 kHz. The preview is not bundled in Nastech Compact’s 1 GiB core and is not yet called a pure or quality-verified Luganda voice: that claim requires native-speaker review. The exact Bantu-language states, licence boundaries, and next evidence gates are in [BANTU_LANGUAGE_COVERAGE.md](docs/BANTU_LANGUAGE_COVERAGE.md).
+
+```bash
+nastech-tts languages
+nastech-tts language-preflight lg
+nastech-tts synthesize release/multilingual_fixtures/nastech-luganda-pure.xml \
+  --provider coqui-luganda-openbible --language lg --output luganda.wav --clean
+```
+
 ## Local CLI
 
 | Command | Purpose |
 |---|---|
-| `nastech-tts validate FILE.xml` | Validate English NastechML without model loading or synthesis |
+| `nastech-tts validate FILE.xml --language lg` | Validate NastechML for a registered language without model loading or synthesis |
 | `nastech-tts plan FILE.xml --delivery chunked-wav --clean` | Create an auditable local agent plan before synthesis |
 | `nastech-tts compile FILE.xml --provider nastech-native-onnx` | Compile NastechML into an active Nastech provider request and fidelity manifest |
 | `nastech-tts synthesize FILE.xml --output FILE.wav --clean` | Run local inference and optionally apply PCM cleanup |
 | `nastech-tts clean INPUT.wav --output CLEAN.wav` | Clean an existing mono signed-16-bit PCM WAV without a model or cloud service |
 | `nastech-tts status` / `warmup` / `clear-cache` | Inspect and operate the local ONNX runtime |
 | `nastech-tts benchmark FILE.xml --runs 3` | Measure cache-bypassing CPU synthesis |
-| `nastech-tts providers` | List the 50 Nastech provider targets and their truthful activation states |
+| `nastech-tts providers` | List the 59 Nastech provider targets and their truthful activation states |
+| `nastech-tts languages` | List Bantu-language targets, evidence states, and provider routes |
+| `nastech-tts language-preflight lg` | Inspect Luganda local-pack, licence, and native-review requirements without side effects |
 | `nastech-tts provider-preflight coqui-cli` | Produce a zero-side-effect activation plan for one provider target |
 | `nastech-tts agent-tools` | Print the machine-readable Nastech agent operations |
 | `nastech-tts platforms` | List factual host ONNX providers and portability profiles |
@@ -82,7 +98,9 @@ nastech-tts serve --host 127.0.0.1 --port 8765
 
 | Operation | Endpoint | Result |
 |---|---|---|
-| Provider inventory | `GET /v1/providers` | Full 50-entry Nastech provider catalog, state summary, and network-default policy |
+| Provider inventory | `GET /v1/providers` | Full 59-entry Nastech provider catalog, state summary, and network-default policy |
+| Language inventory | `GET /v1/languages` | Bantu-language targets, active/adapter/planned evidence states, and provider routes |
+| Language preflight | `POST /v1/languages/preflight` | Zero-side-effect provider, licence, and native-review plan for one language target |
 | Provider preflight | `POST /v1/providers/preflight` | Zero-side-effect installation, review, or credential plan for one provider target |
 | Agent planning | `POST /v1/agent/plan` | Validated execution plan, selected provider, local delivery route, cleanup request, and fidelity summary |
 | Standard speech | `POST /v1/agent/speech` | Completed local WAV, optionally cleaned |
@@ -159,7 +177,8 @@ make verify
 | [docs/REPOSITORY_AUTOMATION.md](docs/REPOSITORY_AUTOMATION.md) | CI, daily schedule, release workflow, Dependabot, and template guide |
 | [docs/cpu_optimization.md](docs/cpu_optimization.md) | CPU profiles, measured evidence, and operational guidance |
 | [docs/CAPABILITY_CATALOG_1000.md](docs/CAPABILITY_CATALOG_1000.md) | Authoritative 1,000-record classified capability roadmap |
-| [docs/PROVIDER_CATALOG_50.md](docs/PROVIDER_CATALOG_50.md) | 50 Nastech provider targets and activation states |
+| [docs/PROVIDER_CATALOG_50.md](docs/PROVIDER_CATALOG_50.md) | Original 50-provider research catalog; runtime inventory is extended to 59 targets |
+| [docs/BANTU_LANGUAGE_COVERAGE.md](docs/BANTU_LANGUAGE_COVERAGE.md) | Luganda and major East/Southern Bantu-language evidence registry and activation gates |
 | [docs/PROVIDER_ARCHITECTURE.md](docs/PROVIDER_ARCHITECTURE.md) | Provider mixer, no-fallback routing, and attribution boundary |
 | [docs/VOICE_INVENTORY.md](docs/VOICE_INVENTORY.md) | Verified local voices and consent-first regional voice roadmap |
 | [docs/PORTABILITY_ARCHITECTURE.md](docs/PORTABILITY_ARCHITECTURE.md) | CPU/GPU/mobile/browser evidence rules and target contract |

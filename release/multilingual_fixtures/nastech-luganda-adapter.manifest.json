@@ -1,0 +1,46 @@
+{
+  "request_id": "4e7e566a979c4b4c5364fb0b",
+  "language": "lg",
+  "model_family": "supertonic-3",
+  "source_markup": "<speak>Olunaku luno tukola ku bigambo bya Luganda. Tusoma obulungi era tuwulira eddoboozi erya bulijjo.</speak>\n",
+  "compiled_text": "Olunaku luno tukola ku bigambo bya Luganda. Tusoma obulungi era tuwulira eddoboozi erya bulijjo.",
+  "voice": "F1",
+  "steps": 8,
+  "speed": 1.0,
+  "decisions": [
+    {
+      "span_index": 0,
+      "kind": "speech",
+      "requested_behavior": null,
+      "compiled_controls": [],
+      "fidelity": "direct",
+      "reason": "Plain speech."
+    }
+  ],
+  "warnings": [],
+  "language_definition": {
+    "code": "lg",
+    "iso639_3": "lug",
+    "label": "Luganda",
+    "region": "Uganda / Great Lakes",
+    "state": "adapter-available",
+    "provider_ids": [
+      "coqui-luganda-openbible",
+      "mms-luganda-eval"
+    ],
+    "availability_note": "Optional local Luganda VITS pack; native reviewer approval is required before a pure-language claim.",
+    "reviewer_required": true
+  },
+  "provider": {
+    "id": "coqui-luganda-openbible",
+    "label": "Luganda OpenBible VITS local pack",
+    "route_type": "local-command",
+    "state": "active/local",
+    "supports_english": false,
+    "language_codes": [
+      "lg"
+    ],
+    "activation_boundary": "Operator-configured reviewed Luganda VITS local pack; native language review and combined-budget evidence remain required before production promotion."
+  },
+  "provider_mixer": "nastech"
+}

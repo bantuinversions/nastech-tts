@@ -144,13 +144,13 @@ def test_preflight_command_returns_cuda_validation_plan(monkeypatch, capsys) -> 
     assert json.loads(capsys.readouterr().out)["target"]["status"] == "planned"
 
 
-def test_providers_command_reports_fifty_adapter_targets(monkeypatch, capsys) -> None:
+def test_providers_command_reports_fifty_nine_adapter_targets(monkeypatch, capsys) -> None:
     monkeypatch.setattr(cli, "SupertonicRuntime", CliRuntime)
     monkeypatch.setattr(sys, "argv", ["nastech-tts", "providers"])
 
     assert cli.main() == 0
     payload = json.loads(capsys.readouterr().out)
-    assert payload["provider_catalog_size"] == 50
+    assert payload["provider_catalog_size"] == 59
     assert payload["network_default"] == "disabled"
 
 
@@ -162,3 +162,24 @@ def test_provider_preflight_command_is_zero_side_effect(monkeypatch, capsys) -> 
     payload = json.loads(capsys.readouterr().out)
     assert payload["readiness"] == "adapter-installation-required"
     assert payload["network_request_made"] is False
+
+
+def test_languages_command_reports_luganda_and_southern_targets(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(cli, "SupertonicRuntime", CliRuntime)
+    monkeypatch.setattr(sys, "argv", ["nastech-tts", "languages"])
+
+    assert cli.main() == 0
+    languages = {item["code"]: item for item in json.loads(capsys.readouterr().out)["languages"]}
+    assert languages["lg"]["state"] == "adapter-available"
+    assert languages["zu"]["state"] == "planned"
+    assert languages["ve"]["label"] == "Tshivenda"
+
+
+def test_language_preflight_command_keeps_luganda_adapter_disabled(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(cli, "SupertonicRuntime", CliRuntime)
+    monkeypatch.setattr(sys, "argv", ["nastech-tts", "language-preflight", "lg"])
+
+    assert cli.main() == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["language"]["iso639_3"] == "lug"
+    assert payload["provider_preflights"][0]["network_request_made"] is False

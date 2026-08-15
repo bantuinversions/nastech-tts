@@ -1,6 +1,7 @@
-"""Nastech Compact: local-first English expressive TTS with a provider mixer."""
+"""Nastech Compact: local-first expressive TTS with a multilingual provider mixer."""
 
 from .cpu import CpuConfigurationError, CpuTuning
+from .languages import LanguageRegistryError, get_language, language_inventory
 from .markup import NastechMarkupError, parse_nastechml
 from .providers import (
     ProviderActivationError,
@@ -30,10 +31,13 @@ __all__ = [
     "CompactSettings",
     "NastechLocalRuntime",
     "NastechMarkupError",
+    "LanguageRegistryError",
     "ProviderActivationError",
     "SupertonicRuntime",
     "compile_nastechml",
+    "get_language",
     "get_provider",
+    "language_inventory",
     "list_providers",
     "provider_inventory",
     "provider_preflight",
@@ -41,4 +45,4 @@ __all__ = [
     "parse_nastechml",
 ]
 
-__version__ = "0.9.1"
+__version__ = "0.10.0"

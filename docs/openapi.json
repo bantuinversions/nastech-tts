@@ -3,7 +3,7 @@
   "info": {
     "title": "Nastech Compact TTS",
     "description": "A Nastech-branded, local-first, agent-ready expressive TTS API with a provider mixer, auditable provider selection, and bounded WAV delivery.",
-    "version": "0.9.1"
+    "version": "0.10.0"
   },
   "paths": {
     "/v1/health": {
@@ -58,6 +58,108 @@
                   "additionalProperties": true,
                   "title": "Response Capabilities V1 Capabilities Get"
                 }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/languages": {
+      "get": {
+        "summary": "List Languages",
+        "operationId": "list_languages_v1_languages_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response List Languages V1 Languages Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/languages/preflight": {
+      "post": {
+        "summary": "Preflight Language",
+        "operationId": "preflight_language_v1_languages_preflight_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LanguagePreflightRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -931,6 +1033,14 @@
               }
             ],
             "title": "Provider Id"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Language",
+            "default": "en"
           }
         },
         "type": "object",
@@ -984,6 +1094,14 @@
               }
             ],
             "title": "Provider Id"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Language",
+            "default": "en"
           },
           "cleanup": {
             "type": "boolean",
@@ -1056,6 +1174,14 @@
             ],
             "title": "Provider Id"
           },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Language",
+            "default": "en"
+          },
           "cleanup": {
             "type": "boolean",
             "title": "Cleanup",
@@ -1113,6 +1239,14 @@
               }
             ],
             "title": "Provider Id"
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Language",
+            "default": "en"
           },
           "cleanup": {
             "type": "boolean",
@@ -1198,6 +1332,14 @@
             ],
             "title": "Provider Id"
           },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Language",
+            "default": "en"
+          },
           "cleanup": {
             "type": "boolean",
             "title": "Cleanup",
@@ -1266,6 +1408,23 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
+      "LanguagePreflightRequest": {
+        "properties": {
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Language"
+          }
+        },
+        "type": "object",
+        "required": [
+          "language"
+        ],
+        "title": "LanguagePreflightRequest",
+        "description": "Named language target to inspect without activating a provider."
+      },
       "OpenAISpeechRequest": {
         "properties": {
           "model": {
@@ -1308,6 +1467,26 @@
             "type": "boolean",
             "title": "Cleanup",
             "default": false
+          },
+          "language": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 2,
+            "pattern": "^[A-Za-z0-9_-]+$",
+            "title": "Language",
+            "default": "en"
+          },
+          "provider_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Id"
           }
         },
         "type": "object",

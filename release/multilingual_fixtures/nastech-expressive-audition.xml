@@ -1,0 +1,10 @@
+<speak voice="F3">
+  <emotion name="sad" intensity="0.70">At dusk, the workshop grew quiet. Nastech Agent paused, remembered the difficult days, and spoke with care.</emotion>
+  <sound type="sigh" />
+  <pause ms="650" />
+  <emotion name="angry" intensity="0.75">Then a warning arrived. The team would not abandon the work, and every test would be faced directly.</emotion>
+  <sound type="cough" />
+  <pause ms="450" />
+  <emotion name="happy" intensity="0.80">Soon the final signal was clear. The local voice returned, the measurements passed, and the room filled with hopeful laughter.</emotion>
+  <sound type="laugh" />
+</speak>

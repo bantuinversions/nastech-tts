@@ -54,9 +54,11 @@ def test_authorized_tool_catalog_exposes_all_local_operations(monkeypatch) -> No
 
     assert response.status_code == 200
     payload = response.json()
-    assert len(payload) == 13
+    assert len(payload) == 15
     assert {tool["name"] for tool in payload} >= {
         "nastech_list_providers",
+        "nastech_list_languages",
+        "nastech_language_preflight",
         "nastech_provider_preflight",
         "nastech_compose_story",
         "nastech_plan_speech",
@@ -84,7 +86,7 @@ def test_provider_inventory_and_preflight_are_authenticated_and_truthful(monkeyp
     )
 
     assert inventory.status_code == 200
-    assert inventory.json()["provider_catalog_size"] == 50
+    assert inventory.json()["provider_catalog_size"] == 59
     assert inventory.json()["network_default"] == "disabled"
     assert preflight.status_code == 200
     assert preflight.json()["readiness"] == "adapter-installation-required"
@@ -183,7 +185,7 @@ def test_health_remains_available_and_reports_authentication(monkeypatch) -> Non
 
     assert response.status_code == 200
     assert response.json()["authentication_required"] is True
-    assert response.json()["version"] == "0.9.1"
+    assert response.json()["version"] == "0.10.0"
 
 
 def test_agent_plan_exposes_local_execution_and_fidelity_summary(monkeypatch) -> None:
@@ -247,7 +249,7 @@ def test_capabilities_advertise_streaming_and_local_cleanup(monkeypatch) -> None
     payload = response.json()
     assert "/v1/providers" in payload["agent_endpoints"]
     assert "/v1/providers/preflight" in payload["agent_endpoints"]
-    assert payload["provider_inventory"]["catalog_size"] == 50
+    assert payload["provider_inventory"]["catalog_size"] == 59
     assert "/v1/agent/identity" in payload["agent_endpoints"]
     assert "/v1/agent/story" in payload["agent_endpoints"]
     assert "/v1/agent/speech/stream" in payload["agent_endpoints"]
@@ -297,3 +299,37 @@ def test_platform_preflight_rejects_unknown_target(monkeypatch) -> None:
     )
 
     assert response.status_code == 422
+
+
+def test_language_inventory_and_luganda_preflight_are_authenticated_and_truthful(
+    monkeypatch,
+) -> None:
+    client, _ = _secured_client(monkeypatch)
+    headers = {"Authorization": "Bearer matrix-secret"}
+
+    inventory = client.get("/v1/languages", headers=headers)
+    preflight = client.post("/v1/languages/preflight", headers=headers, json={"language": "lg"})
+
+    assert inventory.status_code == 200
+    languages = {language["code"]: language for language in inventory.json()["languages"]}
+    assert languages["lg"]["state"] == "adapter-available"
+    assert languages["zu"]["state"] == "planned"
+    assert preflight.status_code == 200
+    assert preflight.json()["language"]["iso639_3"] == "lug"
+    assert preflight.json()["network_request_made"] is False
+
+
+def test_luganda_synthesis_refuses_english_core_without_fallback(monkeypatch) -> None:
+    client, _ = _secured_client(monkeypatch)
+
+    response = client.post(
+        "/v1/agent/speech",
+        headers={"Authorization": "Bearer matrix-secret"},
+        json={
+            "markup": "<speak>Nze njagala okwogera Luganda.</speak>",
+            "language": "lg",
+        },
+    )
+
+    assert response.status_code == 422
+    assert "does not declare language 'lg'" in response.json()["detail"]

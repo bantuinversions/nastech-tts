@@ -151,11 +151,15 @@ def _compile_span(span: AudioSpan, index: int) -> tuple[str, dict[str, Any], flo
 
 
 def compile_nastechml(
-    markup: str, settings: CompactSettings | None = None
+    markup: str,
+    settings: CompactSettings | None = None,
+    *,
+    language: str | None = None,
 ) -> CompactCompiledRequest:
-    """Compile stable NastechML into compact Supertonic prompt text."""
+    """Compile stable NastechML into a provider-ready prompt with a declared language."""
     settings = settings or CompactSettings.from_env()
-    voice, spans = parse_nastechml(markup)
+    selected_language = language or settings.language
+    voice, spans = parse_nastechml(markup, language=selected_language)
     compiled: list[str] = []
     decisions: list[dict[str, Any]] = []
     speeds: list[float] = []
@@ -172,7 +176,7 @@ def compile_nastechml(
     request_id = os.urandom(12).hex()
     manifest = {
         "request_id": request_id,
-        "language": settings.language,
+        "language": selected_language,
         "model_family": "supertonic-3",
         "source_markup": markup,
         "compiled_text": " ".join(compiled),

@@ -27,6 +27,14 @@ artifacts/
 !release/voice_fixtures/*.wav
 !release/voice_fixtures/*.xml
 !release/voice_fixtures/*.json
+!release/multilingual_fixtures/
+!release/multilingual_fixtures/*.wav
+!release/multilingual_fixtures/*.xml
+!release/multilingual_fixtures/*.json
+!release/multilingual_fixtures/SHA256SUMS
+
+# Generated 30-minute continuity evidence is uploaded on release; do not add its 156 MiB WAV to Git history.
+release/longform_continuity/
 
 # Model and dataset assets
 models/
