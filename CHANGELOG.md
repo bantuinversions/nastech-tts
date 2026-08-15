@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.1 — 2026-08-15
+
+This patch makes the Luganda `configured-local` registry test explicitly provide the required WAV normalizer command, matching the provider adapter’s documented activation gate in clean CI environments. No language-support claim or model/provider boundary changed.
+
 ## 0.10.0 — 2026-08-15
 
 Nastech Compact adds a 23-target **Bantu-language registry**, language-aware NastechML compilation, API and CLI inventory/preflight commands, and a 59-entry strict no-fallback provider catalog. English remains the verified native local synthesis path. Luganda now has an explicitly configured optional local OpenBible VITS route exposed only as a `configured-local` technical preview; it is not claimed as native-speaker verified and remains subject to licence, repeatability, and competent Luganda review gates.

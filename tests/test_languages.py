@@ -71,6 +71,7 @@ def test_english_core_refuses_luganda_without_provider_fallback() -> None:
 def test_luganda_language_state_reflects_explicit_configured_adapter(monkeypatch) -> None:
     monkeypatch.setenv("NASTECH_ENABLE_LUGANDA_ADAPTER", "1")
     monkeypatch.setenv("NASTECH_LUGANDA_TTS_COMMAND", "/usr/bin/true")
+    monkeypatch.setenv("NASTECH_FFMPEG_COMMAND", "/usr/bin/true")
     monkeypatch.setenv("NASTECH_LUGANDA_TTS_MODEL", "multilingual-tts/VITS-OpenBible-Luganda")
     monkeypatch.setenv("NASTECH_LUGANDA_TTS_SPEAKER", "SPEAKER_00_Luganda")
 

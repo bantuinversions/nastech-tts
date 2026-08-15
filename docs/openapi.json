@@ -3,7 +3,7 @@
   "info": {
     "title": "Nastech Compact TTS",
     "description": "A Nastech-branded, local-first, agent-ready expressive TTS API with a provider mixer, auditable provider selection, and bounded WAV delivery.",
-    "version": "0.10.0"
+    "version": "0.10.1"
   },
   "paths": {
     "/v1/health": {
