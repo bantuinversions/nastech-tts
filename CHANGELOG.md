@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.9.0 — 2026-08-15
+
+Nastech Compact becomes a **Nastech provider-mixer platform**. Its public API, CLI, OpenAPI contract, and agent descriptor now expose a 50-target provider catalog, explicit `provider_id` selection, strict no-fallback routing, a network-disabled default, and zero-side-effect provider preflights. The verified local core remains active as `nastech-native-onnx`; every other target is accurately classified as adapter-available, licence-review, or credential-required until separately installed, reviewed, and accepted. A Coqui-compatible local command, Python, HTTP, and container path is cataloged without bundling an incompatible runtime or unreviewed model.
+
+Nastech Research is now the clear publisher in package metadata, agent identity, governance materials, release documentation, and visual assets. The public product surface uses Nastech identity; third-party identifiers remain only in the required notice, exact dependency declarations, adapter catalog, and provider evidence.
+
+The release adds deterministic Nastech Agent story composition, WAV-level analysis, real local release voice fixtures with manifests and checksums, and a tag-only audio workflow. The deterministic suite now contains **115 tests**. The capability roadmap is completed as a generated 500-record foundation, 500-record researched expansion, and authoritative 1,000-record master catalog.
+
 ## 0.8.0 — 2026-08-15
 
 Nastech Compact adds a provider-aware portability layer. Local users and agents can inspect host ONNX providers through `nastech-tts platforms` or `GET /v1/platforms`, and create evidence-gated CPU, GPU, Android, iOS, and browser activation plans through `nastech-tts preflight TARGET` or `POST /v1/platforms/preflight`. Python CPU remains the sole verified runtime. All accelerator and mobile targets explicitly remain planned until real target-provider synthesis, audio, latency, memory, package, and relevant device evidence are recorded.

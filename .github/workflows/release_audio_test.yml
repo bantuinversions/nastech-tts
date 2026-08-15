@@ -1,0 +1,57 @@
+name: Release Audio Verification
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: "Tag or commit to verify with real local Supertonic synthesis"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-audio-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  local-supertonic-audio:
+    name: Real local voice fixtures
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out release source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install local runtime and verification dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+
+      - name: Generate real local release voices
+        run: |
+          python scripts/generate_release_voice_fixtures.py --overwrite
+
+      - name: Validate WAV format and deterministic levels
+        run: |
+          python scripts/validate_release_voice_fixtures.py \
+            --report release/voice_fixtures/verification.json
+
+      - name: Upload release voice fixtures
+        uses: actions/upload-artifact@v4
+        with:
+          name: nastech-release-voice-fixtures-${{ github.ref_name }}
+          path: release/voice_fixtures/
+          if-no-files-found: error
+          retention-days: 90

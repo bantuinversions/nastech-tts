@@ -1,4 +1,4 @@
-"""Nastech Compact agent API backed by a local tuned Supertonic ONNX runtime."""
+"""Nastech Compact agent API with a local-first provider mixer."""
 
 from __future__ import annotations
 
@@ -14,14 +14,22 @@ from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
+from .agent_identity import agent_identity, generate_nastech_story_markup
 from .cleanup import VoiceCleanupError, clean_wav
 from .markup import NastechMarkupError
 from .platforms import PlatformPlanError, host_platform_report, platform_preflight
+from .providers import (
+    ProviderActivationError,
+    provider_inventory,
+    provider_preflight,
+    require_active_provider,
+    synthesize_with_provider,
+)
 from .supertonic import CompactAudio, CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
 logger = logging.getLogger(__name__)
 MAX_CLEANUP_BYTES = 64 * 1024 * 1024
-VERSION = "0.8.0"
+VERSION = "0.9.0"
 
 
 class AgentCompileRequest(BaseModel):
@@ -30,12 +38,23 @@ class AgentCompileRequest(BaseModel):
     markup: str = Field(min_length=1, max_length=12000)
     voice: str | None = Field(default=None, pattern="^[A-Za-z0-9_-]{1,64}$")
     steps: int | None = Field(default=None, ge=5, le=12)
+    provider_id: str | None = Field(default=None, pattern="^[a-z0-9-]{1,64}$")
 
 
 class AgentSpeechRequest(AgentCompileRequest):
-    """NastechML request that produces local Supertonic audio."""
+    """NastechML request that produces audio through an active local provider."""
 
     cleanup: bool = False
+
+
+class AgentStoryRequest(AgentSpeechRequest):
+    """Compose a deterministic Nastech Agent story and optionally render it locally."""
+
+    markup: str = Field(default="", max_length=12000, exclude=True)
+    theme: str = Field(default="innovation", min_length=1, max_length=32, pattern="^[a-z-]+$")
+    emotion: str = Field(default="hopeful", min_length=1, max_length=16, pattern="^[a-z-]+$")
+    sounds: list[str] = Field(default_factory=list, max_length=3)
+    render: bool = False
 
 
 class AgentStreamRequest(AgentSpeechRequest):
@@ -58,6 +77,12 @@ class AgentPlanRequest(AgentSpeechRequest):
         max_length=280,
     )
     delivery: str = Field(default="wav", pattern="^(wav|chunked-wav)$")
+
+
+class ProviderPreflightRequest(BaseModel):
+    """Named Nastech provider target to inspect without side effects."""
+
+    provider_id: str = Field(min_length=1, max_length=64, pattern="^[a-z0-9-]+$")
 
 
 class PlatformPreflightRequest(BaseModel):
@@ -97,6 +122,30 @@ def agent_tool_descriptors() -> list[AgentToolDescriptor]:
     }
     return [
         AgentToolDescriptor(
+            name="nastech_list_providers",
+            description="List the Nastech provider-mixer catalog and truthful activation states.",
+            method="GET",
+            path="/v1/providers",
+            input_schema=empty_input,
+        ),
+        AgentToolDescriptor(
+            name="nastech_provider_preflight",
+            description="Create a zero-side-effect activation plan for a Nastech provider adapter.",
+            method="POST",
+            path="/v1/providers/preflight",
+            input_schema=ProviderPreflightRequest.model_json_schema(),
+        ),
+        AgentToolDescriptor(
+            name="nastech_compose_story",
+            description=(
+                "Compose a deterministic Nastech Agent English story and optionally render it "
+                "through an active local Nastech provider."
+            ),
+            method="POST",
+            path="/v1/agent/story",
+            input_schema=AgentStoryRequest.model_json_schema(),
+        ),
+        AgentToolDescriptor(
             name="nastech_plan_speech",
             description=(
                 "Compile English NastechML into an auditable execution plan before synthesis."
@@ -107,14 +156,18 @@ def agent_tool_descriptors() -> list[AgentToolDescriptor]:
         ),
         AgentToolDescriptor(
             name="nastech_compile_speech",
-            description="Compile English NastechML into a local Supertonic expression plan.",
+            description=(
+                "Compile English NastechML into an active Nastech provider expression plan."
+            ),
             method="POST",
             path="/v1/agent/compile",
             input_schema=AgentCompileRequest.model_json_schema(),
         ),
         AgentToolDescriptor(
             name="nastech_generate_speech",
-            description="Generate local English expressive WAV audio with Supertonic ONNX.",
+            description=(
+                "Generate local English expressive WAV audio through an active Nastech provider."
+            ),
             method="POST",
             path="/v1/agent/speech",
             input_schema=AgentSpeechRequest.model_json_schema(),
@@ -201,6 +254,7 @@ def _text_to_markup(text: str, voice: str | None = None, speed: float = 1.0) -> 
 
 
 def _compiled(payload: AgentCompileRequest, runtime: SupertonicRuntime):
+    provider = require_active_provider(payload.provider_id)
     settings = runtime.settings
     if payload.voice:
         settings = type(settings)(
@@ -218,13 +272,17 @@ def _compiled(payload: AgentCompileRequest, runtime: SupertonicRuntime):
             speed=settings.speed,
             cache_dir=settings.cache_dir,
         )
-    return compile_nastechml(payload.markup, settings)
+    compiled = compile_nastechml(payload.markup, settings)
+    compiled.manifest["provider"] = provider.as_dict()
+    compiled.manifest["provider_mixer"] = "nastech"
+    return compiled
 
 
 def _compiled_payload(compiled: Any) -> dict[str, Any]:
     return {
         "request_id": compiled.request_id,
-        "runtime": "supertonic-local-onnx-cpu",
+        "runtime": "nastech-provider-mixer",
+        "provider": compiled.manifest.get("provider"),
         "text": compiled.text,
         "voice": compiled.voice,
         "steps": compiled.steps,
@@ -245,15 +303,17 @@ def _agent_plan(payload: AgentPlanRequest, compiled: Any) -> dict[str, Any]:
         **_compiled_payload(compiled),
         "objective": payload.objective,
         "execution": {
-            "model_family": "supertonic-3",
-            "inference": "local-onnx-cpu",
+            "provider_mixer": "nastech",
+            "provider": compiled.manifest.get("provider"),
+            "inference": "active-local-provider",
             "delivery": payload.delivery,
             "delivery_endpoint": delivery_path,
             "voice_cleanup_requested": payload.cleanup,
             "steps": [
                 "Validate English NastechML.",
-                "Compile controls into a local Supertonic expression prompt.",
-                "Run one bounded local ONNX synthesis request.",
+                "Select one eligible Nastech provider without silent fallback.",
+                "Compile controls into the active local-provider request.",
+                "Run one bounded local synthesis request.",
                 "Optionally apply deterministic local PCM cleanup.",
                 "Return WAV bytes or bounded post-synthesis chunks.",
             ],
@@ -267,8 +327,53 @@ def _agent_plan(payload: AgentPlanRequest, compiled: Any) -> dict[str, Any]:
     }
 
 
+def _story_payload(
+    payload: AgentStoryRequest, runtime: SupertonicRuntime
+) -> tuple[dict[str, Any], Any]:
+    """Compose and compile a Nastech Agent story without starting model inference."""
+    markup = generate_nastech_story_markup(
+        payload.theme,
+        emotion=payload.emotion,
+        sounds=payload.sounds,
+    )
+    compiled = _compiled(
+        AgentCompileRequest(
+            markup=markup,
+            voice=payload.voice,
+            steps=payload.steps,
+            provider_id=payload.provider_id,
+        ),
+        runtime,
+    )
+    return (
+        {
+            "agent": agent_identity(),
+            "story": {
+                "theme": payload.theme,
+                "requested_emotion": payload.emotion,
+                "sounds": payload.sounds,
+                "title": f"Nastech Agent: {payload.theme.title()} story",
+                "markup": markup,
+                "render_requested": payload.render,
+                "render_endpoint": "/v1/agent/story",
+            },
+            **_compiled_payload(compiled),
+        },
+        compiled,
+    )
+
+
 def _error_response(exc: Exception) -> JSONResponse:
-    if isinstance(exc, (NastechMarkupError, VoiceCleanupError, PlatformPlanError, ValueError)):
+    if isinstance(
+        exc,
+        (
+            NastechMarkupError,
+            VoiceCleanupError,
+            PlatformPlanError,
+            ProviderActivationError,
+            ValueError,
+        ),
+    ):
         code = status.HTTP_422_UNPROCESSABLE_CONTENT
     elif isinstance(exc, CompactRuntimeError):
         code = status.HTTP_503_SERVICE_UNAVAILABLE
@@ -299,7 +404,7 @@ def _audio_headers(
 ) -> dict[str, str]:
     return {
         "X-Nastech-Request-Id": request_id,
-        "X-Nastech-Runtime": "supertonic-local-onnx-cpu",
+        "X-Nastech-Runtime": "nastech-provider-mixer",
         "X-Nastech-Duration-Seconds": f"{audio.duration_seconds:.2f}",
         "X-Nastech-Manifest-Endpoint": "/v1/agent/compile",
         "X-Nastech-Voice-Cleanup": "local-pcm-hygiene" if cleanup_report else "not-requested",
@@ -338,8 +443,8 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         title="Nastech Compact TTS",
         version=VERSION,
         description=(
-            "A local, CPU-tuned, agent-ready expressive TTS API backed by Supertonic 3 ONNX "
-            "assets. Agent plans and chunked delivery remain auditable and local."
+            "A Nastech-branded, local-first, agent-ready expressive TTS API with a provider "
+            "mixer, auditable provider selection, and bounded WAV delivery."
         ),
         lifespan=lifespan,
     )
@@ -358,10 +463,16 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
     @app.get("/v1/capabilities")
     async def capabilities(_: None = Depends(require_agent_key)) -> dict[str, Any]:
         return {
+            "publisher": "Nastech Research",
             "language": "en",
-            "model_family": "supertonic-3",
-            "inference": "local-onnx-cpu",
+            "provider_mixer": "nastech",
+            "default_provider_id": provider_inventory()["default_provider_id"],
+            "inference": "local-first; configured provider selection",
             "agent_endpoints": [
+                "/v1/providers",
+                "/v1/providers/preflight",
+                "/v1/agent/identity",
+                "/v1/agent/story",
                 "/v1/agent/plan",
                 "/v1/agent/compile",
                 "/v1/agent/speech",
@@ -406,8 +517,28 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             "documented_native_tags": ["laugh", "breath", "sigh"],
             "release_dependent_tags": ["sad", "angry", "surprise", "cough", "yawn"],
             "formats": ["wav"],
+            "provider_inventory": {
+                "catalog_size": provider_inventory()["provider_catalog_size"],
+                "network_default": "disabled",
+                "states": provider_inventory()["states"],
+            },
+            "nastech_agent": agent_identity(),
             "max_deployment_mib": 1024,
         }
+
+    @app.get("/v1/providers")
+    async def list_providers(_: None = Depends(require_agent_key)) -> dict[str, Any]:
+        return provider_inventory()
+
+    @app.post("/v1/providers/preflight", response_model=None)
+    async def preflight_provider(
+        payload: ProviderPreflightRequest,
+        _: None = Depends(require_agent_key),
+    ) -> dict[str, Any] | JSONResponse:
+        try:
+            return provider_preflight(payload.provider_id)
+        except ProviderActivationError as exc:
+            return _error_response(exc)
 
     @app.get("/v1/platforms")
     async def list_platforms(_: None = Depends(require_agent_key)) -> dict[str, Any]:
@@ -448,9 +579,44 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         cleared = await run_in_threadpool(local_runtime.clear_audio_cache)
         return {"status": "cleared", **cleared, "runtime": local_runtime.status()}
 
+    @app.get("/v1/agent/identity")
+    async def get_agent_identity(_: None = Depends(require_agent_key)) -> dict[str, Any]:
+        return agent_identity()
+
     @app.get("/v1/agent/tools", response_model=list[AgentToolDescriptor])
     async def agent_tools(_: None = Depends(require_agent_key)) -> list[AgentToolDescriptor]:
         return agent_tool_descriptors()
+
+    @app.post("/v1/agent/story", response_model=None)
+    async def compose_story(
+        payload: AgentStoryRequest,
+        _: None = Depends(require_agent_key),
+        local_runtime: SupertonicRuntime = Depends(_runtime),
+    ) -> dict[str, Any] | Response | JSONResponse:
+        try:
+            story, compiled = _story_payload(payload, local_runtime)
+            if not payload.render:
+                return story
+            audio = await run_in_threadpool(
+                synthesize_with_provider,
+                payload.provider_id,
+                local_runtime,
+                compiled,
+            )
+            audio, cleanup_report = await run_in_threadpool(
+                _maybe_clean_audio, audio, payload.cleanup
+            )
+        except (NastechMarkupError, CompactRuntimeError, VoiceCleanupError, ValueError) as exc:
+            return _error_response(exc)
+        headers = _audio_headers(audio, compiled.request_id, cleanup_report)
+        headers.update(
+            {
+                "X-Nastech-Agent": "nastech-agent",
+                "X-Nastech-Publisher": "Nastech Research",
+                "X-Nastech-Story-Theme": payload.theme,
+            }
+        )
+        return Response(content=audio.data, media_type=audio.content_type, headers=headers)
 
     @app.post("/v1/agent/plan", response_model=None)
     async def plan_speech(
@@ -484,7 +650,12 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
     ) -> Response | JSONResponse:
         try:
             compiled = _compiled(payload, local_runtime)
-            audio = await run_in_threadpool(local_runtime.synthesize, compiled)
+            audio = await run_in_threadpool(
+                synthesize_with_provider,
+                payload.provider_id,
+                local_runtime,
+                compiled,
+            )
             audio, cleanup_report = await run_in_threadpool(
                 _maybe_clean_audio, audio, payload.cleanup
             )
@@ -500,7 +671,12 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
     ) -> StreamingResponse | JSONResponse:
         try:
             compiled = _compiled(payload, local_runtime)
-            audio = await run_in_threadpool(local_runtime.synthesize, compiled)
+            audio = await run_in_threadpool(
+                synthesize_with_provider,
+                payload.provider_id,
+                local_runtime,
+                compiled,
+            )
             audio, cleanup_report = await run_in_threadpool(
                 _maybe_clean_audio, audio, payload.cleanup
             )
@@ -555,10 +731,16 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             markup=_text_to_markup(payload.input, payload.voice, payload.speed),
             voice=payload.voice,
             cleanup=payload.cleanup,
+            provider_id=None,
         )
         try:
             compiled = _compiled(request, local_runtime)
-            audio = await run_in_threadpool(local_runtime.synthesize, compiled)
+            audio = await run_in_threadpool(
+                synthesize_with_provider,
+                request.provider_id,
+                local_runtime,
+                compiled,
+            )
             audio, cleanup_report = await run_in_threadpool(
                 _maybe_clean_audio, audio, payload.cleanup
             )

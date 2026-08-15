@@ -55,6 +55,12 @@ platforms:
 preflight:
 	nastech-tts preflight $${TARGET:-python-cuda}
 
+providers:
+	nastech-tts providers
+
+provider-preflight:
+	nastech-tts provider-preflight $${PROVIDER:-coqui-cli}
+
 benchmark:
 	NASTECH_CPU_PROFILE=$${NASTECH_CPU_PROFILE:-balanced} nastech-tts benchmark examples/compact_agent_story.xml --runs $${RUNS:-3}
 

@@ -1,108 +1,114 @@
-# Nastech Compact Agent API
+# Nastech TTS API Reference
 
-Nastech Compact v0.8.0 provides **local, English-only Supertonic ONNX synthesis** on CPU. It adds portable-runtime inventory and preflight planning for GPU, mobile, and browser targets while retaining agent planning, transparent post-synthesis chunk delivery, deterministic PCM cleanup, compiler, synthesis, diagnostics, warm-up, and cache operations. No endpoint proxies text or audio to a cloud TTS provider. [1] [2]
+Nastech Compact v0.9.0 is a **local-first, English expressive TTS provider mixer** published by Nastech Research. It presents a single NastechML request contract, routes each synthesis request through one explicitly selected active provider, applies deterministic optional WAV cleanup, and returns auditable provider metadata. The default core is real local CPU synthesis; network providers are disabled by default and inactive catalog entries cannot synthesize.
 
-> **Streaming contract:** `/v1/agent/speech/stream` synthesizes the complete WAV locally first, then transmits the result in bounded chunks. It is useful for memory-bounded clients and progressive transfer, but it is **not** falsely presented as token-level or frame-level model streaming.
+> **Provider honesty:** a target in the 50-provider catalog is not necessarily installed, configured, licenced for a particular use, or eligible for synthesis. Call `POST /v1/providers/preflight` to receive its zero-side-effect activation requirements. See [PROVIDER_CATALOG_50.md](PROVIDER_CATALOG_50.md) and [PROVIDER_ARCHITECTURE.md](PROVIDER_ARCHITECTURE.md).
+
+> **Streaming contract:** `/v1/agent/speech/stream` creates the complete WAV first, then transfers it in bounded chunks. This can reduce client buffering but is **not** token-level or frame-level model streaming.
 
 ## Authentication
 
-Set `NASTECH_API_KEY` to protect every endpoint except `GET /v1/health`:
+Set `NASTECH_API_KEY` to protect every endpoint except `GET /v1/health`.
 
 ```text
 Authorization: Bearer <NASTECH_API_KEY>
 ```
 
-## Agent Operations
+## Provider Selection
 
-| Tool | HTTP operation | Local result |
-|---|---|---|
-| `nastech_plan_speech` | `POST /v1/agent/plan` | Validated execution plan, local delivery route, requested cleanup state, and direct/approximated/unavailable fidelity counts |
-| `nastech_compile_speech` | `POST /v1/agent/compile` | Supertonic prompt and auditable NastechML manifest without audio generation |
-| `nastech_generate_speech` | `POST /v1/agent/speech` | Completed local `audio/wav` response; optional cleanup |
-| `nastech_stream_speech` | `POST /v1/agent/speech/stream` | Completed local WAV delivered in bounded post-synthesis byte chunks |
-| `nastech_clean_wav` | `POST /v1/audio/clean` | Deterministically cleaned mono signed-16-bit PCM WAV, with cleanup headers |
-| `nastech_list_platforms` | `GET /v1/platforms` | Factual host/runtime facts, registered ONNX providers, and verified/planned target profiles |
-| `nastech_platform_preflight` | `POST /v1/platforms/preflight` | Activation requirements, evidence gates, and claim boundary for a named CPU/GPU/mobile/browser target |
-| `nastech_runtime_diagnostics` | `GET /v1/runtime/diagnostics` | CPU policy, ONNX model/cache state, and synthesis metrics |
-| `nastech_warmup_runtime` | `POST /v1/runtime/warmup` | Loaded local runtime and short warm-up synthesis |
-| `nastech_clear_runtime_cache` | `POST /v1/runtime/cache/clear` | Cache entries and bytes cleared without unloading ONNX sessions |
-
-`GET /v1/agent/tools` returns the same ten operations as machine-readable API descriptors. A repository copy is stored in [`agent_tools/nastech_tts_tool.json`](../agent_tools/nastech_tts_tool.json).
-
-## Plan Before Synthesis
-
-Use planning when an agent needs to inspect local behavior before consuming CPU time:
+Every compile, plan, story, or synthesis request can include an optional `provider_id`. Omitting it selects `nastech-native-onnx`, the currently verified local provider. The router does not silently substitute another provider if the requested ID is inactive.
 
 ```json
 {
-  "markup": "<speak voice=\"F1\"><emotion name=\"sad\">The lantern went dark.</emotion><sound type=\"sigh\"/></speak>",
-  "objective": "Prepare a cautious local narration response.",
-  "delivery": "chunked-wav",
+  "markup": "<speak><emotion name=\"sad\">The lantern went dark.</emotion><sound type=\"sigh\" /></speak>",
+  "provider_id": "nastech-native-onnx",
   "cleanup": true
 }
 ```
 
-The plan returns the compiled text, manifest, local model family, delivery endpoint, cleanup request, and a fidelity summary. A plan does **not** claim that an expression is deterministic when the pinned Supertonic release has not been listening-tested for that tag.
+| State | Synthesis result | Network effect |
+|---|---|---|
+| `active/local` | Eligible for local rendering. | None. |
+| `adapter/available` | Returns HTTP 422 with an activation instruction. | None. |
+| `planned/license-review` | Returns HTTP 422 with review requirements. | None. |
+| `planned/credential-required` | Returns HTTP 422 with credential and privacy requirements. | None. |
 
-## Chunked WAV Delivery
+## Agent Operations
 
-`POST /v1/agent/speech/stream` accepts the speech request plus `chunk_bytes` from 4 KiB to 1 MiB. It returns `audio/wav` with these headers:
+| Tool | HTTP operation | Result |
+|---|---|---|
+| `nastech_list_providers` | `GET /v1/providers` | The 50 Nastech provider targets, truthful states, and network-default policy. |
+| `nastech_provider_preflight` | `POST /v1/providers/preflight` | A provider activation plan; it never downloads software, tests credentials, or sends text/audio. |
+| `nastech_compose_story` | `POST /v1/agent/story` | Deterministic Nastech Agent story markup, optionally rendered by an active local provider. |
+| `nastech_plan_speech` | `POST /v1/agent/plan` | Auditable execution plan with selected provider, delivery route, cleanup state, and fidelity counts. |
+| `nastech_compile_speech` | `POST /v1/agent/compile` | Provider-selected request manifest without audio generation. |
+| `nastech_generate_speech` | `POST /v1/agent/speech` | Completed local `audio/wav`; cleanup is optional. |
+| `nastech_stream_speech` | `POST /v1/agent/speech/stream` | Completed WAV delivered in caller-bounded post-synthesis byte chunks. |
+| `nastech_clean_wav` | `POST /v1/audio/clean` | Deterministically cleaned mono signed-16-bit PCM WAV. |
+| `nastech_list_platforms` | `GET /v1/platforms` | Host/runtime facts plus verified and planned portability profiles. |
+| `nastech_platform_preflight` | `POST /v1/platforms/preflight` | Evidence requirements for a CPU, GPU, mobile, or browser target. |
+| `nastech_runtime_diagnostics` | `GET /v1/runtime/diagnostics` | Local CPU policy, cache state, and runtime metrics. |
+| `nastech_warmup_runtime` | `POST /v1/runtime/warmup` | Short local warm-up synthesis. |
+| `nastech_clear_runtime_cache` | `POST /v1/runtime/cache/clear` | Bounded WAV-cache cleanup without unloading runtime sessions. |
 
-| Header | Meaning |
-|---|---|
-| `X-Nastech-Delivery: chunked-post-synthesis` | The full WAV was generated locally before chunk transmission began |
-| `X-Nastech-Chunk-Bytes` | Maximum body chunk size requested by the caller |
-| `X-Nastech-Request-Id` | Correlation ID shared with the compilation manifest |
-| `X-Nastech-Voice-Cleanup` | `not-requested` or `local-pcm-hygiene` |
+`GET /v1/agent/tools` returns the same 13 operations as machine-readable descriptors. The repository copy is [agent_tools/nastech_tts_tool.json](../agent_tools/nastech_tts_tool.json).
 
-## Conservative Voice Cleanup
+## Nastech Agent Stories
 
-`POST /v1/audio/clean` accepts `Content-Type: audio/wav`, up to 64 MiB, and only supports **mono signed-16-bit PCM WAV**. It applies four deterministic, local operations: DC-offset removal, a near-silence gate, peak limiting only when needed to prevent clipping, and short edge fades to reduce clicks.
-
-This tool is **not** voice conversion, denoising by a learned second model, speaker cloning, or a claim of professional mastering. It does not change speaker identity and requires no model download or cloud call.
-
-The normal synthesis and OpenAI-compatible endpoints accept `"cleanup": true` when the caller wants this stage after local inference. Cleanup remains opt-in to preserve byte-for-byte compatibility for existing callers.
-
-## Portability Discovery and Preflight
-
-`GET /v1/platforms` reports operating-system/architecture facts, the ONNX Runtime providers registered **on the current host**, and Nastech target profiles. A registered provider is not claimed to run the Supertonic graph.
-
-`POST /v1/platforms/preflight` accepts a target such as `python-cuda`, `android-nnapi`, or `web-webgpu`. It responds with target-specific prerequisites, matching providers on the current host, acceptance evidence required, and an explicit claim boundary. `python-cpu` is the only verified profile in v0.8. GPU, Android, iOS, and browser profiles remain planned until a real target synthesis proves compatibility, audio validity, latency, memory, and package constraints. ONNX Runtime documents that execution-provider results are model and device specific. [3] [4]
+`POST /v1/agent/story` composes a short deterministic English NastechML narrative. Supported themes are `innovation`, `discovery`, and `resilience`; supported emotions and sound cues are validated against NastechML. Set `render` to `false` to obtain markup and a provider-selected compilation manifest without model inference.
 
 ```json
-{"target": "android-nnapi"}
+{
+  "theme": "discovery",
+  "emotion": "hopeful",
+  "sounds": ["sigh"],
+  "provider_id": "nastech-native-onnx",
+  "render": false
+}
 ```
+
+The response identifies **Nastech Agent** and **Nastech Research** but does not claim a cloud language model or autonomous narration service.
+
+## Conservative WAV Cleanup and Level Gates
+
+`POST /v1/audio/clean` accepts `Content-Type: audio/wav`, up to 64 MiB, and supports **mono signed-16-bit PCM WAV**. It applies DC-offset removal, near-silence gating, peak limiting when required to prevent clipping, and short edge fades. It is not voice conversion, a learned denoiser, speaker cloning, or mastering.
+
+The deterministic level analyser checks channel count, sample rate, duration, peak, RMS, clipping, and DC offset. Real local release voices are generated only in the tag-only workflow, stored as audited fixtures, and revalidated from checksum-bearing manifests. See [release/voice_fixtures](../release/voice_fixtures/) and [RELEASE_CHECKLIST.md](../release/RELEASE_CHECKLIST.md).
+
+## Portability Discovery
+
+`GET /v1/platforms` reports current host facts, registered ONNX Runtime providers, and Nastech target profiles. `POST /v1/platforms/preflight` accepts targets such as `python-cuda`, `android-nnapi`, or `web-webgpu`. A registered runtime provider does not prove that an active Nastech provider runs on the target. Python CPU remains the only verified profile; other profiles require real synthesis, audio validity, latency, memory, package, and applicable device evidence before promotion. ONNX Runtime documents that execution-provider behaviour is model- and device-dependent. [1] [2]
 
 ## Core Endpoints
 
 | Method | Path | Purpose |
 |---|---|---|
-| `GET` | `/v1/health` | Public readiness, selected CPU policy, and model state |
-| `GET` | `/v1/capabilities` | Local model, delivery, cleanup, CPU, and expression contract |
-| `POST` | `/v1/agent/plan` | Agent planning without synthesis |
-| `POST` | `/v1/agent/compile` | NastechML compilation without synthesis |
-| `POST` | `/v1/agent/speech` | Complete local expressive WAV generation |
-| `POST` | `/v1/agent/speech/stream` | Completed WAV transferred in bounded chunks |
-| `POST` | `/v1/audio/clean` | Local conservative WAV cleanup |
-| `POST` | `/v1/audio/speech` | OpenAI-compatible plain-text local synthesis alias |
-| `GET` | `/v1/platforms` | Current host ONNX providers and verified/planned platform profiles |
-| `POST` | `/v1/platforms/preflight` | Validation-gated target activation plan |
-| `GET` | `/v1/runtime/diagnostics` | Local CPU/model/cache diagnostics |
-| `POST` | `/v1/runtime/warmup` | Local ONNX warm-up |
-| `POST` | `/v1/runtime/cache/clear` | Bounded WAV cache management |
+| `GET` | `/v1/health` | Public readiness and runtime state. |
+| `GET` | `/v1/capabilities` | Nastech provider mixer, delivery, cleanup, CPU, expression, and agent contract. |
+| `GET` | `/v1/providers` | Provider inventory and state summary. |
+| `POST` | `/v1/providers/preflight` | Zero-side-effect provider activation plan. |
+| `GET` | `/v1/agent/identity` | Nastech Agent identity and story capability boundary. |
+| `POST` | `/v1/agent/story` | Compose or render a Nastech Agent story. |
+| `POST` | `/v1/agent/plan` | Agent planning without synthesis. |
+| `POST` | `/v1/agent/compile` | NastechML compilation without synthesis. |
+| `POST` | `/v1/agent/speech` | Complete expressive WAV generation through an active local provider. |
+| `POST` | `/v1/agent/speech/stream` | Completed WAV transferred in bounded chunks. |
+| `POST` | `/v1/audio/clean` | Conservative local WAV cleanup. |
+| `POST` | `/v1/audio/speech` | OpenAI-compatible local plain-text synthesis alias. |
+| `GET` | `/v1/platforms` | Current host runtime facts and portability profiles. |
+| `POST` | `/v1/platforms/preflight` | Validation-gated target activation plan. |
+| `GET` | `/v1/runtime/diagnostics` | Local CPU/cache diagnostics. |
+| `POST` | `/v1/runtime/warmup` | Local warm-up. |
+| `POST` | `/v1/runtime/cache/clear` | Bounded WAV-cache management. |
 
-## Daily Verification
+## Daily and Release Verification
 
-GitHub Actions runs the deterministic full quality workflow on push, pull request, manual dispatch, and **daily at 03:17 UTC**. The scheduled run executes formatting, static analysis, the Python suite, generated 500-capability catalog drift detection, machine-readable contract validation, OpenAPI drift detection, source/wheel builds, and distribution checks. It intentionally does not download models or generate cloud audio. See [REPOSITORY_AUTOMATION.md](REPOSITORY_AUTOMATION.md).
+The deterministic workflow runs on push, pull request, manual dispatch, and **daily at 03:17 UTC**. It checks formatting, static analysis, all deterministic tests, generated 500+500+1,000 roadmap drift, JSON/YAML contracts, OpenAPI drift, source/wheel builds, and distribution metadata. It intentionally does not download models or call managed TTS services. The tag-only release-audio workflow separately renders and validates the real local voice fixtures. See [REPOSITORY_AUTOMATION.md](REPOSITORY_AUTOMATION.md).
 
 The versioned OpenAPI schema is [openapi.json](openapi.json).
 
 ## References
 
-[1] [Supertonic official repository](https://github.com/supertone-inc/supertonic)
+[1] [ONNX Runtime execution providers](https://onnxruntime.ai/docs/execution-providers/)
 
-[2] [Supertonic Python SDK](https://github.com/supertone-inc/supertonic-py)
-
-[3] [ONNX Runtime execution providers](https://onnxruntime.ai/docs/execution-providers/)
-
-[4] [ONNX Runtime mobile deployment guide](https://onnxruntime.ai/docs/tutorials/mobile/)
+[2] [ONNX Runtime mobile deployment guide](https://onnxruntime.ai/docs/tutorials/mobile/)

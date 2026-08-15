@@ -1,18 +1,18 @@
-# Nastech 500-Capability Catalog
+# Nastech 500-Capability Foundation Catalog
 
-This catalog is a **product and research roadmap**, not a claim that 500 features already work. Every item is classified by a delivery state so cross-platform, GPU, mobile, cloning, and training work is not misrepresented. The source evidence and platform constraints are recorded in [cross_platform_research_notes.md](cross_platform_research_notes.md).
+This foundation catalog is a **product and research roadmap**. It does not claim that all 500 features already work. Every item is classified by delivery state so GPU, mobile, cloning, and training work is not misrepresented. Source evidence appears in the linked [cross_platform_research_notes.md](cross_platform_research_notes.md).
 
 | Delivery class | Meaning |
 |---|---|
-| `implemented/core` | Available in the current Compact runtime and covered by tests or release verification. |
+| `implemented/core` | Available in the Compact runtime and covered by tests or release verification. |
 | `implemented plus planned` | A core exists; the listed extension needs implementation and tests. |
-| `planned/... validation required` | Requires a provider/device/runtime compatibility test before it can be advertised. |
-| `planned/consent required` | Requires consent, abuse-prevention, and policy design before implementation. |
-| `research and license gate` | Requires model/data/license review and a separately measured deployment decision. |
+| `planned/... validation required` | Requires provider, device, runtime, client, media, or evaluation evidence before advertisement. |
+| `planned/consent required` | Requires consent, abuse prevention, and policy design before implementation. |
+| `research and license gate` | Requires model, data, license, and deployment-budget review before implementation. |
 
 ## Catalog Index
 
-The catalog contains 20 domains × 25 capability records = **500 records**. Each record is a concrete engineering deliverable: an interface, control, validation, test, safety guardrail, metric, documentation artifact, or acceptance criterion.
+This tranche contains 20 domains × 25 records = **500 records**. Each record is an interface, control, validation, test, safety guardrail, metric, documentation artifact, or acceptance criterion. Evidence is recorded in [cross_platform_research_notes.md](cross_platform_research_notes.md).
 
 ## Text intake and normalization
 
@@ -656,6 +656,6 @@ Default delivery class: `implemented plus planned`.
 
 ## Verification Rule
 
-A record moves to `implemented/core` only when code and tests are committed. Documentation, budget, and relevant platform proof must accompany them. GPU/Android profiles need actual execution-provider/device validation. Voice-cloning and training profiles need model/license/consent review. The catalog rejects unsupported claims.
+A record moves to `implemented/core` only when code and tests are committed. Documentation, budget, and relevant platform proof must accompany them. GPU/mobile profiles need actual execution-provider and device validation. Voice identity, conversion, and training profiles need model, license, and consent review. Provenance profiles need the stated cryptographic or audit evidence. The catalog rejects unsupported claims.
 
 **Generated record count:** 500.

@@ -54,8 +54,11 @@ def test_authorized_tool_catalog_exposes_all_local_operations(monkeypatch) -> No
 
     assert response.status_code == 200
     payload = response.json()
-    assert len(payload) == 10
+    assert len(payload) == 13
     assert {tool["name"] for tool in payload} >= {
+        "nastech_list_providers",
+        "nastech_provider_preflight",
+        "nastech_compose_story",
         "nastech_plan_speech",
         "nastech_compile_speech",
         "nastech_generate_speech",
@@ -67,6 +70,63 @@ def test_authorized_tool_catalog_exposes_all_local_operations(monkeypatch) -> No
         "nastech_warmup_runtime",
         "nastech_clear_runtime_cache",
     }
+
+
+def test_provider_inventory_and_preflight_are_authenticated_and_truthful(monkeypatch) -> None:
+    client, _ = _secured_client(monkeypatch)
+    headers = {"Authorization": "Bearer matrix-secret"}
+
+    inventory = client.get("/v1/providers", headers=headers)
+    preflight = client.post(
+        "/v1/providers/preflight",
+        headers=headers,
+        json={"provider_id": "coqui-cli"},
+    )
+
+    assert inventory.status_code == 200
+    assert inventory.json()["provider_catalog_size"] == 50
+    assert inventory.json()["network_default"] == "disabled"
+    assert preflight.status_code == 200
+    assert preflight.json()["readiness"] == "adapter-installation-required"
+    assert preflight.json()["network_request_made"] is False
+
+
+def test_agent_identity_and_story_composition_credit_nastech_research(monkeypatch) -> None:
+    client, _ = _secured_client(monkeypatch)
+    headers = {"Authorization": "Bearer matrix-secret"}
+
+    identity = client.get("/v1/agent/identity", headers=headers)
+    story = client.post(
+        "/v1/agent/story",
+        headers=headers,
+        json={"theme": "discovery", "emotion": "hopeful", "sounds": ["sigh"]},
+    )
+
+    assert identity.status_code == 200
+    assert identity.json()["publisher"] == "Nastech Research"
+    assert identity.json()["repository_owner"] == "bantuinversions"
+    assert story.status_code == 200
+    assert story.json()["agent"]["name"] == "Nastech Agent"
+    assert story.json()["story"]["theme"] == "discovery"
+    assert '<sound type="sigh" />' in story.json()["story"]["markup"]
+    assert story.json()["runtime"] == "nastech-provider-mixer"
+
+
+def test_rendered_nastech_agent_story_uses_local_audio(monkeypatch) -> None:
+    client, runtime = _secured_client(monkeypatch)
+
+    response = client.post(
+        "/v1/agent/story",
+        headers={"Authorization": "Bearer matrix-secret"},
+        json={"theme": "resilience", "emotion": "sad", "render": True},
+    )
+
+    assert response.status_code == 200
+    assert response.content == b"RIFFmatrix"
+    assert response.headers["x-nastech-agent"] == "nastech-agent"
+    assert response.headers["x-nastech-publisher"] == "Nastech Research"
+    assert response.headers["x-nastech-story-theme"] == "resilience"
+    assert "Nastech Agent returned" in runtime.last_compiled.text
 
 
 def test_cache_clear_endpoint_reports_result(monkeypatch) -> None:
@@ -104,7 +164,7 @@ def test_openai_alias_maps_fast_speed_to_compiled_prosody(monkeypatch) -> None:
 
     assert response.status_code == 200
     assert runtime.last_compiled.speed == 1.18
-    assert response.headers["x-nastech-runtime"] == "supertonic-local-onnx-cpu"
+    assert response.headers["x-nastech-runtime"] == "nastech-provider-mixer"
 
 
 def test_capabilities_advertise_cache_management(monkeypatch) -> None:
@@ -123,7 +183,7 @@ def test_health_remains_available_and_reports_authentication(monkeypatch) -> Non
 
     assert response.status_code == 200
     assert response.json()["authentication_required"] is True
-    assert response.json()["version"] == "0.8.0"
+    assert response.json()["version"] == "0.9.0"
 
 
 def test_agent_plan_exposes_local_execution_and_fidelity_summary(monkeypatch) -> None:
@@ -141,7 +201,8 @@ def test_agent_plan_exposes_local_execution_and_fidelity_summary(monkeypatch) ->
 
     assert response.status_code == 200
     payload = response.json()
-    assert payload["execution"]["inference"] == "local-onnx-cpu"
+    assert payload["execution"]["inference"] == "active-local-provider"
+    assert payload["execution"]["provider"]["id"] == "nastech-native-onnx"
     assert payload["execution"]["delivery_endpoint"] == "/v1/agent/speech/stream"
     assert payload["execution"]["voice_cleanup_requested"] is True
 
@@ -184,7 +245,13 @@ def test_capabilities_advertise_streaming_and_local_cleanup(monkeypatch) -> None
 
     assert response.status_code == 200
     payload = response.json()
+    assert "/v1/providers" in payload["agent_endpoints"]
+    assert "/v1/providers/preflight" in payload["agent_endpoints"]
+    assert payload["provider_inventory"]["catalog_size"] == 50
+    assert "/v1/agent/identity" in payload["agent_endpoints"]
+    assert "/v1/agent/story" in payload["agent_endpoints"]
     assert "/v1/agent/speech/stream" in payload["agent_endpoints"]
+    assert payload["publisher"] == "Nastech Research"
     assert (
         payload["delivery"]["streaming_semantics"]
         == "post-synthesis WAV chunks; not incremental model inference"

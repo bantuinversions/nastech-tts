@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "publisher": "Nastech Research",
+  "fixture_count": 3,
+  "fixtures": [
+    {
+      "id": "nastech-agent-innovation",
+      "wav": "nastech-agent-innovation.wav",
+      "levels": {
+        "format": "mono-16-bit-pcm-wav",
+        "channels": 1,
+        "sample_width_bytes": 2,
+        "sample_rate_hz": 44100,
+        "frames": 795648,
+        "duration_seconds": 18.0419,
+        "peak_pcm": 12975,
+        "peak_dbfs": -8.0466,
+        "rms_pcm": 1665.965,
+        "rms_dbfs": -25.8754,
+        "dc_offset_pcm": 0.6523,
+        "clipped_samples": 0
+      }
+    },
+    {
+      "id": "nastech-agent-resilience",
+      "wav": "nastech-agent-resilience.wav",
+      "levels": {
+        "format": "mono-16-bit-pcm-wav",
+        "channels": 1,
+        "sample_width_bytes": 2,
+        "sample_rate_hz": 44100,
+        "frames": 777216,
+        "duration_seconds": 17.6239,
+        "peak_pcm": 15241,
+        "peak_dbfs": -6.6485,
+        "rms_pcm": 1639.707,
+        "rms_dbfs": -26.0134,
+        "dc_offset_pcm": 0.6496,
+        "clipped_samples": 0
+      }
+    },
+    {
+      "id": "expressive-laugh-cough",
+      "wav": "expressive-laugh-cough.wav",
+      "levels": {
+        "format": "mono-16-bit-pcm-wav",
+        "channels": 1,
+        "sample_width_bytes": 2,
+        "sample_rate_hz": 44100,
+        "frames": 380928,
+        "duration_seconds": 8.6378,
+        "peak_pcm": 13948,
+        "peak_dbfs": -7.4185,
+        "rms_pcm": 1624.5716,
+        "rms_dbfs": -26.094,
+        "dc_offset_pcm": -1.4351,
+        "clipped_samples": 0
+      }
+    }
+  ]
+}

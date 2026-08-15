@@ -2,14 +2,14 @@
 
 ## Scope
 
-Nastech Compact v0.8.0 runs **Supertonic 3** locally through ONNX Runtime on CPU. The optimizer layer preserves one model family and real local inference; it does not introduce a cloud proxy, GPU dependency, model merge, quantization substitute, or second fallback model. Supertonic’s loader exposes ONNX Runtime intra-operation and inter-operation thread controls and enables full graph optimization for its model sessions. [1]
+Nastech Compact v0.9.0 runs the verified **Nastech native local provider** through ONNX Runtime on CPU. The optimizer layer preserves real local inference for the active provider; it does not introduce a cloud proxy, GPU dependency, model merge, unreviewed fallback, or silent provider substitution. The local loader exposes ONNX Runtime intra-operation and inter-operation thread controls and enables full graph optimization for its model sessions. [1]
 
 ## Implemented Controls
 
 | Control | Implementation | Operational effect |
 |---|---|---|
 | CPU profiles | `balanced`, `latency`, `throughput`, and `auto` | Gives safe defaults for common server patterns while retaining host-specific overrides |
-| ONNX thread tuning | `NASTECH_INTRA_OP_THREADS` and `NASTECH_INTER_OP_THREADS` | Passes explicit worker counts to local Supertonic ONNX sessions |
+| ONNX thread tuning | `NASTECH_INTRA_OP_THREADS` and `NASTECH_INTER_OP_THREADS` | Passes explicit worker counts to the active local ONNX provider |
 | Bounded scheduling | `NASTECH_MAX_PARALLEL_SYNTHESIS` plus `NASTECH_QUEUE_TIMEOUT_SECONDS` | Prevents unrestricted request-level CPU oversubscription |
 | Response cache | Bounded LRU in-memory WAV cache | Reuses identical recent local responses without growing disk state |
 | Warm-up | CLI, API endpoint, and optional startup lifecycle warm-up | Preloads sessions and a voice style before user traffic |
@@ -26,9 +26,9 @@ The upstream model’s execution stage is sequential because its ONNX modules ha
 | Available RAM | 23 GiB |
 | Model assets | 384.83 MiB |
 | Python runtime and quality-tool dependencies | 289.15 MiB |
-| Release assets | 2.44 MiB |
-| Full measured deployment | **676.42 MiB** |
-| Headroom below 1 GiB | **347.58 MiB** |
+| Release assets | 8.65 MiB |
+| Full measured deployment | **682.62 MiB** |
+| Headroom below 1 GiB | **341.38 MiB** |
 
 ## Benchmark Evidence
 

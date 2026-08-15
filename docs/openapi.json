@@ -2,8 +2,8 @@
   "openapi": "3.1.0",
   "info": {
     "title": "Nastech Compact TTS",
-    "description": "A local, CPU-tuned, agent-ready expressive TTS API backed by Supertonic 3 ONNX assets. Agent plans and chunked delivery remain auditable and local.",
-    "version": "0.8.0"
+    "description": "A Nastech-branded, local-first, agent-ready expressive TTS API with a provider mixer, auditable provider selection, and bounded WAV delivery.",
+    "version": "0.9.0"
   },
   "paths": {
     "/v1/health": {
@@ -58,6 +58,108 @@
                   "additionalProperties": true,
                   "title": "Response Capabilities V1 Capabilities Get"
                 }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/providers": {
+      "get": {
+        "summary": "List Providers",
+        "operationId": "list_providers_v1_providers_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response List Providers V1 Providers Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/providers/preflight": {
+      "post": {
+        "summary": "Preflight Provider",
+        "operationId": "preflight_provider_v1_providers_preflight_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProviderPreflightRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -316,6 +418,54 @@
         }
       }
     },
+    "/v1/agent/identity": {
+      "get": {
+        "summary": "Get Agent Identity",
+        "operationId": "get_agent_identity_v1_agent_identity_get",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Get Agent Identity V1 Agent Identity Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/agent/tools": {
       "get": {
         "summary": "Agent Tools",
@@ -350,6 +500,60 @@
                   },
                   "title": "Response Agent Tools V1 Agent Tools Get"
                 }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/agent/story": {
+      "post": {
+        "summary": "Compose Story",
+        "operationId": "compose_story_v1_agent_story_post",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentStoryRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
               }
             }
           },
@@ -715,6 +919,18 @@
               }
             ],
             "title": "Steps"
+          },
+          "provider_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Id"
           }
         },
         "type": "object",
@@ -756,6 +972,18 @@
               }
             ],
             "title": "Steps"
+          },
+          "provider_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Id"
           },
           "cleanup": {
             "type": "boolean",
@@ -816,6 +1044,18 @@
             ],
             "title": "Steps"
           },
+          "provider_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Id"
+          },
           "cleanup": {
             "type": "boolean",
             "title": "Cleanup",
@@ -827,7 +1067,91 @@
           "markup"
         ],
         "title": "AgentSpeechRequest",
-        "description": "NastechML request that produces local Supertonic audio."
+        "description": "NastechML request that produces audio through an active local provider."
+      },
+      "AgentStoryRequest": {
+        "properties": {
+          "markup": {
+            "type": "string",
+            "maxLength": 12000,
+            "title": "Markup",
+            "default": ""
+          },
+          "voice": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Voice"
+          },
+          "steps": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 12.0,
+                "minimum": 5.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Steps"
+          },
+          "provider_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Id"
+          },
+          "cleanup": {
+            "type": "boolean",
+            "title": "Cleanup",
+            "default": false
+          },
+          "theme": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 1,
+            "pattern": "^[a-z-]+$",
+            "title": "Theme",
+            "default": "innovation"
+          },
+          "emotion": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 1,
+            "pattern": "^[a-z-]+$",
+            "title": "Emotion",
+            "default": "hopeful"
+          },
+          "sounds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 3,
+            "title": "Sounds"
+          },
+          "render": {
+            "type": "boolean",
+            "title": "Render",
+            "default": false
+          }
+        },
+        "type": "object",
+        "title": "AgentStoryRequest",
+        "description": "Compose a deterministic Nastech Agent story and optionally render it locally."
       },
       "AgentStreamRequest": {
         "properties": {
@@ -861,6 +1185,18 @@
               }
             ],
             "title": "Steps"
+          },
+          "provider_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^[a-z0-9-]{1,64}$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Id"
           },
           "cleanup": {
             "type": "boolean",
@@ -997,6 +1333,23 @@
         ],
         "title": "PlatformPreflightRequest",
         "description": "Named portable runtime target to evaluate against the current host."
+      },
+      "ProviderPreflightRequest": {
+        "properties": {
+          "provider_id": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1,
+            "pattern": "^[a-z0-9-]+$",
+            "title": "Provider Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "provider_id"
+        ],
+        "title": "ProviderPreflightRequest",
+        "description": "Named Nastech provider target to inspect without side effects."
       },
       "ValidationError": {
         "properties": {

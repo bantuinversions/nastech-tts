@@ -1,9 +1,12 @@
 {
-  "schema_version": "1.3",
+  "schema_version": "1.4",
   "service": "nastech-tts",
-  "version": "0.8.0",
-  "model_family": "supertonic-3",
-  "inference": "local-onnx-cpu",
+  "publisher": "Nastech Research",
+  "version": "0.9.0",
+  "provider_mixer": "nastech",
+  "provider_catalog_size": 50,
+  "default_provider_id": "nastech-native-onnx",
+  "network_default": "disabled",
   "max_deployment_mib": 1024,
   "authentication": {
     "environment_variable": "NASTECH_API_KEY",
@@ -13,28 +16,50 @@
   "portability_contract": {
     "verified_profile": "python-cpu",
     "planned_profiles_require_real_target_validation": true,
-    "claim_boundary": "A registered provider or listed target does not prove Supertonic executed there."
+    "claim_boundary": "A listed provider or target does not prove it has executed on that target."
   },
   "delivery_contract": {
     "format": "audio/wav",
-    "streaming": "The stream endpoint emits bounded chunks only after complete local ONNX synthesis and optional cleanup. It is not incremental model inference."
+    "streaming": "The stream endpoint emits bounded chunks only after complete local synthesis and optional cleanup. It is not incremental model inference."
   },
   "tools": [
     {
+      "name": "nastech_list_providers",
+      "description": "List the Nastech 50-provider catalog and truthful activation states.",
+      "http": {"method": "GET", "path": "/v1/providers"},
+      "input": {"type": "object", "properties": {}, "additionalProperties": false}
+    },
+    {
+      "name": "nastech_provider_preflight",
+      "description": "Create a zero-side-effect activation plan for one Nastech provider target.",
+      "http": {"method": "POST", "path": "/v1/providers/preflight"},
+      "input": {
+        "type": "object",
+        "required": ["provider_id"],
+        "properties": {"provider_id": {"type": "string", "example": "coqui-cli"}}
+      }
+    },
+    {
+      "name": "nastech_compose_story",
+      "description": "Compose a deterministic Nastech Agent English story and optionally render it locally.",
+      "http": {"method": "POST", "path": "/v1/agent/story"},
+      "input": {"type": "object", "properties": {"theme": {"type": "string", "example": "innovation"}}}
+    },
+    {
       "name": "nastech_plan_speech",
-      "description": "Compile English NastechML into an auditable local execution plan without generating audio.",
+      "description": "Compile English NastechML into an auditable provider-selected execution plan without generating audio.",
       "http": {"method": "POST", "path": "/v1/agent/plan"},
       "input": {"type": "object", "required": ["markup"]}
     },
     {
       "name": "nastech_compile_speech",
-      "description": "Compile English NastechML into a local Supertonic expression prompt.",
+      "description": "Compile English NastechML into an active Nastech provider request and fidelity manifest.",
       "http": {"method": "POST", "path": "/v1/agent/compile"},
       "input": {"type": "object", "required": ["markup"]}
     },
     {
       "name": "nastech_generate_speech",
-      "description": "Generate completed local English expressive WAV audio with Supertonic ONNX.",
+      "description": "Generate completed local English expressive WAV audio through an active Nastech provider.",
       "http": {"method": "POST", "path": "/v1/agent/speech", "response": "audio/wav"},
       "input": {"type": "object", "required": ["markup"]}
     },
@@ -52,7 +77,7 @@
     },
     {
       "name": "nastech_list_platforms",
-      "description": "Report host facts, registered ONNX providers, and verified/planned portability profiles.",
+      "description": "Report host facts, registered ONNX providers, and verified or planned portability profiles.",
       "http": {"method": "GET", "path": "/v1/platforms"},
       "input": {"type": "object", "properties": {}, "additionalProperties": false}
     },
@@ -74,13 +99,13 @@
     },
     {
       "name": "nastech_warmup_runtime",
-      "description": "Load the local ONNX runtime and perform a short warm-up synthesis.",
+      "description": "Load the active local runtime and perform a short local warm-up synthesis.",
       "http": {"method": "POST", "path": "/v1/runtime/warmup"},
       "input": {"type": "object", "properties": {}, "additionalProperties": false}
     },
     {
       "name": "nastech_clear_runtime_cache",
-      "description": "Discard cached WAV responses without unloading local ONNX sessions.",
+      "description": "Discard cached WAV responses without unloading local runtime sessions.",
       "http": {"method": "POST", "path": "/v1/runtime/cache/clear"},
       "input": {"type": "object", "properties": {}, "additionalProperties": false}
     }

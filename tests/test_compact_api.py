@@ -43,7 +43,8 @@ def test_compile_returns_auditable_local_expression_plan() -> None:
 
     assert response.status_code == 200
     body = response.json()
-    assert body["runtime"] == "supertonic-local-onnx-cpu"
+    assert body["runtime"] == "nastech-provider-mixer"
+    assert body["provider"]["id"] == "nastech-native-onnx"
     assert body["text"] == "<sad> Hello. <laugh>"
     assert body["manifest"]["model_family"] == "supertonic-3"
 
@@ -56,7 +57,7 @@ def test_speech_endpoint_returns_local_audio() -> None:
 
     assert response.status_code == 200
     assert response.content == b"RIFFcompact-wave"
-    assert response.headers["x-nastech-runtime"] == "supertonic-local-onnx-cpu"
+    assert response.headers["x-nastech-runtime"] == "nastech-provider-mixer"
     assert response.headers["x-nastech-duration-seconds"] == "1.25"
 
 
@@ -67,7 +68,7 @@ def test_openai_compatible_alias_is_local() -> None:
     )
 
     assert response.status_code == 200
-    assert response.headers["x-nastech-runtime"] == "supertonic-local-onnx-cpu"
+    assert response.headers["x-nastech-runtime"] == "nastech-provider-mixer"
 
 
 def test_runtime_diagnostics_and_warmup_are_available() -> None:

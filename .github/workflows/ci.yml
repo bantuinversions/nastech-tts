@@ -70,10 +70,11 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install -e '.[dev]' build twine pyyaml
 
-      - name: Regenerate and verify 500-capability catalog
+      - name: Regenerate and verify 1,000-record capability roadmap
         run: |
           python scripts/generate_capability_catalog.py
-          git diff --exit-code -- docs/CAPABILITY_CATALOG_500.md
+          git diff --exit-code -- docs/CAPABILITY_CATALOG_500.md \
+            docs/CAPABILITY_EXPANSION_500.md docs/CAPABILITY_CATALOG_1000.md
 
       - name: Regenerate and verify OpenAPI schema
         run: |

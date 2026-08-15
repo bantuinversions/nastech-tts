@@ -21,6 +21,13 @@ artifacts/
 *.manifest.json
 *.log
 
+# Audited real local release evidence is intentionally versioned.
+!release/
+!release/voice_fixtures/
+!release/voice_fixtures/*.wav
+!release/voice_fixtures/*.xml
+!release/voice_fixtures/*.json
+
 # Model and dataset assets
 models/
 data/

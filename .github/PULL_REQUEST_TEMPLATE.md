@@ -1,6 +1,6 @@
-# Pull Request Summary
+# Nastech Research Pull Request Summary
 
-Describe the user-visible result and the reason for this change.
+Describe the user-visible result, the reason for the change, and any impact on the Nastech Research product identity.
 
 ## Change Type
 
@@ -24,13 +24,14 @@ make verify:
 
 - [ ] No synthesis behavior changed.
 - [ ] NastechML parser/compiler behavior changed and has focused tests.
-- [ ] Agent API or tool-catalog behavior changed and the OpenAPI schema was regenerated.
+- [ ] Agent API, Nastech Agent identity/story behavior, or tool-catalog behavior changed and the OpenAPI schema was regenerated.
 - [ ] CPU profile, queue, warm-up, or cache behavior changed and includes safe tests/benchmark evidence.
 - [ ] This change does not introduce a cloud synthesis dependency or a second model family.
 
 ## Deployment Budget
 
 - [ ] No dependency, model, or release-asset size changed materially.
+- [ ] If release voice fixtures changed, `scripts/validate_release_voice_fixtures.py` passed and the fixture manifest was reviewed.
 - [ ] `make budget` was run against the target environment and remains within the 1 GiB cap.
 - [ ] The measured impact and any updated budget evidence are described below.
 
@@ -39,6 +40,7 @@ make verify:
 - [ ] README, API, deployment, project summary, or test matrix documentation was updated where required.
 - [ ] No API key, bearer token, private audio, customer text, or model asset was added to the change.
 - [ ] I reviewed [SECURITY.md](SECURITY.md) for security-sensitive changes.
+- [ ] I reviewed [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) and routed review according to `.github/CODEOWNERS`.
 
 ## Additional Context
 

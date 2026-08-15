@@ -15,8 +15,8 @@ class StaticCompactRuntime:
 
     def status(self):
         return {
-            "provider": "supertonic-local",
-            "model_family": "supertonic-3",
+            "provider": "nastech-native-onnx",
+            "provider_mixer": "nastech",
             "model_assets_mib": 0.0,
             "target_max_deployment_mib": 1024,
         }

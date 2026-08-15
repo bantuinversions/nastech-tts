@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -26,11 +27,26 @@ def _require(condition: bool, message: str) -> None:
         raise ValueError(message)
 
 
+def _validate_catalog(path: Path, expected_records: int) -> None:
+    """Require an exact generated capability-table row count and count marker."""
+    catalog = path.read_text(encoding="utf-8")
+    records = len(re.findall(r"^\| \d+ \|", catalog, flags=re.MULTILINE))
+    _require(
+        records == expected_records,
+        f"{path.name} has {records} records; expected {expected_records}.",
+    )
+    marker = f"**Generated record count:** {expected_records}."
+    _require(marker in catalog, f"{path.name} count marker mismatch.")
+
+
 def main() -> int:
     agent = _read_json(ROOT / "agent_tools" / "nastech_tts_tool.json")
     tools = agent.get("tools", [])
     tool_names = {tool.get("name") for tool in tools}
     expected_tools = {
+        "nastech_list_providers",
+        "nastech_provider_preflight",
+        "nastech_compose_story",
         "nastech_plan_speech",
         "nastech_compile_speech",
         "nastech_generate_speech",
@@ -43,6 +59,13 @@ def main() -> int:
         "nastech_clear_runtime_cache",
     }
     _require(agent.get("service") == "nastech-tts", "Agent catalog has an invalid service name.")
+    _require(agent.get("publisher") == "Nastech Research", "Agent catalog publisher mismatch.")
+    _require(agent.get("version") == "0.9.0", "Agent catalog version mismatch.")
+    _require(agent.get("provider_catalog_size") == 50, "Provider catalog size mismatch.")
+    _require(
+        agent.get("default_provider_id") == "nastech-native-onnx",
+        "Default provider mismatch.",
+    )
     _require(tool_names == expected_tools, "Agent catalog does not expose the expected tool set.")
 
     openapi = _read_json(ROOT / "docs" / "openapi.json")
@@ -51,6 +74,10 @@ def main() -> int:
         "/v1/health",
         "/v1/capabilities",
         "/v1/agent/tools",
+        "/v1/agent/identity",
+        "/v1/agent/story",
+        "/v1/providers",
+        "/v1/providers/preflight",
         "/v1/agent/plan",
         "/v1/agent/compile",
         "/v1/agent/speech",
@@ -67,13 +94,17 @@ def main() -> int:
 
     summary = _read_yaml(ROOT / "project-summary.yml")
     _require(summary["project"]["package"] == "nastech-tts", "Project summary package mismatch.")
-    _require(summary["project"]["version"] == "0.8.0", "Project summary version mismatch.")
-    _require(summary["quality"]["test_target"] == 90, "Project summary test target mismatch.")
-    catalog = (ROOT / "docs" / "CAPABILITY_CATALOG_500.md").read_text(encoding="utf-8")
-    _require(catalog.count("| ") >= 500, "Capability catalog has fewer than 500 records.")
+    _require(summary["project"]["version"] == "0.9.0", "Project summary version mismatch.")
+    _require(summary["project"]["publisher"] == "Nastech Research", "Project publisher mismatch.")
+    _require(summary["runtime"]["provider_catalog_size"] == 50, "Provider catalog mismatch.")
     _require(
-        "**Generated record count:** 500." in catalog, "Capability catalog count marker mismatch."
+        summary["runtime"]["network_default"] == "disabled",
+        "Provider network-default policy mismatch.",
     )
+    _require(summary["quality"]["test_target"] >= 100, "Project summary test target mismatch.")
+    _validate_catalog(ROOT / "docs" / "CAPABILITY_CATALOG_500.md", 500)
+    _validate_catalog(ROOT / "docs" / "CAPABILITY_EXPANSION_500.md", 500)
+    _validate_catalog(ROOT / "docs" / "CAPABILITY_CATALOG_1000.md", 1000)
 
     yaml_paths = [
         ROOT / ".github" / "dependabot.yml",
@@ -83,6 +114,7 @@ def main() -> int:
         ROOT / ".github" / "ISSUE_TEMPLATE" / "config.yml",
         ROOT / ".github" / "workflows" / "ci.yml",
         ROOT / ".github" / "workflows" / "release.yml",
+        ROOT / ".github" / "workflows" / "release_audio_test.yml",
     ]
     for path in yaml_paths:
         _require(_read_yaml(path) is not None, f"YAML contract is empty: {path.relative_to(ROOT)}")

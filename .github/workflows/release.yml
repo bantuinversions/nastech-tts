@@ -44,8 +44,12 @@ jobs:
           ruff format --check src tests scripts
           ruff check src tests scripts
           pytest -q
+          python scripts/generate_capability_catalog.py
+          python scripts/validate_project_contracts.py
           python scripts/export_openapi.py
-          git diff --exit-code -- docs/openapi.json
+          git diff --exit-code -- docs/openapi.json docs/CAPABILITY_CATALOG_500.md \
+            docs/CAPABILITY_EXPANSION_500.md docs/CAPABILITY_CATALOG_1000.md
+          python scripts/validate_release_voice_fixtures.py
 
       - name: Build and validate distributions
         run: |
@@ -58,7 +62,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
         run: |
-          gh release create "$RELEASE_TAG" dist/* SHA256SUMS \
+          gh release create "$RELEASE_TAG" dist/* SHA256SUMS release/voice_fixtures/* \
             --draft \
             --generate-notes \
             --title "Nastech Compact $RELEASE_TAG"

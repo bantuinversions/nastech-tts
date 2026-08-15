@@ -2,13 +2,17 @@ schema_version: "1.2"
 project:
   name: "Nastech Compact TTS"
   package: "nastech-tts"
-  version: "0.8.0"
+  version: "0.9.0"
+  publisher: "Nastech Research"
   repository: "https://github.com/bantuinversions/nastech-tts"
   license: "Apache-2.0"
   language_scope: "English only"
 runtime:
-  model_family: "Supertonic 3"
-  inference: "local ONNX on CPU"
+  provider_mixer: "Nastech"
+  provider_catalog_size: 50
+  default_provider_id: "nastech-native-onnx"
+  inference: "local-first; active provider selected explicitly"
+  network_default: "disabled"
   gpu_required: false
   cloud_synthesis_required: false
   output:
@@ -48,34 +52,45 @@ runtime:
   operational_endpoints:
     - "/v1/health"
     - "/v1/capabilities"
+    - "/v1/providers"
+    - "/v1/providers/preflight"
     - "/v1/platforms"
     - "/v1/platforms/preflight"
     - "/v1/runtime/diagnostics"
     - "/v1/runtime/warmup"
     - "/v1/runtime/cache/clear"
 quality:
-  test_target: 90
+  test_target: 115
   commands:
     lint: "make lint"
     tests: "pytest -q"
     package: "make build"
     full_verification: "make verify"
     capability_catalog: "make catalog"
+    capability_roadmap_records: 1000
   automation:
     workflows:
       - ".github/workflows/ci.yml"
       - ".github/workflows/release.yml"
+      - ".github/workflows/release_audio_test.yml"
     daily_ci_utc: "03:17"
     dependency_updates: ".github/dependabot.yml"
 deployment_budget:
   maximum_mib: 1024
-  latest_verified_mib: 676.42
-  remaining_mib: 347.58
+  latest_verified_mib: 682.62
+  remaining_mib: 341.38
 agent_contract:
   descriptor: "agent_tools/nastech_tts_tool.json"
   openapi: "docs/openapi.json"
-  capability_catalog: "docs/CAPABILITY_CATALOG_500.md"
+  capability_catalog: "docs/CAPABILITY_CATALOG_1000.md"
+  capability_catalogs:
+    foundation_500: "docs/CAPABILITY_CATALOG_500.md"
+    expansion_500: "docs/CAPABILITY_EXPANSION_500.md"
+    master_1000: "docs/CAPABILITY_CATALOG_1000.md"
   tools:
+    - nastech_list_providers
+    - nastech_provider_preflight
+    - nastech_compose_story
     - nastech_plan_speech
     - nastech_compile_speech
     - nastech_generate_speech
@@ -86,3 +101,6 @@ agent_contract:
     - nastech_runtime_diagnostics
     - nastech_warmup_runtime
     - nastech_clear_runtime_cache
+  provider_catalog: "docs/PROVIDER_CATALOG_50.md"
+  provider_architecture: "docs/PROVIDER_ARCHITECTURE.md"
+  voice_inventory_policy: "docs/VOICE_INVENTORY.md"

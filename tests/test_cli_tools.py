@@ -16,6 +16,34 @@ class CliRuntime:
         return {"entries_cleared": 2, "bytes_cleared": 12}
 
 
+def test_story_command_composes_nastech_agent_markup_without_model_loading(
+    monkeypatch, tmp_path, capsys
+) -> None:
+    markup_output = tmp_path / "nastech-story.xml"
+    monkeypatch.setattr(cli, "SupertonicRuntime", CliRuntime)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "nastech-tts",
+            "story",
+            "discovery",
+            "--emotion",
+            "hopeful",
+            "--sound",
+            "sigh",
+            "--markup-output",
+            str(markup_output),
+        ],
+    )
+
+    assert cli.main() == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report["agent"]["publisher"] == "Nastech Research"
+    assert report["story"]["theme"] == "discovery"
+    assert "Nastech Agent opened a map" in markup_output.read_text(encoding="utf-8")
+
+
 def test_validate_command_writes_a_compilation_report(monkeypatch, tmp_path) -> None:
     source = tmp_path / "story.xml"
     report = tmp_path / "report.json"
@@ -114,3 +142,23 @@ def test_preflight_command_returns_cuda_validation_plan(monkeypatch, capsys) -> 
 
     assert cli.main() == 0
     assert json.loads(capsys.readouterr().out)["target"]["status"] == "planned"
+
+
+def test_providers_command_reports_fifty_adapter_targets(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(cli, "SupertonicRuntime", CliRuntime)
+    monkeypatch.setattr(sys, "argv", ["nastech-tts", "providers"])
+
+    assert cli.main() == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["provider_catalog_size"] == 50
+    assert payload["network_default"] == "disabled"
+
+
+def test_provider_preflight_command_is_zero_side_effect(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(cli, "SupertonicRuntime", CliRuntime)
+    monkeypatch.setattr(sys, "argv", ["nastech-tts", "provider-preflight", "coqui-cli"])
+
+    assert cli.main() == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["readiness"] == "adapter-installation-required"
+    assert payload["network_request_made"] is False

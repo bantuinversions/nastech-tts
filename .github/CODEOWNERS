@@ -1,0 +1,13 @@
+# Nastech Research is the company stewardship identity for this project.
+# This review-routing declaration does not transfer repository ownership.
+* @nastechresearch
+
+# Product identity, agent contracts, release evidence, and governance materials.
+/README.md @nastechresearch
+/docs/ @nastechresearch
+/src/nastech_tts/ @nastechresearch
+/tests/ @nastechresearch
+/release/ @nastechresearch
+/.github/ @nastechresearch
+/project-summary.yml @nastechresearch
+/agent_tools/ @nastechresearch
