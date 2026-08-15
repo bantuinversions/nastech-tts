@@ -61,7 +61,7 @@ jobs:
             --report release/voice_fixtures/verification.json
 
       - name: Upload release voice fixtures
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nastech-release-voice-fixtures-${{ github.ref_name }}
           path: release/voice_fixtures/
@@ -69,7 +69,7 @@ jobs:
           retention-days: 90
 
       - name: Upload expressive local evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nastech-release-expressive-audition-${{ github.ref_name }}
           path: |
@@ -81,7 +81,7 @@ jobs:
           retention-days: 90
 
       - name: Upload long-form continuity evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nastech-release-longform-continuity-${{ github.ref_name }}
           path: release/longform_continuity/
