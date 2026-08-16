@@ -1,6 +1,7 @@
 """Nastech Compact: local-first expressive TTS with a multilingual provider mixer."""
 
 from .cpu import CpuConfigurationError, CpuTuning
+from .hardware import HardwareConfigurationError, HardwarePlan
 from .languages import LanguageRegistryError, get_language, language_inventory
 from .markup import NastechMarkupError, parse_nastechml
 from .providers import (
@@ -26,6 +27,8 @@ __all__ = [
     "CompactAudio",
     "CpuConfigurationError",
     "CpuTuning",
+    "HardwareConfigurationError",
+    "HardwarePlan",
     "CompactCompiledRequest",
     "CompactRuntimeError",
     "CompactSettings",
@@ -45,4 +48,4 @@ __all__ = [
     "parse_nastechml",
 ]
 
-__version__ = "0.10.1"
+__version__ = "0.11.0"

@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-4D8CC9)](LICENSE)
 [![Provider mixer](https://img.shields.io/badge/providers-59%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
 
-**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.10.1** adds a Bantu-language registry to the Nastech provider mixer, with one stable request format, **59 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
+**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.11.0** adds automatic CPU/GPU hardware planning and optional local Bantu model packs on top of the Bantu-language registry to the Nastech provider mixer, with one stable request format, **59 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
 
 > **Deployment contract:** The full verified environment remains below the strict **1 GiB** cap. Run `make budget` for the exact target-host measurement before any production deployment.
 
@@ -141,7 +141,11 @@ nastech-tts preflight python-cuda
 nastech-tts preflight android-nnapi
 ```
 
-The repository includes the authoritative [1,000-capability catalog](docs/CAPABILITY_CATALOG_1000.md), comprising the [500-record foundation](docs/CAPABILITY_CATALOG_500.md) and [500-record researched expansion](docs/CAPABILITY_EXPANSION_500.md). It is a classified product and research roadmap, not a claim that all records are active. The [provider catalog](docs/PROVIDER_CATALOG_50.md), [provider architecture](docs/PROVIDER_ARCHITECTURE.md), [voice inventory policy](docs/VOICE_INVENTORY.md), [cross-platform research notes](docs/cross_platform_research_notes.md), and [portability architecture](docs/PORTABILITY_ARCHITECTURE.md) define activation evidence and claim boundaries.
+The repository includes the authoritative [1,000-capability catalog](docs/CAPABILITY_CATALOG_1000.md), comprising the [500-record foundation](docs/CAPABILITY_CATALOG_500.md) and [500-record researched expansion](docs/CAPABILITY_EXPANSION_500.md). It is a classified product and research roadmap, not a claim that all records are active. The [provider catalog](docs/PROVIDER_CATALOG_50.md), [provider architecture](docs/PROVIDER_ARCHITECTURE.md), [voice inventory policy](docs/VOICE_INVENTORY.md),
+[cross-platform research notes](docs/cross_platform_research_notes.md), and [portability architecture](docs/PORTABILITY_ARCHITECTURE.md) define activation evidence and claim boundaries.
+
+The runtime now exposes an automatic hardware plan through `HardwarePlan` and `/v1/platforms`: it detects CPU count, host RAM, CUDA availability, ONNX execution providers, safe precision, bounded concurrency, and a memory-aware batch recommendation. `NASTECH_DEVICE=auto` selects CUDA only when both the device and CUDAExecutionProvider are available; `NASTECH_DEVICE=cpu` forces the compact CPU path; and `NASTECH_DEVICE=gpu` fails closed when a verified CUDA route is unavailable. Optional local Bantu packs and their non-commercial MMS evidence are documented in [BANTU_LOCAL_MODELS.md](docs/BANTU_LOCAL_MODELS.md) and remain outside the compact core.
+
 
 ## NastechML Example
 
@@ -179,6 +183,7 @@ make verify
 | [docs/CAPABILITY_CATALOG_1000.md](docs/CAPABILITY_CATALOG_1000.md) | Authoritative 1,000-record classified capability roadmap |
 | [docs/PROVIDER_CATALOG_50.md](docs/PROVIDER_CATALOG_50.md) | Original 50-provider research catalog; runtime inventory is extended to 59 targets |
 | [docs/BANTU_LANGUAGE_COVERAGE.md](docs/BANTU_LANGUAGE_COVERAGE.md) | Luganda and major East/Southern Bantu-language evidence registry and activation gates |
+| [docs/BANTU_LOCAL_MODELS.md](docs/BANTU_LOCAL_MODELS.md) | Optional local MMS Bantu packs, hardware auto-detection, installation, and licence boundaries |
 | [docs/PROVIDER_ARCHITECTURE.md](docs/PROVIDER_ARCHITECTURE.md) | Provider mixer, no-fallback routing, and attribution boundary |
 | [docs/VOICE_INVENTORY.md](docs/VOICE_INVENTORY.md) | Verified local voices and consent-first regional voice roadmap |
 | [docs/PORTABILITY_ARCHITECTURE.md](docs/PORTABILITY_ARCHITECTURE.md) | CPU/GPU/mobile/browser evidence rules and target contract |

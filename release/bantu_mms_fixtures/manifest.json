@@ -1,0 +1,126 @@
+{
+  "device": "cpu",
+  "voices": {
+    "lg": {
+      "label": "Luganda",
+      "model": "facebook/mms-tts-lg",
+      "text": "Buli lunaku abantu bakola wamu okukulaakulanya obulamu.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 4.448,
+      "peak_dbfs": -4.412622509540627,
+      "rms_dbfs": -20.762658853097218,
+      "clipped_samples": 0
+    },
+    "nyn": {
+      "label": "Runyankole",
+      "model": "facebook/mms-tts-nyn",
+      "text": "Abantu bakorera hamwe okugira obusinge.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 1.824,
+      "peak_dbfs": -12.656231465273585,
+      "rms_dbfs": -26.718630404699113,
+      "clipped_samples": 0
+    },
+    "ach": {
+      "label": "Acholi",
+      "model": "facebook/mms-tts-ach",
+      "text": "Wang twero tic karacel pi kwo maber.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 3.136,
+      "peak_dbfs": -12.75121019176468,
+      "rms_dbfs": -27.056112681770912,
+      "clipped_samples": 0
+    },
+    "teo": {
+      "label": "Ateso",
+      "model": "facebook/mms-tts-teo",
+      "text": "Erai ngesi akwapakina ngesi.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 2.064,
+      "peak_dbfs": -11.493689986570008,
+      "rms_dbfs": -26.479517694598627,
+      "clipped_samples": 0
+    },
+    "sw": {
+      "label": "Kiswahili",
+      "model": "facebook/mms-tts-swh",
+      "text": "Watu wanafanya kazi pamoja kwa maisha bora.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 3.152,
+      "peak_dbfs": -2.595800961361922,
+      "rms_dbfs": -16.276535788498997,
+      "clipped_samples": 0
+    },
+    "rw": {
+      "label": "Kinyarwanda",
+      "model": "facebook/mms-tts-rw",
+      "text": "Abantu bakorera hamwe kugira ngo babeho neza.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 2.848,
+      "peak_dbfs": -12.96200635541851,
+      "rms_dbfs": -26.951729824994363,
+      "clipped_samples": 0
+    },
+    "rn": {
+      "label": "Kirundi",
+      "model": "facebook/mms-tts-rn",
+      "text": "Abantu bakorera hamwe kugira ubuzima bwiza.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 2.448,
+      "peak_dbfs": -11.232838745888216,
+      "rms_dbfs": -26.473652727554267,
+      "clipped_samples": 0
+    },
+    "ki": {
+      "label": "Gikuyu",
+      "model": "facebook/mms-tts-ki",
+      "text": "Andu marutaga hamwe nĩguo matũũre wega.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 3.04,
+      "peak_dbfs": -2.0910931398164005,
+      "rms_dbfs": -16.144830955682835,
+      "clipped_samples": 0
+    },
+    "ts": {
+      "label": "Tsonga",
+      "model": "facebook/mms-tts-ts",
+      "text": "Vanhu va tirha swin’we ku hanya kahle.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 3.232,
+      "peak_dbfs": -2.494181360136043,
+      "rms_dbfs": -16.245287566221315,
+      "clipped_samples": 0
+    },
+    "sn": {
+      "label": "Shona",
+      "model": "facebook/mms-tts-sn",
+      "text": "Vanhu vanoshanda pamwe chete kuti vararame zvakanaka.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 4.112,
+      "peak_dbfs": -2.0786247891813474,
+      "rms_dbfs": -16.02302691136107,
+      "clipped_samples": 0
+    },
+    "ny": {
+      "label": "Chichewa",
+      "model": "facebook/mms-tts-ny",
+      "text": "Anthu amagwira ntchito limodzi kuti akhale ndi moyo wabwino.",
+      "sample_rate_hz": 16000,
+      "channels": 1,
+      "duration_s": 5.424,
+      "peak_dbfs": -4.434678002672177,
+      "rms_dbfs": -20.870550190641453,
+      "clipped_samples": 0
+    }
+  }
+}

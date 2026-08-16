@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.11.0 — 2026-08-16
+
+Nastech Compact now reports an automatic hardware plan through the package and REST diagnostics. It detects CPU count, host RAM, CUDA availability, ONNX providers, safe precision, bounded concurrency, and batch recommendations; `NASTECH_DEVICE=gpu` fails closed unless a real CUDA path is available. The compact CPU core remains verified and does not require a GPU.
+
+The optional Bantu runtime installer and local inference harness now support 11 public MMS-TTS packs—Luganda, Runyankole, Acholi, Ateso, Kiswahili, Kinyarwanda, Kirundi, Gikuyu, Xitsonga, Shona, and Chichewa/Nyanja—stored outside the compact core. All 11 generated non-silent, unclipped CPU WAV smoke outputs on the current host. This is local generation evidence, not native-speaker or production-quality certification; MMS model use remains bounded by its CC-BY-NC-4.0 licence.
+
+The repository remains under the 1 GiB compact deployment limit at approximately 699.10 MiB, and the deterministic suite now contains **129 passing tests**. The Common Voice Luganda training corpus and 30-minute generated WAV remain external research/release assets rather than source-package contents.
+
 ## 0.10.1 — 2026-08-15
 
 This patch makes the Luganda `configured-local` registry test explicitly provide the required WAV normalizer command, matching the provider adapter’s documented activation gate in clean CI environments. No language-support claim or model/provider boundary changed.

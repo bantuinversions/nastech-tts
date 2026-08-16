@@ -2,7 +2,7 @@ schema_version: "1.2"
 project:
   name: "Nastech Compact TTS"
   package: "nastech-tts"
-  version: "0.10.1"
+  version: "0.11.0"
   publisher: "Nastech Research"
   repository: "https://github.com/bantuinversions/nastech-tts"
   license: "Apache-2.0"
@@ -14,6 +14,9 @@ runtime:
   language_registry: "docs/BANTU_LANGUAGE_COVERAGE.md"
   optional_luganda_provider: "coqui-luganda-openbible"
   optional_language_pack_rule: "Optional external packs are never included in the 1 GiB Nastech Compact core measurement."
+  optional_bantu_model_guide: "docs/BANTU_LOCAL_MODELS.md"
+  optional_bantu_installed_packs: 11
+  optional_bantu_license_boundary: "MMS packs are CC-BY-NC-4.0 evaluation/non-commercial assets pending separate review."
   default_provider_id: "nastech-native-onnx"
   inference: "local-first; active provider selected explicitly"
   network_default: "disabled"
@@ -27,6 +30,10 @@ runtime:
     - latency
     - throughput
     - auto
+  hardware_auto_detection:
+    endpoint_fields: "CPU count, RAM, CUDA availability, ONNX providers, precision, bounded concurrency, batch recommendation"
+    device_override: "NASTECH_DEVICE=auto|cpu|gpu"
+    gpu_fail_closed: true
   cross_platform:
     verified_profiles:
       - python-cpu
@@ -66,7 +73,7 @@ runtime:
     - "/v1/runtime/warmup"
     - "/v1/runtime/cache/clear"
 quality:
-  test_target: 125
+  test_target: 129
   commands:
     lint: "make lint"
     tests: "pytest -q"
@@ -75,6 +82,7 @@ quality:
     capability_catalog: "make catalog"
     capability_roadmap_records: 1000
   automation:
+
     workflows:
       - ".github/workflows/ci.yml"
       - ".github/workflows/release.yml"

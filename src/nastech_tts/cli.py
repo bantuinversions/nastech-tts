@@ -30,7 +30,7 @@ from .providers import (
 )
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
-VERSION = "0.10.1"
+VERSION = "0.11.0"
 
 
 def _parser() -> argparse.ArgumentParser:

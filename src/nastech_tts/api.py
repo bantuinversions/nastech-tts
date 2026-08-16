@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 
 from .agent_identity import agent_identity, generate_nastech_story_markup
 from .cleanup import VoiceCleanupError, clean_wav
+from .hardware import HardwareConfigurationError, HardwarePlan
 from .languages import LanguageRegistryError, get_language, language_inventory
 from .luganda_adapter import LugandaAdapterError
 from .markup import NastechMarkupError
@@ -31,7 +32,7 @@ from .supertonic import CompactAudio, CompactRuntimeError, SupertonicRuntime, co
 
 logger = logging.getLogger(__name__)
 MAX_CLEANUP_BYTES = 64 * 1024 * 1024
-VERSION = "0.10.1"
+VERSION = "0.11.0"
 
 
 class AgentCompileRequest(BaseModel):
@@ -490,6 +491,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             "service": "nastech-tts",
             "version": VERSION,
             "runtime": local_runtime.status(),
+            "hardware": HardwarePlan.detect().as_dict(),
             "authentication_required": _authorization_required(),
         }
 
@@ -598,7 +600,12 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
 
     @app.get("/v1/platforms")
     async def list_platforms(_: None = Depends(require_agent_key)) -> dict[str, Any]:
-        return host_platform_report()
+        report = host_platform_report()
+        try:
+            report["hardware"] = HardwarePlan.detect().as_dict()
+        except HardwareConfigurationError as exc:
+            report["hardware_error"] = str(exc)
+        return report
 
     @app.post("/v1/platforms/preflight", response_model=None)
     async def preflight_platform(
@@ -615,7 +622,12 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         _: None = Depends(require_agent_key),
         local_runtime: SupertonicRuntime = Depends(_runtime),
     ) -> dict[str, Any]:
-        return {"service": "nastech-tts", "version": VERSION, "runtime": local_runtime.status()}
+        return {
+            "service": "nastech-tts",
+            "version": VERSION,
+            "runtime": local_runtime.status(),
+            "hardware": HardwarePlan.detect().as_dict(),
+        }
 
     @app.post("/v1/runtime/warmup", response_model=None)
     async def warmup(

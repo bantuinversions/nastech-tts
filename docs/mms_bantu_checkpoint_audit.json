@@ -1,0 +1,118 @@
+{
+  "eng": {
+    "available": true,
+    "id": "facebook/mms-tts-eng",
+    "sha": "c71de0fe7204c83f1c10820a7d696d0b450048ba",
+    "private": false
+  },
+  "lug": {
+    "available": true,
+    "id": "facebook/mms-tts-lug",
+    "sha": "7da897bc70b025a01bbbc5a7651b8b5e1325239d",
+    "private": false
+  },
+  "nyn": {
+    "available": true,
+    "id": "facebook/mms-tts-nyn",
+    "sha": "0194917183886e0ef017d74d9355a248b2a6a6cc",
+    "private": false
+  },
+  "ach": {
+    "available": true,
+    "id": "facebook/mms-tts-ach",
+    "sha": "7ce6859976a8f7659fcf6870d59c71c3a5fb1294",
+    "private": false
+  },
+  "teo": {
+    "available": true,
+    "id": "facebook/mms-tts-teo",
+    "sha": "3e955492eabce29e274795d932085d68b6293f92",
+    "private": false
+  },
+  "swh": {
+    "available": true,
+    "id": "facebook/mms-tts-swh",
+    "sha": "c66a113bf598cd86fe1dfd3c0b5b56d4caa4e6f5",
+    "private": false
+  },
+  "kin": {
+    "available": true,
+    "id": "facebook/mms-tts-kin",
+    "sha": "71d00a03419b9bfd203a6bfa4d6bc565cbe3c4e0",
+    "private": false
+  },
+  "run": {
+    "available": true,
+    "id": "facebook/mms-tts-run",
+    "sha": "f98e94332ca1fb56f7a994daab06276df6925aef",
+    "private": false
+  },
+  "kik": {
+    "available": true,
+    "id": "facebook/mms-tts-kik",
+    "sha": "063336ad2feb161690834f94d3a2b53ccdb06c91",
+    "private": false
+  },
+  "kam": {
+    "available": false,
+    "status": 401
+  },
+  "luy": {
+    "available": false,
+    "status": 401
+  },
+  "luo": {
+    "available": false,
+    "status": 401
+  },
+  "zul": {
+    "available": false,
+    "status": 401
+  },
+  "xho": {
+    "available": false,
+    "status": 401
+  },
+  "sot": {
+    "available": false,
+    "status": 401
+  },
+  "nso": {
+    "available": false,
+    "status": 401
+  },
+  "tsn": {
+    "available": false,
+    "status": 401
+  },
+  "ven": {
+    "available": false,
+    "status": 401
+  },
+  "tso": {
+    "available": true,
+    "id": "facebook/mms-tts-tso",
+    "sha": "4eee11614c5a79417a5f41309af5398ae39ace2b",
+    "private": false
+  },
+  "ssw": {
+    "available": false,
+    "status": 401
+  },
+  "nbl": {
+    "available": false,
+    "status": 401
+  },
+  "sna": {
+    "available": true,
+    "id": "facebook/mms-tts-sna",
+    "sha": "129b8ba61c8dbce8daaeb1a134e2cb45c29870ad",
+    "private": false
+  },
+  "nya": {
+    "available": true,
+    "id": "facebook/mms-tts-nya",
+    "sha": "bd19fd2c0facbd46412426a262ca6f04af74e32c",
+    "private": false
+  }
+}
