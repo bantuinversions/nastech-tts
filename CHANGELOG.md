@@ -8,6 +8,8 @@ The registry maps verified public MMS routes for Luganda, Runyankole, Acholi, At
 
 The release contains **135 passing deterministic tests**, regenerated OpenAPI and agent contracts, one-language cache/eviction tests, and no-startup-download safeguards. The compact budget remains measured separately from all optional model packs.
 
+GitHub Actions now audits all 23 registered language targets and runs a parallel five-minute native-language story matrix for English plus the 13 verified Bantu packs. The English story covers Nastech Research branding, emotional transitions, and all nine registered non-verbal cues: laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, and cry. Each matrix job validates duration, non-silence, sample rate, clipping, checksums, and uploads WAV/report artifacts to the draft release. Planned languages remain explicit failures rather than substitutions.
+
 ## 0.11.0 — 2026-08-16
 
 Nastech Compact now reports an automatic hardware plan through the package and REST diagnostics. It detects CPU count, host RAM, CUDA availability, ONNX providers, safe precision, bounded concurrency, and batch recommendations; `NASTECH_DEVICE=gpu` fails closed unless a real CUDA path is available. The compact CPU core remains verified and does not require a GPU.
