@@ -66,6 +66,17 @@ _PROVIDER_ROWS = (
         "Included in the measured local Nastech core.",
     ),
     _provider(
+        "mms-lazy",
+        "MMS per-language lazy local pack",
+        "local-python",
+        ACTIVE_LOCAL,
+        (
+            "Explicitly select a language; download only that pack into the external cache, "
+            "load one model at a time, and retain CC-BY-NC-4.0 restrictions."
+        ),
+        ("lg", "nyn", "ach", "teo", "sw", "rw", "rn", "ki", "nso", "ve", "ts", "sn", "ny"),
+    ),
+    _provider(
         "kokoro-local",
         "Kokoro local",
         "local-python",
@@ -666,6 +677,10 @@ def synthesize_with_provider(
         if use_cache:
             return runtime.synthesize(compiled)
         return runtime.synthesize(compiled, use_cache=False)
+    if provider.id == "mms-lazy":
+        from .mms_lazy import synthesize_mms
+
+        return synthesize_mms(language, compiled.text)
     if provider.id == "coqui-cli":
         adapter = _configured_coqui_adapter()
         if adapter is None:

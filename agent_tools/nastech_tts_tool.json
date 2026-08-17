@@ -2,9 +2,9 @@
   "schema_version": "1.5",
   "service": "nastech-tts",
   "publisher": "Nastech Research",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "provider_mixer": "nastech",
-  "provider_catalog_size": 59,
+  "provider_catalog_size": 60,
   "language_registry_size": 23,
   "default_provider_id": "nastech-native-onnx",
   "default_language": "en",
@@ -33,7 +33,7 @@
   "tools": [
     {
       "name": "nastech_list_providers",
-      "description": "List the Nastech 59-provider catalog and truthful activation states.",
+      "description": "List the Nastech 60-provider catalog and truthful activation states.",
       "http": {"method": "GET", "path": "/v1/providers"},
       "input": {"type": "object", "properties": {}, "additionalProperties": false}
     },
@@ -48,6 +48,18 @@
       "description": "Inspect a language target's provider, licence, native-review, and activation requirements without side effects.",
       "http": {"method": "POST", "path": "/v1/languages/preflight"},
       "input": {"type": "object", "required": ["language"], "properties": {"language": {"type": "string", "example": "lg"}}}
+    },
+    {
+      "name": "nastech_list_language_packs",
+      "description": "List lazy Bantu model-pack cache and download states without downloading models.",
+      "http": {"method": "GET", "path": "/v1/languages/packs"},
+      "input": {"type": "object", "properties": {}, "additionalProperties": false}
+    },
+    {
+      "name": "nastech_download_language_pack",
+      "description": "Download exactly one requested Bantu language pack into the external cache.",
+      "http": {"method": "POST", "path": "/v1/languages/packs/download"},
+      "input": {"type": "object", "required": ["language"], "properties": {"language": {"type": "string", "example": "sw"}}}
     },
     {
       "name": "nastech_provider_preflight",

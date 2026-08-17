@@ -20,6 +20,7 @@ from .agent_identity import (
 from .cleanup import VoiceCleanupError, clean_wav
 from .cpu import CpuConfigurationError
 from .languages import get_language, language_inventory
+from .lazy_packs import download_language_pack, pack_inventory
 from .markup import NastechMarkupError
 from .platforms import PlatformPlanError, host_platform_report, platform_preflight
 from .providers import (
@@ -30,7 +31,7 @@ from .providers import (
 )
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
 
-VERSION = "0.11.0"
+VERSION = "0.12.0"
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -140,6 +141,11 @@ def _parser() -> argparse.ArgumentParser:
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
     subparsers.add_parser("providers", help="List all Nastech provider-mixer targets.")
     subparsers.add_parser("languages", help="List Bantu-language targets and evidence states.")
+    subparsers.add_parser("language-packs", help="List lazy Bantu model-pack cache states.")
+    download_pack = subparsers.add_parser(
+        "download-language-pack", help="Download exactly one requested Bantu language pack."
+    )
+    download_pack.add_argument("language", help="Language code, for example sw or zu.")
     language_check = subparsers.add_parser(
         "language-preflight", help="Inspect language provider requirements without side effects."
     )
@@ -286,6 +292,14 @@ def main() -> int:
 
         if args.command == "languages":
             print(json.dumps(language_inventory(), indent=2))
+            return 0
+
+        if args.command == "language-packs":
+            print(json.dumps(pack_inventory(), indent=2))
+            return 0
+
+        if args.command == "download-language-pack":
+            print(json.dumps(download_language_pack(args.language), indent=2))
             return 0
 
         if args.command == "language-preflight":

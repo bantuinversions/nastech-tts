@@ -2,14 +2,14 @@ schema_version: "1.2"
 project:
   name: "Nastech Compact TTS"
   package: "nastech-tts"
-  version: "0.11.0"
+  version: "0.12.0"
   publisher: "Nastech Research"
   repository: "https://github.com/bantuinversions/nastech-tts"
   license: "Apache-2.0"
   language_scope: "English verified locally; optional Luganda local technical preview; Bantu-language registry with explicit evidence states"
 runtime:
   provider_mixer: "Nastech"
-  provider_catalog_size: 59
+  provider_catalog_size: 60
   language_registry_size: 23
   language_registry: "docs/BANTU_LANGUAGE_COVERAGE.md"
   optional_luganda_provider: "coqui-luganda-openbible"
@@ -73,7 +73,7 @@ runtime:
     - "/v1/runtime/warmup"
     - "/v1/runtime/cache/clear"
 quality:
-  test_target: 129
+  test_target: 135
   commands:
     lint: "make lint"
     tests: "pytest -q"

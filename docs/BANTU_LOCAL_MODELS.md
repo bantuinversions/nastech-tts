@@ -18,6 +18,14 @@ Nastech TTS keeps the compact English core separate from optional multilingual m
 
 The models are separate single-language VITS checkpoints, not a single universal multilingual voice. Their existence and local generation do not by themselves establish pronunciation quality, native-speaker acceptance, commercial redistribution rights, or production readiness. The Nastech language registry must retain those evidence boundaries.
 
+## Lazy on-demand behavior
+
+Nastech does not download all Bantu packs at startup. `GET /v1/languages/packs` and `nastech-tts language-packs` inspect the registry and external cache without network access. An operator explicitly requests one pack with `POST /v1/languages/packs/download` or `nastech-tts download-language-pack sw`; the download is resumable through the Hugging Face cache and is written atomically under `NASTECH_BANTU_CACHE` (default: `~/.cache/nastech-bantu`).
+
+Synthesis through the `mms-lazy` provider loads only the requested language. The runtime keeps one MMS model resident and evicts the previous language model before loading another, so using Swahili does not load Luganda, Shona, or every other pack into RAM. `NASTECH_ALLOW_LAZY_DOWNLOAD=1` permits a synthesis request to acquire its requested cached-missing pack; leaving it unset fails closed and requires the explicit download operation first. `NASTECH_DEVICE=auto|cpu|gpu` controls the shared hardware planner.
+
+The registry is broader than the currently verified model set. For example, `zu` / isiZulu remains `no-verified-pack` in the lazy-pack inventory because the official MMS TTS language list and current checkpoint audit did not establish a Zulu checkpoint. Nastech will return a truthful unavailable-pack error rather than download a different language under the Zulu name. A future verified Zulu checkpoint can be added to the pack manifest without changing the lazy-cache architecture.
+
 ## Hardware behavior
 
 The optional inference harness detects CUDA through PyTorch and uses CUDA only when CUDA is available and the ONNX provider inventory also registers `CUDAExecutionProvider`. Otherwise it uses CPU float32 inference and loads one model at a time to control RAM. The current host has 6 logical CPUs, approximately 23.8 GiB RAM, no CUDA device, and no registered ONNX Runtime providers; its automatic plan is CPU execution, four intra-operation threads, one inter-operation thread, at most two parallel synthesis requests, and batch size one.

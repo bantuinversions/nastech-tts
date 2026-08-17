@@ -54,11 +54,13 @@ def test_authorized_tool_catalog_exposes_all_local_operations(monkeypatch) -> No
 
     assert response.status_code == 200
     payload = response.json()
-    assert len(payload) == 15
+    assert len(payload) == 17
     assert {tool["name"] for tool in payload} >= {
         "nastech_list_providers",
         "nastech_list_languages",
         "nastech_language_preflight",
+        "nastech_list_language_packs",
+        "nastech_download_language_pack",
         "nastech_provider_preflight",
         "nastech_compose_story",
         "nastech_plan_speech",
@@ -86,7 +88,7 @@ def test_provider_inventory_and_preflight_are_authenticated_and_truthful(monkeyp
     )
 
     assert inventory.status_code == 200
-    assert inventory.json()["provider_catalog_size"] == 59
+    assert inventory.json()["provider_catalog_size"] == 60
     assert inventory.json()["network_default"] == "disabled"
     assert preflight.status_code == 200
     assert preflight.json()["readiness"] == "adapter-installation-required"
@@ -185,7 +187,7 @@ def test_health_remains_available_and_reports_authentication(monkeypatch) -> Non
 
     assert response.status_code == 200
     assert response.json()["authentication_required"] is True
-    assert response.json()["version"] == "0.11.0"
+    assert response.json()["version"] == "0.12.0"
 
 
 def test_agent_plan_exposes_local_execution_and_fidelity_summary(monkeypatch) -> None:
@@ -249,7 +251,7 @@ def test_capabilities_advertise_streaming_and_local_cleanup(monkeypatch) -> None
     payload = response.json()
     assert "/v1/providers" in payload["agent_endpoints"]
     assert "/v1/providers/preflight" in payload["agent_endpoints"]
-    assert payload["provider_inventory"]["catalog_size"] == 59
+    assert payload["provider_inventory"]["catalog_size"] == 60
     assert "/v1/agent/identity" in payload["agent_endpoints"]
     assert "/v1/agent/story" in payload["agent_endpoints"]
     assert "/v1/agent/speech/stream" in payload["agent_endpoints"]

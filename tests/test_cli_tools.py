@@ -150,7 +150,7 @@ def test_providers_command_reports_fifty_nine_adapter_targets(monkeypatch, capsy
 
     assert cli.main() == 0
     payload = json.loads(capsys.readouterr().out)
-    assert payload["provider_catalog_size"] == 59
+    assert payload["provider_catalog_size"] == 60
     assert payload["network_default"] == "disabled"
 
 

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.12.0 — 2026-08-17
+
+Nastech Compact adds a lazy Bantu model-pack registry. Startup performs zero optional downloads and zero optional model loads; an operator can inspect pack states and explicitly download one requested language through REST, CLI, or agent tools. The `mms-lazy` provider loads one requested local MMS model at a time, evicts the previous model from RAM, and uses the shared CPU/GPU hardware planner.
+
+The registry maps verified public MMS routes for Luganda, Runyankole, Acholi, Ateso, Kiswahili, Kinyarwanda, Kirundi, Gikuyu, Sepedi, Tshivenda, Xitsonga, Shona, and Chichewa/Nyanja. Targets without a verified checkpoint—such as isiZulu—remain truthful `no-verified-pack` entries; Nastech never downloads a different language under the requested name. MMS packs remain external CC-BY-NC-4.0 assets and are not bundled into the Apache-2.0 compact core.
+
+The release contains **135 passing deterministic tests**, regenerated OpenAPI and agent contracts, one-language cache/eviction tests, and no-startup-download safeguards. The compact budget remains measured separately from all optional model packs.
+
 ## 0.11.0 — 2026-08-16
 
 Nastech Compact now reports an automatic hardware plan through the package and REST diagnostics. It detects CPU count, host RAM, CUDA availability, ONNX providers, safe precision, bounded concurrency, and batch recommendations; `NASTECH_DEVICE=gpu` fails closed unless a real CUDA path is available. The compact CPU core remains verified and does not require a GPU.

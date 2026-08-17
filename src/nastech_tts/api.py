@@ -18,6 +18,7 @@ from .agent_identity import agent_identity, generate_nastech_story_markup
 from .cleanup import VoiceCleanupError, clean_wav
 from .hardware import HardwareConfigurationError, HardwarePlan
 from .languages import LanguageRegistryError, get_language, language_inventory
+from .lazy_packs import LazyPackError, download_language_pack, pack_inventory
 from .luganda_adapter import LugandaAdapterError
 from .markup import NastechMarkupError
 from .platforms import PlatformPlanError, host_platform_report, platform_preflight
@@ -32,7 +33,7 @@ from .supertonic import CompactAudio, CompactRuntimeError, SupertonicRuntime, co
 
 logger = logging.getLogger(__name__)
 MAX_CLEANUP_BYTES = 64 * 1024 * 1024
-VERSION = "0.11.0"
+VERSION = "0.12.0"
 
 
 class AgentCompileRequest(BaseModel):
@@ -91,6 +92,12 @@ class ProviderPreflightRequest(BaseModel):
 
 class LanguagePreflightRequest(BaseModel):
     """Named language target to inspect without activating a provider."""
+
+    language: str = Field(min_length=2, max_length=16, pattern="^[A-Za-z0-9_-]+$")
+
+
+class LanguagePackRequest(BaseModel):
+    """Named language pack for explicit status or download operations."""
 
     language: str = Field(min_length=2, max_length=16, pattern="^[A-Za-z0-9_-]+$")
 
@@ -155,6 +162,24 @@ def agent_tool_descriptors() -> list[AgentToolDescriptor]:
             method="POST",
             path="/v1/languages/preflight",
             input_schema=LanguagePreflightRequest.model_json_schema(),
+        ),
+        AgentToolDescriptor(
+            name="nastech_list_language_packs",
+            description=(
+                "List Bantu model-pack cache and lazy-download states without downloading models."
+            ),
+            method="GET",
+            path="/v1/languages/packs",
+            input_schema=empty_input,
+        ),
+        AgentToolDescriptor(
+            name="nastech_download_language_pack",
+            description=(
+                "Download exactly one requested Bantu language pack into the external cache."
+            ),
+            method="POST",
+            path="/v1/languages/packs/download",
+            input_schema=LanguagePackRequest.model_json_schema(),
         ),
         AgentToolDescriptor(
             name="nastech_provider_preflight",
@@ -508,6 +533,8 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
                 "/v1/providers",
                 "/v1/providers/preflight",
                 "/v1/languages",
+                "/v1/languages/packs",
+                "/v1/languages/packs/download",
                 "/v1/agent/identity",
                 "/v1/agent/story",
                 "/v1/agent/plan",
@@ -582,7 +609,24 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
                 provider_preflight(provider_id) for provider_id in language.provider_ids
             ],
             "network_request_made": False,
+            "lazy_pack": next(
+                item for item in pack_inventory()["packs"] if item["language"] == language.code
+            ),
         }
+
+    @app.get("/v1/languages/packs")
+    async def list_language_packs(_: None = Depends(require_agent_key)) -> dict[str, Any]:
+        return pack_inventory()
+
+    @app.post("/v1/languages/packs/download", response_model=None)
+    async def download_language_pack_route(
+        payload: LanguagePackRequest,
+        _: None = Depends(require_agent_key),
+    ) -> dict[str, Any] | JSONResponse:
+        try:
+            return download_language_pack(payload.language)
+        except (LanguageRegistryError, LazyPackError) as exc:
+            return _error_response(exc)
 
     @app.get("/v1/providers")
     async def list_providers(_: None = Depends(require_agent_key)) -> dict[str, Any]:

@@ -3,9 +3,9 @@
 [![CI](https://github.com/bantuinversions/nastech-tts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bantuinversions/nastech-tts/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-Apache--2.0-4D8CC9)](LICENSE)
-[![Provider mixer](https://img.shields.io/badge/providers-59%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
+[![Provider mixer](https://img.shields.io/badge/providers-60%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
 
-**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.11.0** adds automatic CPU/GPU hardware planning and optional local Bantu model packs on top of the Bantu-language registry to the Nastech provider mixer, with one stable request format, **59 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
+**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.0** adds automatic CPU/GPU hardware planning and optional local Bantu model packs on top of the Bantu-language registry to the Nastech provider mixer, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
 
 > **Deployment contract:** The full verified environment remains below the strict **1 GiB** cap. Run `make budget` for the exact target-host measurement before any production deployment.
 
@@ -98,7 +98,7 @@ nastech-tts serve --host 127.0.0.1 --port 8765
 
 | Operation | Endpoint | Result |
 |---|---|---|
-| Provider inventory | `GET /v1/providers` | Full 59-entry Nastech provider catalog, state summary, and network-default policy |
+| Provider inventory | `GET /v1/providers` | Full 60-entry Nastech provider catalog, state summary, and network-default policy |
 | Language inventory | `GET /v1/languages` | Bantu-language targets, active/adapter/planned evidence states, and provider routes |
 | Language preflight | `POST /v1/languages/preflight` | Zero-side-effect provider, licence, and native-review plan for one language target |
 | Provider preflight | `POST /v1/providers/preflight` | Zero-side-effect installation, review, or credential plan for one provider target |
@@ -181,7 +181,7 @@ make verify
 | [docs/REPOSITORY_AUTOMATION.md](docs/REPOSITORY_AUTOMATION.md) | CI, daily schedule, release workflow, Dependabot, and template guide |
 | [docs/cpu_optimization.md](docs/cpu_optimization.md) | CPU profiles, measured evidence, and operational guidance |
 | [docs/CAPABILITY_CATALOG_1000.md](docs/CAPABILITY_CATALOG_1000.md) | Authoritative 1,000-record classified capability roadmap |
-| [docs/PROVIDER_CATALOG_50.md](docs/PROVIDER_CATALOG_50.md) | Original 50-provider research catalog; runtime inventory is extended to 59 targets |
+| [docs/PROVIDER_CATALOG_50.md](docs/PROVIDER_CATALOG_50.md) | Original 50-provider research catalog; runtime inventory is extended to 60 targets |
 | [docs/BANTU_LANGUAGE_COVERAGE.md](docs/BANTU_LANGUAGE_COVERAGE.md) | Luganda and major East/Southern Bantu-language evidence registry and activation gates |
 | [docs/BANTU_LOCAL_MODELS.md](docs/BANTU_LOCAL_MODELS.md) | Optional local MMS Bantu packs, hardware auto-detection, installation, and licence boundaries |
 | [docs/PROVIDER_ARCHITECTURE.md](docs/PROVIDER_ARCHITECTURE.md) | Provider mixer, no-fallback routing, and attribution boundary |
