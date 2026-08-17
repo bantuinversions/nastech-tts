@@ -146,7 +146,7 @@ def _expanded_story(language: str, duration_seconds: float) -> str:
     seed = ENGLISH_STORY if language == "en" else BANTU_STORIES[language]
     # Repeat complete story paragraphs rather than padding with silence. The
     # synthesis loop trims the final chunk to the requested duration exactly.
-    target_words = max(80, int(duration_seconds * 2.2))
+    target_words = max(80, int(duration_seconds * 2.8))
     expanded: list[str] = []
     while len(" ".join(expanded).split()) < target_words:
         expanded.append(seed)
@@ -218,7 +218,10 @@ def main() -> int:
     if target not in BANTU_STORIES and target != "en":
         raise RuntimeError(f"No native-language story fixture exists for '{target}'.")
     data, rate = _synthesize_five_minutes(target, args.duration_seconds)
-    quality = validate_release_wav(data)
+    quality = validate_release_wav(
+        data,
+        maximum_duration_seconds=max(360.0, args.duration_seconds + 1.0),
+    )
     if quality.duration_seconds < args.duration_seconds * 0.98:
         raise RuntimeError(f"Generated story is too short: {quality.duration_seconds:.2f}s")
     args.output_dir.mkdir(parents=True, exist_ok=True)
