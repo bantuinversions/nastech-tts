@@ -29,8 +29,6 @@ def test_voice_matrix_covers_english_and_verified_bantu_targets() -> None:
         "rw",
         "rn",
         "ki",
-        "nso",
-        "ve",
         "ts",
         "sn",
         "ny",

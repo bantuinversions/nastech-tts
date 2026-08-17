@@ -110,7 +110,8 @@ def _matrix() -> list[dict[str, Any]]:
                 "pack_state": pack.state,
                 "model_id": pack.model_id,
                 "providers": list(definition.provider_ids),
-                "story_available": code == "en" or code in BANTU_STORIES,
+                "story_available": code == "en"
+                or (code in BANTU_STORIES and pack.model_id is not None),
             }
         )
     return rows
@@ -146,7 +147,7 @@ def _expanded_story(language: str, duration_seconds: float) -> str:
     seed = ENGLISH_STORY if language == "en" else BANTU_STORIES[language]
     # Repeat complete story paragraphs rather than padding with silence. The
     # synthesis loop trims the final chunk to the requested duration exactly.
-    target_words = max(80, int(duration_seconds * 2.8))
+    target_words = max(80, int(duration_seconds * 3.2))
     expanded: list[str] = []
     while len(" ".join(expanded).split()) < target_words:
         expanded.append(seed)

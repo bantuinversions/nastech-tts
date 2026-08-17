@@ -31,7 +31,7 @@ jobs:
           assert len(rows) == 23, len(rows)
           assert {row['language'] for row in rows if row['story_available']} == {
               'en', 'lg', 'nyn', 'ach', 'teo', 'sw', 'rw', 'rn', 'ki',
-              'nso', 've', 'ts', 'sn', 'ny'
+              'ts', 'sn', 'ny'
           }
           for row in rows:
               if row['pack_state'] == 'no-verified-pack':
@@ -53,7 +53,7 @@ jobs:
       fail-fast: false
       max-parallel: 4
       matrix:
-        language: [en, lg, nyn, ach, teo, sw, rw, rn, ki, nso, ve, ts, sn, ny]
+        language: [en, lg, nyn, ach, teo, sw, rw, rn, ki, ts, sn, ny]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

@@ -4,11 +4,11 @@
 
 Nastech Compact adds a lazy Bantu model-pack registry. Startup performs zero optional downloads and zero optional model loads; an operator can inspect pack states and explicitly download one requested language through REST, CLI, or agent tools. The `mms-lazy` provider loads one requested local MMS model at a time, evicts the previous model from RAM, and uses the shared CPU/GPU hardware planner.
 
-The registry maps verified public MMS routes for Luganda, Runyankole, Acholi, Ateso, Kiswahili, Kinyarwanda, Kirundi, Gikuyu, Sepedi, Tshivenda, Xitsonga, Shona, and Chichewa/Nyanja. Targets without a verified checkpoint—such as isiZulu—remain truthful `no-verified-pack` entries; Nastech never downloads a different language under the requested name. MMS packs remain external CC-BY-NC-4.0 assets and are not bundled into the Apache-2.0 compact core.
+The registry maps 11 verified public MMS routes for Luganda, Runyankole, Acholi, Ateso, Kiswahili, Kinyarwanda, Kirundi, Gikuyu, Xitsonga, Shona, and Chichewa/Nyanja. Sepedi, Tshivenda, isiZulu, and other targets without a verified checkpoint remain truthful `no-verified-pack` entries; Nastech never downloads a different language under the requested name. MMS packs remain external CC-BY-NC-4.0 assets and are not bundled into the Apache-2.0 compact core.
 
 The release contains **135 passing deterministic tests**, regenerated OpenAPI and agent contracts, one-language cache/eviction tests, and no-startup-download safeguards. The compact budget remains measured separately from all optional model packs.
 
-GitHub Actions now audits all 23 registered language targets and runs a parallel five-minute native-language story matrix for English plus the 13 verified Bantu packs. The English story covers Nastech Research branding, emotional transitions, and all nine registered non-verbal cues: laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, and cry. Each matrix job validates duration, non-silence, sample rate, clipping, checksums, and uploads WAV/report artifacts to the draft release. Planned languages remain explicit failures rather than substitutions.
+GitHub Actions now audits all 23 registered language targets and runs a parallel five-minute native-language story matrix for English plus the 11 verified Bantu packs. The English story covers Nastech Research branding, emotional transitions, and all nine registered non-verbal cues: laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, and cry. Each matrix job validates duration, non-silence, sample rate, clipping, checksums, and uploads WAV/report artifacts to the draft release. Planned languages remain explicit failures rather than substitutions.
 
 ## 0.11.0 — 2026-08-16
 

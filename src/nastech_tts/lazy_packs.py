@@ -56,8 +56,6 @@ _PACK_ROWS = (
     ("rw", "kin", "Kinyarwanda", "facebook/mms-tts-kin"),
     ("rn", "run", "Kirundi", "facebook/mms-tts-run"),
     ("ki", "kik", "Gikuyu", "facebook/mms-tts-kik"),
-    ("nso", "nso", "Sepedi / Northern Sotho", "facebook/mms-tts-nso"),
-    ("ve", "ven", "Tshivenda", "facebook/mms-tts-ven"),
     ("ts", "tso", "itsonga", "facebook/mms-tts-tso"),
     ("sn", "sna", "Shona", "facebook/mms-tts-sna"),
     ("ny", "nya", "Chichewa / Nyanja", "facebook/mms-tts-nya"),
