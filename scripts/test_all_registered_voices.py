@@ -29,6 +29,7 @@ from nastech_tts.languages import LANGUAGE_REGISTRY  # noqa: E402
 from nastech_tts.lazy_packs import _pack_definitions  # noqa: E402
 
 TARGET_SECONDS = 300.0
+OUTPUT_RATE = 44100
 
 # The English story deliberately exercises every registered emotional style and
 # every supported non-verbal sound cue. Bantu seeds are native-language text
@@ -122,6 +123,15 @@ def _wav_parts(data: bytes) -> tuple[int, np.ndarray]:
     return rate, samples
 
 
+def _resample(samples: np.ndarray, source_rate: int, target_rate: int = OUTPUT_RATE) -> np.ndarray:
+    if source_rate == target_rate:
+        return samples
+    target_length = max(1, round(len(samples) * target_rate / source_rate))
+    source_positions = np.linspace(0.0, 1.0, num=len(samples), endpoint=False)
+    target_positions = np.linspace(0.0, 1.0, num=target_length, endpoint=False)
+    return np.rint(np.interp(target_positions, source_positions, samples)).astype(np.int16)
+
+
 def _wav_bytes(rate: int, samples: np.ndarray) -> bytes:
     output = io.BytesIO()
     with wave.open(output, "wb") as handle:
@@ -161,9 +171,9 @@ def _synthesize_five_minutes(language: str, duration_seconds: float) -> tuple[by
     # important for the 1 GiB core budget and one-model MMS residency rule.
     chunks = text.split(". ")
     audio_parts: list[np.ndarray] = []
-    rate: int | None = None
+    rate: int = OUTPUT_RATE
     total_frames = 0
-    target_frames: int | None = None
+    target_frames = int(duration_seconds * rate)
     for index in range(0, len(chunks), 4):
         chunk = ". ".join(chunks[index : index + 4]).strip()
         if not chunk:
@@ -172,21 +182,17 @@ def _synthesize_five_minutes(language: str, duration_seconds: float) -> tuple[by
             chunk = f"<speak>{chunk}</speak>"
         data = _synthesize(language, chunk)
         current_rate, samples = _wav_parts(data)
-        if rate is None:
-            rate = current_rate
-            target_frames = int(duration_seconds * rate)
-        if current_rate != rate:
-            raise RuntimeError(f"Sample-rate mismatch for {language}: {current_rate} != {rate}")
-        remaining = (target_frames or 0) - total_frames
+        samples = _resample(samples, current_rate, rate)
+        remaining = target_frames - total_frames
         if remaining <= 0:
             break
         audio_parts.append(samples[:remaining])
         total_frames += min(len(samples), remaining)
-        if total_frames >= (target_frames or 0):
+        if total_frames >= target_frames:
             break
-    if rate is None or target_frames is None or total_frames < int(rate * duration_seconds * 0.98):
+    if total_frames < int(rate * duration_seconds * 0.98):
         raise RuntimeError(
-            f"Unable to generate a five-minute story for {language}; only {total_frames / max(rate or 1, 1):.2f}s"
+            f"Unable to generate a five-minute story for {language}; only {total_frames / rate:.2f}s"
         )
     return _wav_bytes(rate, np.concatenate(audio_parts)), rate
 
