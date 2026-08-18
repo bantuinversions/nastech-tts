@@ -14,7 +14,7 @@ from pathlib import Path
 from typing import Any
 
 APP_NAME = "Nastech TTS"
-VERSION = "0.12.1"
+VERSION = "0.12.2"
 
 
 def _memory_mib() -> int | None:

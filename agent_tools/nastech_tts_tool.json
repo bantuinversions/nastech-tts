@@ -2,7 +2,7 @@
   "schema_version": "1.5",
   "service": "nastech-tts",
   "publisher": "Nastech Research",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "provider_mixer": "nastech",
   "provider_catalog_size": 60,
   "language_registry_size": 23,

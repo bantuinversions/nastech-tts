@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.2 — 2026-08-18
+
+The installer now opens a branded animated Nastech Research desktop window when Tk and a display are available. It shows live setup stages, a pulsing progress animation, detected hardware, optimization choice, dependency progress, and clear success/error states. Windows prefers the windowless Python launcher, while minimal/headless systems fall back automatically to the same local bootstrap logic. The release remains auditable; normal users do not see a terminal, but source is not falsely advertised as secret or tamper-proof.
+
 ## 0.12.1 — 2026-08-18
 
 This patch release adds the Nastech Research cross-platform one-time installer and self-bootstrapping launcher. Linux, macOS, and Windows bundles create an isolated environment, install declared dependencies once, detect CPU/GPU/RAM, persist a runtime profile, apply safe optimization settings, and expose explicit repair/reset operations. GitHub Actions builds and uploads platform-labelled installer bundles for version tags. Optional Bantu packs remain on-demand and are never downloaded during initial setup.

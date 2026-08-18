@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-4D8CC9)](LICENSE)
 [![Provider mixer](https://img.shields.io/badge/providers-60%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
 
-**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.1** adds automatic CPU/GPU hardware planning and optional local Bantu model packs on top of the Bantu-language registry to the Nastech provider mixer, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
+**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.2** adds automatic CPU/GPU hardware planning and optional local Bantu model packs on top of the Bantu-language registry to the Nastech provider mixer, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
 
 > **Deployment contract:** The full verified environment remains below the strict **1 GiB** cap. Run `make budget` for the exact target-host measurement before any production deployment.
 
@@ -189,7 +189,7 @@ Mixed synthesis remains entirely local. The returned manifest records every segm
 
 ## Cross-platform installer and launcher
 
-Nastech includes a one-time self-bootstrapping installer for Linux, macOS, and Windows. It creates an isolated environment, installs declared dependencies on first start, detects CPU/GPU/RAM, persists a safe optimization profile, and starts any Nastech CLI command. See [docs/INSTALLER.md](docs/INSTALLER.md) for the complete setup guide.
+Nastech includes a one-time self-bootstrapping installer for Linux, macOS, and Windows. On desktop systems it opens a branded animated progress window, hides terminal output from normal users, creates an isolated environment, installs declared dependencies on first start, detects CPU/GPU/RAM, persists a safe optimization profile, and starts any Nastech CLI command. Minimal or headless systems automatically use the same setup logic without the GUI. See [docs/INSTALLER.md](docs/INSTALLER.md) for the complete setup guide.
 
 ```sh
 ./installer/install.sh -- platforms

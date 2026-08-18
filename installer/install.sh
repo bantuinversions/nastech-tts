@@ -2,4 +2,7 @@
 set -eu
 
 SOURCE_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-exec python3 "$SOURCE_ROOT/installer/launcher.py" --source-root "$SOURCE_ROOT" -- "$@"
+if [ -n "${DISPLAY:-}${WAYLAND_DISPLAY:-}" ]; then
+  exec python3 -m installer.gui --source-root "$SOURCE_ROOT" -- "$@"
+fi
+exec python3 -m installer.launcher --source-root "$SOURCE_ROOT" -- "$@"
