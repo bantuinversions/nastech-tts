@@ -73,7 +73,12 @@ _EMOTION_TAGS: dict[str, tuple[str | None, Fidelity, str]] = {
     "excited": (
         "<surprise>",
         Fidelity.APPROXIMATED,
-        "Native tag request; confirm on pinned release.",
+        "Mapped to the upstream surprise expression tag.",
+    ),
+    "surprised": (
+        "<surprise>",
+        Fidelity.DIRECT,
+        "Upstream Supertonic expression tag.",
     ),
     "fearful": (
         "<surprise>",
@@ -99,6 +104,8 @@ _SOUND_TAGS: dict[str, tuple[str, Fidelity, str]] = {
     "groan": ("<sigh>", Fidelity.APPROXIMATED, "Mapped to documented sigh tag."),
     "yawn": ("<yawn>", Fidelity.APPROXIMATED, "Native tag request; confirm on pinned release."),
     "cry": ("<sad>", Fidelity.APPROXIMATED, "Mapped to sad tag request; no direct cry event."),
+    "scream": ("<scream>", Fidelity.DIRECT, "Upstream Supertonic expression tag."),
+    "throatclear": ("<throatclear>", Fidelity.DIRECT, "Upstream Supertonic expression tag."),
 }
 _RATE_MAP = {"slow": 0.82, "normal": 1.0, "fast": 1.18}
 

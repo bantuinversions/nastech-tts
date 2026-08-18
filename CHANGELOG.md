@@ -8,6 +8,8 @@ The registry maps 11 verified public MMS routes for Luganda, Runyankole, Acholi,
 
 The release contains **135 passing deterministic tests**, regenerated OpenAPI and agent contracts, one-language cache/eviction tests, and no-startup-download safeguards. The compact budget remains measured separately from all optional model packs.
 
+The expressive NastechML surface now includes the upstream Supertonic expression controls `<scream>` and `<throatclear>`, plus the semantic `surprised` emotion mapped to `<surprise>`. The parser and compiler have deterministic coverage for these additions. Nastech continues to label non-native mappings such as cry, cough, chuckle, sniffle, and groan as approximations instead of claiming that every sound is equally direct or guaranteed.
+
 GitHub Actions now audits all 23 registered language targets and runs a parallel five-minute native-language story matrix for English plus the 11 verified Bantu packs. The English story covers Nastech Research branding, emotional transitions, and all nine registered non-verbal cues: laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, and cry. Each matrix job validates duration, non-silence, sample rate, clipping, checksums, and uploads WAV/report artifacts to the draft release. Planned languages remain explicit failures rather than substitutions.
 
 ## 0.11.0 — 2026-08-16

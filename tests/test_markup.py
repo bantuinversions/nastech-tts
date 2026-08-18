@@ -31,6 +31,15 @@ class NastechMarkupTests(unittest.TestCase):
         self.assertEqual(spans[2].value, 300)
         self.assertEqual(spans[3].style.emotion, "sad")
 
+    def test_parses_upstream_expression_sounds_and_surprise(self):
+        markup = (
+            '<speak><emotion name="surprised">Look!</emotion>'
+            '<sound type="scream" /><sound type="throatclear" /></speak>'
+        )
+        _, spans = parse_nastechml(markup)
+        self.assertEqual(spans[0].style.emotion, "surprised")
+        self.assertEqual([span.value for span in spans[1:]], ["scream", "throatclear"])
+
     def test_rejects_unknown_sound(self):
         with self.assertRaises(NastechMarkupError):
             parse_nastechml('<speak><sound type="applause" /></speak>')

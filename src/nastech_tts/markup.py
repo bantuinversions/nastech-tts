@@ -30,12 +30,15 @@ _ALLOWED_SOUNDS = {
     "yawn",
     "gasp",
     "cry",
+    "scream",
+    "throatclear",
 }
 _ALLOWED_EMOTIONS = {
     "angry",
     "sad",
     "happy",
     "excited",
+    "surprised",
     "fearful",
     "disgusted",
     "frustrated",

@@ -161,7 +161,9 @@ The runtime now exposes an automatic hardware plan through `HardwarePlan` and `/
 </speak>
 ```
 
-Every compilation emits a decision manifest that classifies requested controls as `direct`, `approximated`, or `unavailable`. `<laugh>` and `<sigh>` are documented direct controls. Release-dependent controls are retained as explicit requests rather than falsely advertised as deterministic.
+Every compilation emits a decision manifest that classifies requested controls as `direct`, `approximated`, or `unavailable`. The upstream Supertonic expression vocabulary includes `<laugh>`, `<breath>`, `<surprise>`, `<sigh>`, `<scream>`, `<throatclear>`, `<sad>`, `<angry>`, `<cough>`, and `<yawn>`. Nastech exposes these through semantic emotion and sound requests, including `surprised`, `scream`, and `throatclear`. Additional semantic sounds such as `chuckle`, `sniffle`, `groan`, and `cry` are explicitly marked as approximations when they map to a related model control. This is not a claim that every human emotion or vocalization is equally reproducible; the manifest records the actual local fidelity for every request.
+
+The compact runtime currently accepts these emotion names: `neutral`, `calm`, `happy`, `excited`, `surprised`, `sad`, `angry`, `frustrated`, `fearful`, and `disgusted`. It accepts these sound names: `laugh`, `chuckle`, `sigh`, `cough`, `sniffle`, `groan`, `yawn`, `gasp`, `cry`, `scream`, and `throatclear`.
 
 ## Daily CI and Releases
 

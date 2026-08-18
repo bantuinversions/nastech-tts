@@ -23,6 +23,24 @@ def test_compiles_documented_direct_expression_tags() -> None:
     assert laugh["fidelity"] == "direct"
 
 
+def test_compiles_upstream_surprise_and_nonverbal_tags() -> None:
+    compiled = compile_nastechml(
+        '<speak><emotion name="surprised">Really?</emotion>'
+        '<sound type="scream" /><sound type="throatclear" /></speak>',
+        _settings(),
+    )
+
+    assert "<surprise> Really?" in compiled.text
+    assert "<scream>" in compiled.text
+    assert "<throatclear>" in compiled.text
+    direct = [
+        decision
+        for decision in compiled.manifest["decisions"]
+        if decision["requested_behavior"] in {"surprised", "scream", "throatclear"}
+    ]
+    assert all(decision["fidelity"] == "direct" for decision in direct)
+
+
 def test_marks_cough_and_named_emotion_as_release_dependent() -> None:
     compiled = compile_nastechml(
         '<speak><emotion name="angry">Stop.</emotion><sound type="cough" /></speak>',
