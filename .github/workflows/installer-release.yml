@@ -1,0 +1,56 @@
+name: Cross-platform installer release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bundle:
+    name: Bundle ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact: nastech-tts-linux
+          - os: macos-latest
+            artifact: nastech-tts-macos
+          - os: windows-latest
+            artifact: nastech-tts-windows
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify launcher syntax
+        run: python installer/launcher.py --diagnostics
+      - name: Package source installer bundle
+        shell: bash
+        run: |
+          mkdir -p dist/${{ matrix.artifact }}
+          cp -R installer dist/${{ matrix.artifact }}/installer
+          cp pyproject.toml README.md LICENSE dist/${{ matrix.artifact }}/
+          tar -czf dist/${{ matrix.artifact }}.tar.gz -C dist ${{ matrix.artifact }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/${{ matrix.artifact }}.tar.gz
+          if-no-files-found: error
+
+  release:
+    name: Upload installer bundles
+    needs: bundle
+    if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      - name: Upload platform bundles to GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$GITHUB_REF_NAME" dist/*.tar.gz --clobber

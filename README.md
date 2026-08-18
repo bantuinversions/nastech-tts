@@ -187,6 +187,17 @@ Use `SupertonicRuntime.synthesize_mixed()` when one document must switch voices 
 
 Mixed synthesis remains entirely local. The returned manifest records every segment’s selected voice, emotion, sound, rate, volume, compiled controls, and fidelity classification.
 
+## Cross-platform installer and launcher
+
+Nastech includes a one-time self-bootstrapping installer for Linux, macOS, and Windows. It creates an isolated environment, installs declared dependencies on first start, detects CPU/GPU/RAM, persists a safe optimization profile, and starts any Nastech CLI command. See [docs/INSTALLER.md](docs/INSTALLER.md) for the complete setup guide.
+
+```sh
+./installer/install.sh -- platforms
+./installer/install.sh -- serve --host 127.0.0.1 --port 8765
+```
+
+PowerShell users can run `installer\\install.ps1 -- platforms`. Use `--repair` to reinstall dependencies and `--reset-environment` to recreate the environment. Optional Bantu language packs remain explicit, on-demand downloads rather than part of the initial install.
+
 ## Daily CI and Releases
 
 GitHub Actions runs the complete deterministic quality workflow on push, pull request, manual launch, and **daily at 03:17 UTC**. The scheduled run checks formatting, static analysis, all tests, generated 500+500+1,000 roadmap drift, JSON/YAML contracts, OpenAPI drift, source/wheel builds, and package metadata. It does not download models or use a managed TTS service. Tag-only audio verification separately renders and validates real local release fixtures.

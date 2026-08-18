@@ -12,6 +12,8 @@ The expressive NastechML surface now includes the upstream Supertonic expression
 
 Mixed local synthesis now supports per-span voice switching and delivery styles. A single document can combine F1, M2, and F3 segments with soft, normal, or loud volume, calm, angry, sad, and happy emotions, rate changes, laughter, and sighs. The returned manifest records each segment’s selected voice and controls; a real local mixed audition was generated as 16.72 seconds of 44.1 kHz WAV.
 
+A cross-platform Nastech Research installer and launcher now supports Linux, macOS, and Windows. It bootstraps an isolated environment, installs dependencies once on first launch, supports explicit `--repair` and `--reset-environment` operations, detects CPU/GPU/RAM, persists `runtime-profile.json`, applies safe device/profile/concurrency settings, and builds version-tagged platform bundles through GitHub Actions. Optional Bantu packs remain on-demand.
+
 GitHub Actions now audits all 23 registered language targets and runs a parallel five-minute native-language story matrix for English plus the 11 verified Bantu packs. The English story covers Nastech Research branding, emotional transitions, and all nine registered non-verbal cues: laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, and cry. Each matrix job validates duration, non-silence, sample rate, clipping, checksums, and uploads WAV/report artifacts to the draft release. Planned languages remain explicit failures rather than substitutions.
 
 ## 0.11.0 — 2026-08-16
