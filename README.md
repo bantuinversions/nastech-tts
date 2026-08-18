@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-4D8CC9)](LICENSE)
 [![Provider mixer](https://img.shields.io/badge/providers-60%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
 
-**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.0** adds automatic CPU/GPU hardware planning and optional local Bantu model packs on top of the Bantu-language registry to the Nastech provider mixer, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
+**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.1** adds automatic CPU/GPU hardware planning and optional local Bantu model packs on top of the Bantu-language registry to the Nastech provider mixer, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
 
 > **Deployment contract:** The full verified environment remains below the strict **1 GiB** cap. Run `make budget` for the exact target-host measurement before any production deployment.
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.12.1 — 2026-08-18
+
+This patch release adds the Nastech Research cross-platform one-time installer and self-bootstrapping launcher. Linux, macOS, and Windows bundles create an isolated environment, install declared dependencies once, detect CPU/GPU/RAM, persist a runtime profile, apply safe optimization settings, and expose explicit repair/reset operations. GitHub Actions builds and uploads platform-labelled installer bundles for version tags. Optional Bantu packs remain on-demand and are never downloaded during initial setup.
+
 ## 0.12.0 — 2026-08-17
 
 Nastech Compact adds a lazy Bantu model-pack registry. Startup performs zero optional downloads and zero optional model loads; an operator can inspect pack states and explicitly download one requested language through REST, CLI, or agent tools. The `mms-lazy` provider loads one requested local MMS model at a time, evicts the previous model from RAM, and uses the shared CPU/GPU hardware planner.

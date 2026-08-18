@@ -23,6 +23,6 @@ def test_write_state_persists_hardware_profile(tmp_path: Path) -> None:
     path = write_state(tmp_path, {"os": "TestOS", "device": "cpu"})
     payload = json.loads(path.read_text(encoding="utf-8"))
     assert payload["app"] == "Nastech TTS"
-    assert payload["version"] == "0.12.0"
+    assert payload["version"] == "0.12.1"
     assert payload["host"]["device"] == "cpu"
     assert payload["optional_packs"] == "on-demand"

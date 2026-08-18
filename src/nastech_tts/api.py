@@ -33,7 +33,7 @@ from .supertonic import CompactAudio, CompactRuntimeError, SupertonicRuntime, co
 
 logger = logging.getLogger(__name__)
 MAX_CLEANUP_BYTES = 64 * 1024 * 1024
-VERSION = "0.12.0"
+VERSION = "0.12.1"
 
 
 class AgentCompileRequest(BaseModel):

@@ -48,4 +48,4 @@ __all__ = [
     "parse_nastechml",
 ]
 
-__version__ = "0.12.0"
+__version__ = "0.12.1"
