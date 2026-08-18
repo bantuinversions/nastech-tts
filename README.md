@@ -165,6 +165,28 @@ Every compilation emits a decision manifest that classifies requested controls a
 
 The compact runtime currently accepts these emotion names: `neutral`, `calm`, `happy`, `excited`, `surprised`, `sad`, `angry`, `frustrated`, `fearful`, and `disgusted`. It accepts these sound names: `laugh`, `chuckle`, `sigh`, `cough`, `sniffle`, `groan`, `yawn`, `gasp`, `cry`, `scream`, and `throatclear`.
 
+### Mixed voices and delivery styles
+
+Use `SupertonicRuntime.synthesize_mixed()` when one document must switch voices or styles. Each span can select a voice, emotion, rate, and volume independently; `soft` applies bounded attenuation, while `loud` applies bounded gain before WAV assembly.
+
+```xml
+<speak voice="F1">
+  <prosody volume="soft">
+    <emotion name="calm">Welcome to Nastech Research.</emotion>
+  </prosody>
+  <emotion name="angry" intensity="0.9">
+    <speak voice="M2">Stop. We protect the listener.</speak>
+  </emotion>
+  <sound type="laugh" />
+  <speak voice="F3">
+    <emotion name="sad">Even hard moments can teach us.</emotion>
+    <sound type="sigh" />
+  </speak>
+</speak>
+```
+
+Mixed synthesis remains entirely local. The returned manifest records every segment’s selected voice, emotion, sound, rate, volume, compiled controls, and fidelity classification.
+
 ## Daily CI and Releases
 
 GitHub Actions runs the complete deterministic quality workflow on push, pull request, manual launch, and **daily at 03:17 UTC**. The scheduled run checks formatting, static analysis, all tests, generated 500+500+1,000 roadmap drift, JSON/YAML contracts, OpenAPI drift, source/wheel builds, and package metadata. It does not download models or use a managed TTS service. Tag-only audio verification separately renders and validates real local release fixtures.

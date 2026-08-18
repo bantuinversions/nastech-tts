@@ -7,6 +7,7 @@ cloud provider and exposes bounded CPU execution appropriate for small servers.
 from __future__ import annotations
 
 import hashlib
+import html
 import io
 import os
 import threading
@@ -341,6 +342,87 @@ class SupertonicRuntime:
             self._audio_cache.clear()
             self._cache_bytes = 0
         return {"entries_cleared": entries, "bytes_cleared": bytes_cleared}
+
+    def synthesize_mixed(
+        self, markup: str, *, language: str | None = None
+    ) -> tuple[CompactAudio, dict[str, Any]]:
+        """Synthesize a document whose spans may use different voices and delivery styles.
+
+        Each span is rendered locally with the requested voice and expression, then the
+        PCM segments are concatenated without a cloud provider or voice-conversion stage.
+        Volume is applied as a deterministic gain after synthesis: soft is attenuated and
+        loud is bounded before the final WAV is encoded.
+        """
+        import numpy as np
+        import soundfile as sf
+
+        selected_language = language or self.settings.language
+        root_voice, spans = parse_nastechml(markup, language=selected_language)
+        segments: list[np.ndarray] = []
+        segment_manifests: list[dict[str, Any]] = []
+        sample_rate = 44100
+        for index, span in enumerate(spans):
+            voice = span.voice
+            if voice in {"", "nastech", "default", "tara"}:
+                voice = self.settings.default_voice or root_voice
+            if span.kind == SpanKind.SPEECH:
+                body = html.escape(str(span.value), quote=False)
+                if span.style.emotion:
+                    intensity = span.style.intensity if span.style.intensity is not None else 0.7
+                    body = (
+                        f'<emotion name="{html.escape(span.style.emotion)}"'
+                        f' intensity="{intensity}">{body}</emotion>'
+                    )
+                if span.style.rate or span.style.volume:
+                    rate = span.style.rate or "normal"
+                    volume = span.style.volume or "normal"
+                    body = f'<prosody rate="{rate}" volume="{volume}">{body}</prosody>'
+            elif span.kind == SpanKind.SOUND:
+                body = f'<sound type="{html.escape(str(span.value))}" />'
+            else:
+                body = f'<pause ms="{int(span.value)}" />'
+            fragment = f'<speak voice="{html.escape(voice)}">{body}</speak>'
+            compiled = compile_nastechml(fragment, self.settings, language=selected_language)
+            audio = self.synthesize(compiled, use_cache=False)
+            data, _ = sf.read(io.BytesIO(audio.data), dtype="int16")
+            samples = np.asarray(data, dtype=np.int16).reshape(-1)
+            gain = {"soft": 0.55, "normal": 1.0, "loud": 1.2}.get(
+                span.style.volume or "normal", 1.0
+            )
+            if gain != 1.0:
+                samples = np.clip(samples.astype(np.float32) * gain, -32767, 32767).astype(np.int16)
+            segments.append(samples)
+            segment_manifests.append(
+                {
+                    "span_index": index,
+                    "voice": voice,
+                    "kind": span.kind.value,
+                    "emotion": span.style.emotion,
+                    "sound": str(span.value) if span.kind == SpanKind.SOUND else None,
+                    "rate": span.style.rate or "normal",
+                    "volume": span.style.volume or "normal",
+                    "compiled_text": compiled.text,
+                    "decisions": compiled.manifest["decisions"],
+                }
+            )
+        merged = np.concatenate(segments) if segments else np.zeros(1, dtype=np.int16)
+        output = io.BytesIO()
+        sf.write(output, merged, sample_rate, format="WAV", subtype="PCM_16")
+        audio = CompactAudio(
+            data=output.getvalue(),
+            content_type="audio/wav",
+            duration_seconds=len(merged) / sample_rate,
+            sample_rate=sample_rate,
+        )
+        manifest = {
+            "language": selected_language,
+            "voice_mode": "mixed",
+            "root_voice": root_voice,
+            "segments": segment_manifests,
+            "sample_rate_hz": sample_rate,
+            "duration_seconds": audio.duration_seconds,
+        }
+        return audio, manifest
 
     def warmup(self) -> dict[str, Any]:
         """Load ONNX sessions, voice vectors, and run one short local synthesis."""

@@ -10,6 +10,8 @@ The release contains **135 passing deterministic tests**, regenerated OpenAPI an
 
 The expressive NastechML surface now includes the upstream Supertonic expression controls `<scream>` and `<throatclear>`, plus the semantic `surprised` emotion mapped to `<surprise>`. The parser and compiler have deterministic coverage for these additions. Nastech continues to label non-native mappings such as cry, cough, chuckle, sniffle, and groan as approximations instead of claiming that every sound is equally direct or guaranteed.
 
+Mixed local synthesis now supports per-span voice switching and delivery styles. A single document can combine F1, M2, and F3 segments with soft, normal, or loud volume, calm, angry, sad, and happy emotions, rate changes, laughter, and sighs. The returned manifest records each segment’s selected voice and controls; a real local mixed audition was generated as 16.72 seconds of 44.1 kHz WAV.
+
 GitHub Actions now audits all 23 registered language targets and runs a parallel five-minute native-language story matrix for English plus the 11 verified Bantu packs. The English story covers Nastech Research branding, emotional transitions, and all nine registered non-verbal cues: laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, and cry. Each matrix job validates duration, non-silence, sample rate, clipping, checksums, and uploads WAV/report artifacts to the draft release. Planned languages remain explicit failures rather than substitutions.
 
 ## 0.11.0 — 2026-08-16
