@@ -74,12 +74,29 @@ def _windows_memory() -> MemoryObservation:
             ("PrivateUsage", ctypes.c_size_t),
         ]
 
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    psapi = ctypes.WinDLL("psapi", use_last_error=True)
+    get_current_process = kernel32.GetCurrentProcess
+    get_current_process.argtypes = []
+    get_current_process.restype = wintypes.HANDLE
+    get_process_memory_info = psapi.GetProcessMemoryInfo
+    get_process_memory_info.argtypes = [
+        wintypes.HANDLE,
+        ctypes.POINTER(ProcessMemoryCountersEx),
+        wintypes.DWORD,
+    ]
+    get_process_memory_info.restype = wintypes.BOOL
+
     counters = ProcessMemoryCountersEx()
     counters.cb = ctypes.sizeof(counters)
-    process = ctypes.windll.kernel32.GetCurrentProcess()
-    ok = ctypes.windll.psapi.GetProcessMemoryInfo(process, ctypes.byref(counters), counters.cb)
-    if not ok:
-        return MemoryObservation(None, None, "Windows GetProcessMemoryInfo unavailable")
+    process = get_current_process()
+    if not get_process_memory_info(process, ctypes.byref(counters), counters.cb):
+        error = ctypes.get_last_error()
+        return MemoryObservation(
+            None,
+            None,
+            f"Windows GetProcessMemoryInfo unavailable (Win32 error {error})",
+        )
     return MemoryObservation(
         current_mib=round(counters.WorkingSetSize / 1024 / 1024, 3),
         process_peak_mib=round(counters.PeakWorkingSetSize / 1024 / 1024, 3),
