@@ -135,9 +135,17 @@ def main() -> int:
         ROOT / ".github" / "workflows" / "ci.yml",
         ROOT / ".github" / "workflows" / "release.yml",
         ROOT / ".github" / "workflows" / "release_audio_test.yml",
+        ROOT / ".github" / "workflows" / "voice-release-tests.yml",
     ]
     for path in yaml_paths:
         _require(_read_yaml(path) is not None, f"YAML contract is empty: {path.relative_to(ROOT)}")
+
+    voice_workflow = _read_yaml(ROOT / ".github" / "workflows" / "voice-release-tests.yml")
+    voice_triggers = voice_workflow.get("on", voice_workflow.get(True, {}))
+    _require(
+        any(item.get("cron") == "37 03 * * *" for item in voice_triggers.get("schedule", [])),
+        "Daily voice self-test schedule is missing.",
+    )
 
     ci = _read_yaml(ROOT / ".github" / "workflows" / "ci.yml")
     triggers = ci.get("on", ci.get(True, {}))

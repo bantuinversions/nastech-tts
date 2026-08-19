@@ -5,7 +5,7 @@
 [![License](https://img.shields.io/badge/license-Apache--2.0-4D8CC9)](LICENSE)
 [![Provider mixer](https://img.shields.io/badge/providers-60%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
 
-**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.2** adds automatic CPU/GPU hardware planning and optional local Bantu model packs on top of the Bantu-language registry to the Nastech provider mixer, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; Luganda is a separately configured local technical preview. Unconfigured adapters never download a model, contact a provider, or claim to be active.
+**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.2** adds automatic CPU/GPU hardware planning and an explicit 61-language registry spanning East, Central, and Southern African targets, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; 35 exact Bantu routes are optional lazy local packs. Unconfigured adapters never download a model, contact a provider, or claim to be active.
 
 > **Deployment contract:** The full verified environment remains below the strict **1 GiB** cap. Run `make budget` for the exact target-host measurement before any production deployment.
 
@@ -13,28 +13,84 @@
 |---|---|
 | Local expressive synthesis | Produces real 44.1 kHz WAV through the active Nastech local provider |
 | Language-aware NastechML | Validates `<speak>`, `<emotion>`, `<sound>`, `<pause>`, and `<prosody>` markup against the selected provider and language route |
-| Bantu-language registry | Lists Luganda, isiZulu, isiXhosa, Sesotho, Setswana, Shona, Tshivenda, and other East/Southern African targets with explicit evidence states |
+| Bantu-language registry | Lists 60 East, Central, and Southern African targets with code-first labels such as `lg - Luganda` and explicit evidence states |
 | Agent planning | Inspects compilation, fidelity, intended delivery, and optional cleanup before spending synthesis CPU time |
 | Chunked transfer | Sends a completed local WAV in bounded byte chunks without falsely claiming incremental model streaming |
 | Local voice cleanup | Applies conservative mono PCM hygiene: DC removal, near-silence gate, clipping protection, and edge fades |
 | Operations | Bounded CPU queue, configurable threads, response cache, warm-up, diagnostics, cache management, and benchmarks |
 | Portability planner | Reports registered ONNX providers and preflights CPU, GPU, Android, iOS, and browser targets with evidence requirements |
-| Provider mixer | Catalogs 59 local and managed integration targets, blocks inactive selections, and preflights every activation without side effects |
+| Provider mixer | Catalogs 60 local and managed integration targets, blocks inactive selections, and preflights every activation without side effects |
 | Automated quality | Deterministic tests, a Python 3.10–3.12 CI matrix, source/wheel checks, contract validation, 1,000-roadmap drift checks, and daily scheduled verification |
 
 ## Install
 
+Nastech TTS is **local-first**. The compact English runtime is installed on the device; optional Bantu packs are separate, explicit downloads. Nothing downloads an entire language collection at first launch.
+
+### Option 1 — Desktop installer bundle (recommended)
+
+Download the bundle matching your operating system from the [GitHub Releases page](https://github.com/bantuinversions/nastech-tts/releases): `nastech-tts-linux.tar.gz`, `nastech-tts-macos.tar.gz`, or `nastech-tts-windows.tar.gz`. Extract the archive, open the extracted directory, and run the platform command below. These are transparent Python bootstrap bundles rather than opaque native binaries. On normal desktop systems, the installer opens the Nastech animated setup window; servers automatically use the same flow in headless mode.
+
+| Platform | First-time diagnostic | Start the local service |
+|---|---|---|
+| Linux or macOS | `./installer/install.sh --diagnostics` | `./installer/install.sh -- serve --host 127.0.0.1 --port 8765` |
+| Windows PowerShell | `.\installer\install.ps1 --diagnostics` | `.\installer\install.ps1 -- serve --host 127.0.0.1 --port 8765` |
+
+The first non-diagnostic launch creates a per-user isolated environment, installs declared dependencies, detects CPU/GPU/RAM, and records a safe runtime profile. Use `--repair` to refresh dependencies or `--reset-environment` to recreate it. See [docs/INSTALLER.md](docs/INSTALLER.md) for the full launcher behavior.
+
+### Option 2 — Install from source
+
+You need Git and Python 3.10 or later. On Linux or macOS:
+
 ```bash
 git clone https://github.com/bantuinversions/nastech-tts.git
 cd nastech-tts
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -e '.[dev]'
-
-nastech-tts status
+python -m pip install --upgrade pip
+python -m pip install -e '.[dev]'
 ```
 
-The first real synthesis prepares the configured local provider assets in the local cache. Generate the supplied expressive story locally:
+On Windows PowerShell:
+
+```powershell
+git clone https://github.com/bantuinversions/nastech-tts.git
+cd nastech-tts
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+py -m pip install --upgrade pip
+py -m pip install -e '.[dev]'
+```
+
+### First local self-check
+
+Run these commands after either installation method. They use the local runtime and do not download optional language packs.
+
+```bash
+nastech-tts status
+nastech-tts platforms
+nastech-tts voices
+nastech-tts languages
+python scripts/validate_language_self_test.py
+```
+
+The last command confirms the committed **61-language registry**, **35 audited lazy local routes**, **11 approved native-story CI routes**, code-first labels such as `lg - Luganda`, and the published all-voices inventory. Source contributors can additionally run `make verify` for linting, the full test suite, package build, contracts, and compact-budget check.
+
+### Optional Bantu packs
+
+Use `nastech-tts languages` or `nastech-tts language-packs` to inspect the registry first. Then download **one exact language pack** only when you choose it:
+
+```bash
+nastech-tts language-packs
+nastech-tts download-language-pack lg    # lg - Luganda
+nastech-tts download-language-pack sw    # sw - Kiswahili
+nastech-tts download-language-pack bem   # bem - Bemba
+```
+
+A `lazy-downloadable` pack is a local technical route and remains outside the 1 GiB compact core. It does not by itself establish native-speaker quality, dialect coverage, or commercial deployment rights. `planned` languages—for example `zu - isiZulu`, `xh - isiXhosa`, `tn - Setswana`, and `ve - Tshivenda`—are shown honestly but are not substituted with another voice. See [BANTU_LANGUAGE_COVERAGE.md](docs/BANTU_LANGUAGE_COVERAGE.md) and [BANTU_LOCAL_MODELS.md](docs/BANTU_LOCAL_MODELS.md).
+
+### Generate the supplied English story
+
+The first real English synthesis prepares the configured local core assets in the local cache:
 
 ```bash
 nastech-tts synthesize examples/compact_agent_story.xml --output output/story.wav
@@ -77,7 +133,7 @@ nastech-tts synthesize release/multilingual_fixtures/nastech-luganda-pure.xml \
 | `nastech-tts clean INPUT.wav --output CLEAN.wav` | Clean an existing mono signed-16-bit PCM WAV without a model or cloud service |
 | `nastech-tts status` / `warmup` / `clear-cache` | Inspect and operate the local ONNX runtime |
 | `nastech-tts benchmark FILE.xml --runs 3` | Measure cache-bypassing CPU synthesis |
-| `nastech-tts providers` | List the 59 Nastech provider targets and their truthful activation states |
+| `nastech-tts providers` | List the 60 Nastech provider targets and their truthful activation states |
 | `nastech-tts languages` | List Bantu-language targets, evidence states, and provider routes |
 | `nastech-tts language-preflight lg` | Inspect Luganda local-pack, licence, and native-review requirements without side effects |
 | `nastech-tts provider-preflight coqui-cli` | Produce a zero-side-effect activation plan for one provider target |
@@ -191,7 +247,7 @@ Mixed synthesis remains entirely local. The returned manifest records every segm
 
 Nastech exposes **40 selectable English local delivery profiles** over ten verified Supertonic base timbres. The named base profiles are **Siya, Nasi, Jafta, Della, Axam, Alicia, Shanice, Adam, Shakira,** and **Shimah**; the other thirty selectors are documented clear, soft, and dynamic delivery profiles. Names and profiles are not claimed as separately trained speaker identities. List them without loading a model with `nastech-tts voices` or `GET /v1/voices`. The complete locally validated inventory is available in [release/Nastech_TTS_All_Voices.md](release/Nastech_TTS_All_Voices.md).
 
-All 23 Bantu registry targets remain visible. Eleven have verified on-demand local MMS packs and five-minute native-story CI; targets without verified public checkpoints remain marked planned or `no-verified-pack` and are never silently substituted.
+All **60 regional African targets** remain visible with code-first labels, alongside the English core. **Thirty-five** have audited on-demand local MMS routes, while **eleven** have approved five-minute native-story CI. Targets without an exact verified public checkpoint remain marked planned or `no-verified-pack` and are never silently substituted.
 
 The [base-timbre benchmark](release/Nastech_Timbre_Benchmark_Linux.md) measures all ten English base timbres with a common cache-disabled test passage, warm speed, native process-memory observations, and WAV format/level/clipping gates. The same controlled matrix runs on Linux, macOS, and Windows by schedule, manual dispatch, and version tags; runner artifacts preserve exact host and metric-source details.
 
@@ -208,7 +264,7 @@ PowerShell users can run `installer\\install.ps1 -- platforms`. Use `--repair` t
 
 ## Daily CI and Releases
 
-GitHub Actions runs the complete deterministic quality workflow on push, pull request, manual launch, and **daily at 03:17 UTC**. The scheduled run checks formatting, static analysis, all tests, generated 500+500+1,000 roadmap drift, JSON/YAML contracts, OpenAPI drift, source/wheel builds, and package metadata. It does not download models or use a managed TTS service. Tag-only audio verification separately renders and validates real local release fixtures.
+GitHub Actions runs the complete deterministic quality workflow on push, pull request, manual launch, and **daily at 03:17 UTC**. A second **daily 03:37 UTC** voice self-test regenerates the language matrix and verifies all 61 registry targets, code-first labels, 35 lazy-pack routes, 11 approved story routes, and the committed all-voices inventory without downloading model packs. Scheduled story audio runs separately against the approved English and Bantu suite; tag-only audio verification separately renders release fixtures. The deterministic checks do not use a managed TTS service.
 
 ```bash
 make lint

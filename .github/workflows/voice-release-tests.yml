@@ -6,6 +6,7 @@ on:
     branches: [main]
     tags: ["v*"]
   schedule:
+    # Daily language-registry, inventory, and approved native-story self-test at 03:37 UTC.
     - cron: "37 03 * * *"
   workflow_dispatch:
 
@@ -22,28 +23,21 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install matrix checker
-        run: python -m pip install numpy
-      - name: Validate complete registry matrix
+        run: python -m pip install . numpy
+      - name: Generate complete registry matrix without downloading packs
+        run: python scripts/test_all_registered_voices.py --list-json > voice-matrix.json
+      - name: Self-audit registry, code-first labels, packs, stories, and inventory
         run: |
-          python scripts/test_all_registered_voices.py --list-json > voice-matrix.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          rows = json.loads(Path("voice-matrix.json").read_text())
-          assert len(rows) == 23, len(rows)
-          assert {row["language"] for row in rows if row["story_available"]} == {
-              "en", "lg", "nyn", "ach", "teo", "sw", "rw", "rn", "ki",
-              "ts", "sn", "ny"
-          }
-          for row in rows:
-              if row["pack_state"] == "no-verified-pack":
-                  assert row["model_id"] is None, row
-          print(f"Audited {len(rows)} registered targets; no silent substitutions allowed.")
-          PY
+          python scripts/validate_language_self_test.py \
+            --matrix voice-matrix.json \
+            --inventory release/Nastech_TTS_All_Voices.md \
+            --report language-self-test-report.json
       - uses: actions/upload-artifact@v4
         with:
           name: nastech-voice-registry
-          path: voice-matrix.json
+          path: |
+            voice-matrix.json
+            language-self-test-report.json
           if-no-files-found: error
 
   story-contracts:
