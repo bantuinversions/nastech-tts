@@ -1,0 +1,330 @@
+{
+  "language": "en",
+  "summary": {
+    "selectable_profiles": 40,
+    "verified_base_timbres": 10,
+    "delivery_profiles": 30
+  },
+  "profiles": [
+    {
+      "profile_id": "siya",
+      "label": "Siya",
+      "base_voice": "F1",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic F1. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "nasi",
+      "label": "Nasi",
+      "base_voice": "F2",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic F2. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "jafta",
+      "label": "Jafta",
+      "base_voice": "M1",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic M1. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "della",
+      "label": "Della",
+      "base_voice": "F3",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic F3. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "axam",
+      "label": "Axam",
+      "base_voice": "M2",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic M2. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "alicia",
+      "label": "Alicia",
+      "base_voice": "F4",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic F4. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "shanice",
+      "label": "Shanice",
+      "base_voice": "F5",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic F5. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "adam",
+      "label": "Adam",
+      "base_voice": "M3",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic M3. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "shakira",
+      "label": "Shakira",
+      "base_voice": "M4",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic M4. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "shimah",
+      "label": "Shimah",
+      "base_voice": "M5",
+      "default_speed": 1.0,
+      "kind": "named-base-profile",
+      "description": "Named Nastech profile backed by verified Supertonic M5. The display name is not claimed as a separately trained speaker identity."
+    },
+    {
+      "profile_id": "en-f1-clear",
+      "label": "English F1 Clear",
+      "base_voice": "F1",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f1-soft",
+      "label": "English F1 Soft",
+      "base_voice": "F1",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f1-dynamic",
+      "label": "English F1 Dynamic",
+      "base_voice": "F1",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f2-clear",
+      "label": "English F2 Clear",
+      "base_voice": "F2",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f2-soft",
+      "label": "English F2 Soft",
+      "base_voice": "F2",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f2-dynamic",
+      "label": "English F2 Dynamic",
+      "base_voice": "F2",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f3-clear",
+      "label": "English F3 Clear",
+      "base_voice": "F3",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f3-soft",
+      "label": "English F3 Soft",
+      "base_voice": "F3",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f3-dynamic",
+      "label": "English F3 Dynamic",
+      "base_voice": "F3",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f4-clear",
+      "label": "English F4 Clear",
+      "base_voice": "F4",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f4-soft",
+      "label": "English F4 Soft",
+      "base_voice": "F4",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f4-dynamic",
+      "label": "English F4 Dynamic",
+      "base_voice": "F4",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f5-clear",
+      "label": "English F5 Clear",
+      "base_voice": "F5",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f5-soft",
+      "label": "English F5 Soft",
+      "base_voice": "F5",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-f5-dynamic",
+      "label": "English F5 Dynamic",
+      "base_voice": "F5",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m1-clear",
+      "label": "English M1 Clear",
+      "base_voice": "M1",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m1-soft",
+      "label": "English M1 Soft",
+      "base_voice": "M1",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m1-dynamic",
+      "label": "English M1 Dynamic",
+      "base_voice": "M1",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m2-clear",
+      "label": "English M2 Clear",
+      "base_voice": "M2",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m2-soft",
+      "label": "English M2 Soft",
+      "base_voice": "M2",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m2-dynamic",
+      "label": "English M2 Dynamic",
+      "base_voice": "M2",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m3-clear",
+      "label": "English M3 Clear",
+      "base_voice": "M3",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m3-soft",
+      "label": "English M3 Soft",
+      "base_voice": "M3",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m3-dynamic",
+      "label": "English M3 Dynamic",
+      "base_voice": "M3",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m4-clear",
+      "label": "English M4 Clear",
+      "base_voice": "M4",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m4-soft",
+      "label": "English M4 Soft",
+      "base_voice": "M4",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m4-dynamic",
+      "label": "English M4 Dynamic",
+      "base_voice": "M4",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m5-clear",
+      "label": "English M5 Clear",
+      "base_voice": "M5",
+      "default_speed": 1.0,
+      "kind": "delivery-profile",
+      "description": "Neutral, measured delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m5-soft",
+      "label": "English M5 Soft",
+      "base_voice": "M5",
+      "default_speed": 0.9,
+      "kind": "delivery-profile",
+      "description": "Slower, gentle delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity."
+    },
+    {
+      "profile_id": "en-m5-dynamic",
+      "label": "English M5 Dynamic",
+      "base_voice": "M5",
+      "default_speed": 1.1,
+      "kind": "delivery-profile",
+      "description": "Faster, energetic delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity."
+    }
+  ]
+}

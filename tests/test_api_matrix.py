@@ -54,10 +54,11 @@ def test_authorized_tool_catalog_exposes_all_local_operations(monkeypatch) -> No
 
     assert response.status_code == 200
     payload = response.json()
-    assert len(payload) == 17
+    assert len(payload) == 18
     assert {tool["name"] for tool in payload} >= {
         "nastech_list_providers",
         "nastech_list_languages",
+        "nastech_list_english_voices",
         "nastech_language_preflight",
         "nastech_list_language_packs",
         "nastech_download_language_pack",

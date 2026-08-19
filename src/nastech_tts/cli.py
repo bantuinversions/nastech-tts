@@ -30,6 +30,7 @@ from .providers import (
     synthesize_with_provider,
 )
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
+from .voices import english_voice_inventory, english_voice_summary
 
 VERSION = "0.12.2"
 
@@ -141,6 +142,9 @@ def _parser() -> argparse.ArgumentParser:
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
     subparsers.add_parser("providers", help="List all Nastech provider-mixer targets.")
     subparsers.add_parser("languages", help="List Bantu-language targets and evidence states.")
+    subparsers.add_parser(
+        "voices", help="List forty English local voice profiles and their verified base timbres."
+    )
     subparsers.add_parser("language-packs", help="List lazy Bantu model-pack cache states.")
     download_pack = subparsers.add_parser(
         "download-language-pack", help="Download exactly one requested Bantu language pack."
@@ -292,6 +296,19 @@ def main() -> int:
 
         if args.command == "languages":
             print(json.dumps(language_inventory(), indent=2))
+            return 0
+
+        if args.command == "voices":
+            print(
+                json.dumps(
+                    {
+                        "language": "en",
+                        "summary": english_voice_summary(),
+                        "profiles": english_voice_inventory(),
+                    },
+                    indent=2,
+                )
+            )
             return 0
 
         if args.command == "language-packs":

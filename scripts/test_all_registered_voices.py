@@ -39,23 +39,31 @@ ENGLISH_STORY = (
     "At Nastech Research, the first light of morning entered a quiet workshop. "
     "A local machine held a small signal, and Nastech Agent listened before it spoke. "
     "The team felt hopeful, then excited, because every careful measurement could become "
-    'a clearer voice for someone far away. <sound type="gasp" /> The signal changed. '
-    'For one breath the room was still. <pause ms="500" /> Nastech Agent checked the '
+    'a clearer voice for someone far away. <sound type="gasp" /> '
+    '<emotion name="surprised" intensity="0.72">The signal changed.</emotion> '
+    'For one breath the room was still. <sound type="throatclear" /> <pause ms="500" /> '
+    "Nastech Agent checked the "
     "source, measured the waveform, and found that the mistake was not a failure but an "
-    'invitation to learn. <sound type="chuckle" /> The engineers smiled at the small '
-    "discovery. They wrote the result down, kept the model local, and protected the story "
+    'invitation to learn. <sound type="chuckle" /> '
+    '<emotion name="happy" intensity="0.74">The engineers smiled at the small discovery.</emotion> '
+    "They wrote the result down, kept the model local, and protected the story "
     'of every speaker who would use it. <emotion name="calm" intensity="0.62">'
     'The work became patient, transparent, and kind.</emotion> <sound type="sigh" /> '
-    'Later, a difficult test made the team frustrated and angry. <sound type="groan" /> '
+    "Later, a difficult test made the team "
+    '<emotion name="frustrated" intensity="0.68">frustrated</emotion> and '
+    '<emotion name="angry" intensity="0.76">angry</emotion>. <sound type="groan" /> '
     'The voice stumbled on a long sentence, and a cough interrupted the room. <sound type="cough" /> '
     "No one hid the result. They slowed the process, cleaned the audio, and tried again. "
-    "Fearful uncertainty became a plan. Disgusted doubt became a question that could be "
-    "answered. Sadness became attention for the people whose languages had too often been "
+    '<emotion name="fearful" intensity="0.63">Fearful uncertainty</emotion> became a plan. '
+    '<emotion name="disgusted" intensity="0.60">Disgusted doubt</emotion> became a question that could be '
+    'answered. <emotion name="sad" intensity="0.70">Sadness</emotion> became attention for the people '
+    "whose languages had too often been "
     'left outside the machine. <sound type="sniffle" /> A quiet tear was not weakness; '
     'it was evidence that the work mattered. <sound type="cry" /> '
     "After the long night, Nastech Agent yawned, stretched, and returned to the final check. "
     '<sound type="yawn" /> The waveform was clear, the peaks were safe, and the words '
-    'remained understandable. The team laughed softly. <sound type="laugh" /> They knew '
+    'remained understandable. A supervised test cue rose and ended safely. <sound type="scream" /> '
+    'The team laughed softly. <sound type="laugh" /> They knew '
     "that a trustworthy voice is not made by claiming perfection. It is made by naming the "
     "limits, testing the details, and improving with respect. At sunrise, the local engine "
     "spoke again. It carried courage without shouting, sadness without harm, joy without "
@@ -235,6 +243,7 @@ def main() -> int:
         "language": target,
         "label": row["label"],
         "story": "Nastech Research five-minute native-language release story",
+        "suite": "english-emotion-rich" if target == "en" else "bantu-native-language",
         "requested_duration_seconds": args.duration_seconds,
         "generated_wav": wav_path.name,
         "sha256": _sha256(data),
@@ -251,6 +260,8 @@ def main() -> int:
             "yawn",
             "gasp",
             "cry",
+            "scream",
+            "throatclear",
         ]
         if target == "en"
         else [],

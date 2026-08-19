@@ -37,7 +37,19 @@ def test_voice_matrix_covers_english_and_verified_bantu_targets() -> None:
 
 def test_english_story_declares_all_expressive_sound_cues() -> None:
     source = SCRIPT.read_text(encoding="utf-8")
-    for sound in ("laugh", "chuckle", "sigh", "cough", "sniffle", "groan", "yawn", "gasp", "cry"):
+    for sound in (
+        "laugh",
+        "chuckle",
+        "sigh",
+        "cough",
+        "sniffle",
+        "groan",
+        "yawn",
+        "gasp",
+        "cry",
+        "scream",
+        "throatclear",
+    ):
         assert f'type="{sound}"' in source
     for emotion in ("calm", "frustrated", "angry", "fearful", "disgusted", "sad"):
         assert emotion in source.lower()

@@ -30,6 +30,7 @@ from .providers import (
     synthesize_with_provider,
 )
 from .supertonic import CompactAudio, CompactRuntimeError, SupertonicRuntime, compile_nastechml
+from .voices import english_voice_inventory, english_voice_summary
 
 logger = logging.getLogger(__name__)
 MAX_CLEANUP_BYTES = 64 * 1024 * 1024
@@ -152,6 +153,16 @@ def agent_tool_descriptors() -> list[AgentToolDescriptor]:
             description="List Bantu-language targets and truthful local-provider evidence states.",
             method="GET",
             path="/v1/languages",
+            input_schema=empty_input,
+        ),
+        AgentToolDescriptor(
+            name="nastech_list_english_voices",
+            description=(
+                "List forty selectable local English delivery profiles and their ten verified "
+                "base timbres without loading a model."
+            ),
+            method="GET",
+            path="/v1/voices",
             input_schema=empty_input,
         ),
         AgentToolDescriptor(
@@ -520,12 +531,26 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
             "authentication_required": _authorization_required(),
         }
 
+    @app.get("/v1/voices")
+    async def list_english_voices(_: None = Depends(require_agent_key)) -> dict[str, Any]:
+        return {
+            "publisher": "Nastech Research",
+            "language": "en",
+            "summary": english_voice_summary(),
+            "profiles": english_voice_inventory(),
+            "claim_boundary": (
+                "Forty selectable delivery profiles are backed by ten verified local Supertonic "
+                "base timbres; profiles are not claimed as forty separately trained speakers."
+            ),
+        }
+
     @app.get("/v1/capabilities")
     async def capabilities(_: None = Depends(require_agent_key)) -> dict[str, Any]:
         return {
             "publisher": "Nastech Research",
             "default_language": "en",
             "language_inventory": language_inventory(),
+            "english_voice_profiles": english_voice_summary(),
             "provider_mixer": "nastech",
             "default_provider_id": provider_inventory()["default_provider_id"],
             "inference": "local-first; configured provider selection",
@@ -533,6 +558,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
                 "/v1/providers",
                 "/v1/providers/preflight",
                 "/v1/languages",
+                "/v1/voices",
                 "/v1/languages/packs",
                 "/v1/languages/packs/download",
                 "/v1/agent/identity",

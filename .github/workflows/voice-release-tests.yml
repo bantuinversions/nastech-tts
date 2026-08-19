@@ -4,7 +4,9 @@ on:
   pull_request:
   push:
     branches: [main]
-    tags: ['v*']
+    tags: ["v*"]
+  schedule:
+    - cron: "37 03 * * *"
   workflow_dispatch:
 
 permissions:
@@ -18,7 +20,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - name: Install matrix checker
         run: python -m pip install numpy
       - name: Validate complete registry matrix
@@ -27,15 +29,15 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-          rows = json.loads(Path('voice-matrix.json').read_text())
+          rows = json.loads(Path("voice-matrix.json").read_text())
           assert len(rows) == 23, len(rows)
-          assert {row['language'] for row in rows if row['story_available']} == {
-              'en', 'lg', 'nyn', 'ach', 'teo', 'sw', 'rw', 'rn', 'ki',
-              'ts', 'sn', 'ny'
+          assert {row["language"] for row in rows if row["story_available"]} == {
+              "en", "lg", "nyn", "ach", "teo", "sw", "rw", "rn", "ki",
+              "ts", "sn", "ny"
           }
           for row in rows:
-              if row['pack_state'] == 'no-verified-pack':
-                  assert row['model_id'] is None, row
+              if row["pack_state"] == "no-verified-pack":
+                  assert row["model_id"] is None, row
           print(f"Audited {len(rows)} registered targets; no silent substitutions allowed.")
           PY
       - uses: actions/upload-artifact@v4
@@ -44,36 +46,116 @@ jobs:
           path: voice-matrix.json
           if-no-files-found: error
 
-  five-minute-voices:
-    name: Five-minute ${{ matrix.language }} story
-    needs: voice-registry
-    if: github.event_name != 'pull_request'
+  story-contracts:
+    name: Fast English emotion and Bantu story contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install contract test dependencies
+        run: python -m pip install . numpy pytest
+      - name: Verify all story suites without model downloads
+        run: |
+          pytest -q tests/test_five_minute_voice_runner.py tests/test_story_suite_contracts.py
+          python -m nastech_tts.cli voices > english-voice-profiles.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path("english-voice-profiles.json").read_text())
+          assert payload["summary"]["selectable_profiles"] == 40
+          assert payload["summary"]["verified_base_timbres"] == 10
+          assert len(payload["profiles"]) == 40
+          print("Verified 40 English delivery profiles over 10 local base timbres.")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nastech-story-contracts
+          path: english-voice-profiles.json
+          if-no-files-found: error
+
+  english-emotion-story:
+    name: English emotion-rich five-minute story
+    needs: [voice-registry, story-contracts]
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install local English runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install . numpy onnxruntime supertonic
+      - name: Generate and validate emotion-rich English story
+        run: |
+          mkdir -p artifacts/en
+          python scripts/test_all_registered_voices.py \
+            --language en \
+            --output-dir artifacts/en \
+            --report artifacts/en/report.json \
+            --duration-seconds 300
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path("artifacts/en/report.json").read_text())
+          assert report["status"] == "passed"
+          assert report["suite"] == "english-emotion-rich"
+          assert report["levels"]["sample_rate_hz"] == 44100
+          assert report["levels"]["duration_seconds"] >= 294
+          assert {"laugh", "scream", "throatclear"} <= set(report["expressive_coverage"])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nastech-five-minute-en
+          path: artifacts/en
+          if-no-files-found: error
+
+  bantu-native-stories:
+    name: Bantu native five-minute ${{ matrix.language }} story
+    needs: [voice-registry, story-contracts]
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       max-parallel: 4
       matrix:
-        language: [en, lg, nyn, ach, teo, sw, rw, rn, ki, ts, sn, ny]
+        language: [lg, nyn, ach, teo, sw, rw, rn, ki, ts, sn, ny]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
-      - name: Install local core and MMS runtime
+          python-version: "3.12"
+      - name: Install local MMS runtime
         run: |
           python -m pip install --upgrade pip
           python -m pip install . numpy torch transformers huggingface_hub sentencepiece onnxruntime
-      - name: Generate and validate native-language five-minute story
+      - name: Generate and validate native-language Bantu story
         env:
-          NASTECH_ALLOW_LAZY_DOWNLOAD: '1'
+          NASTECH_ALLOW_LAZY_DOWNLOAD: "1"
           HF_HOME: ${{ runner.temp }}/huggingface
+          LANGUAGE: ${{ matrix.language }}
         run: |
-          mkdir -p artifacts/${{ matrix.language }}
+          mkdir -p "artifacts/${LANGUAGE}"
           python scripts/test_all_registered_voices.py \
-            --language '${{ matrix.language }}' \
-            --output-dir artifacts/${{ matrix.language }} \
-            --report artifacts/${{ matrix.language }}/report.json \
+            --language "${LANGUAGE}" \
+            --output-dir "artifacts/${LANGUAGE}" \
+            --report "artifacts/${LANGUAGE}/report.json" \
             --duration-seconds 300
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          report = json.loads(Path(f"artifacts/{os.environ['LANGUAGE']}/report.json").read_text())
+          assert report["status"] == "passed"
+          assert report["suite"] == "bantu-native-language"
+          assert report["provider_route"] == "mms-lazy"
+          assert report["levels"]["sample_rate_hz"] == 44100
+          assert report["levels"]["duration_seconds"] >= 294
+          assert report["levels"]["clipped_samples"] == 0
+          PY
       - uses: actions/upload-artifact@v4
         with:
           name: nastech-five-minute-${{ matrix.language }}
@@ -81,25 +163,37 @@ jobs:
           if-no-files-found: error
 
   release-assets:
-    name: Upload five-minute voice evidence to draft release
-    needs: five-minute-voices
+    name: Upload five-minute story evidence to draft release
+    needs: [english-emotion-story, bantu-native-stories]
     if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           pattern: nastech-five-minute-*
           path: release/five_minute_voice_fixtures
-          merge-multiple: true
-      - name: Build release evidence archive
+      - name: Build verified story evidence archive
         run: |
-          test -n "$(find release/five_minute_voice_fixtures -name '*.wav' -print -quit)"
-          tar -czf nastech-${GITHUB_REF_NAME}-five-minute-voice-tests.tar.gz release/five_minute_voice_fixtures
-      - name: Upload evidence to the draft GitHub release
+          test "$(find release/five_minute_voice_fixtures -name '*.wav' | wc -l)" -eq 12
+          test "$(find release/five_minute_voice_fixtures -name 'report.json' | wc -l)" -eq 12
+          tar -czf "nastech-${GITHUB_REF_NAME}-five-minute-story-tests.tar.gz" release/five_minute_voice_fixtures
+      - name: Create the tagged GitHub release if missing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" \
+              --repo "$GITHUB_REPOSITORY" \
+              --draft \
+              --verify-tag \
+              --title "Nastech TTS $GITHUB_REF_NAME" \
+              --generate-notes
+          fi
+      - name: Upload story evidence to the draft GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release upload "$GITHUB_REF_NAME" \
-            nastech-${GITHUB_REF_NAME}-five-minute-voice-tests.tar.gz \
+            --repo "$GITHUB_REPOSITORY" \
+            "nastech-${GITHUB_REF_NAME}-five-minute-story-tests.tar.gz" \
             --clobber

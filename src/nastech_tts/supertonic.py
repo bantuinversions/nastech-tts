@@ -20,6 +20,7 @@ from typing import Any
 from .cpu import CpuTuning
 from .markup import parse_nastechml
 from .types import AudioSpan, Fidelity, SpanKind
+from .voices import resolve_english_voice_profile
 
 
 class CompactRuntimeError(RuntimeError):
@@ -180,7 +181,12 @@ def compile_nastechml(
     selected_voice = (
         settings.default_voice if voice in {"", "nastech", "default", "tara"} else voice
     )
-    effective_speed = round(sum(speeds) / len(speeds), 2) if speeds else settings.speed
+    profile = resolve_english_voice_profile(selected_voice) if selected_language == "en" else None
+    base_voice = profile.base_voice if profile is not None else selected_voice
+    requested_speed = round(sum(speeds) / len(speeds), 2) if speeds else settings.speed
+    effective_speed = (
+        round(requested_speed * profile.default_speed, 2) if profile else requested_speed
+    )
     request_id = os.urandom(12).hex()
     manifest = {
         "request_id": request_id,
@@ -188,7 +194,17 @@ def compile_nastechml(
         "model_family": "supertonic-3",
         "source_markup": markup,
         "compiled_text": " ".join(compiled),
-        "voice": selected_voice,
+        "voice": base_voice,
+        "requested_voice": selected_voice,
+        "voice_profile": {
+            "profile_id": profile.profile_id,
+            "base_voice": profile.base_voice,
+            "kind": profile.kind,
+            "default_speed": profile.default_speed,
+            "description": profile.description,
+        }
+        if profile
+        else None,
         "steps": settings.total_steps,
         "speed": effective_speed,
         "decisions": decisions,
@@ -201,7 +217,7 @@ def compile_nastechml(
     return CompactCompiledRequest(
         request_id=request_id,
         text=manifest["compiled_text"],
-        voice=selected_voice,
+        voice=base_voice,
         speed=effective_speed,
         steps=settings.total_steps,
         manifest=manifest,

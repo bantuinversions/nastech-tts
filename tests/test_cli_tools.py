@@ -183,3 +183,29 @@ def test_language_preflight_command_keeps_luganda_adapter_disabled(monkeypatch, 
     payload = json.loads(capsys.readouterr().out)
     assert payload["language"]["iso639_3"] == "lug"
     assert payload["provider_preflights"][0]["network_request_made"] is False
+
+
+def test_voices_command_reports_forty_profiles_and_ten_base_timbres(monkeypatch, capsys) -> None:
+    monkeypatch.setattr(cli, "SupertonicRuntime", CliRuntime)
+    monkeypatch.setattr(sys, "argv", ["nastech-tts", "voices"])
+
+    assert cli.main() == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["summary"] == {
+        "selectable_profiles": 40,
+        "verified_base_timbres": 10,
+        "delivery_profiles": 30,
+    }
+    assert len(payload["profiles"]) == 40
+    assert {profile["base_voice"] for profile in payload["profiles"]} == {
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+    }

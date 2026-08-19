@@ -187,6 +187,12 @@ Use `SupertonicRuntime.synthesize_mixed()` when one document must switch voices 
 
 Mixed synthesis remains entirely local. The returned manifest records every segment’s selected voice, emotion, sound, rate, volume, compiled controls, and fidelity classification.
 
+## English and Bantu voice inventory
+
+Nastech exposes **40 selectable English local delivery profiles** over ten verified Supertonic base timbres. The named base profiles are **Siya, Nasi, Jafta, Della, Axam, Alicia, Shanice, Adam, Shakira,** and **Shimah**; the other thirty selectors are documented clear, soft, and dynamic delivery profiles. Names and profiles are not claimed as separately trained speaker identities. List them without loading a model with `nastech-tts voices` or `GET /v1/voices`. The complete locally validated inventory is available in [release/Nastech_TTS_All_Voices.md](release/Nastech_TTS_All_Voices.md).
+
+All 23 Bantu registry targets remain visible. Eleven have verified on-demand local MMS packs and five-minute native-story CI; targets without verified public checkpoints remain marked planned or `no-verified-pack` and are never silently substituted.
+
 ## Cross-platform installer and launcher
 
 Nastech includes a one-time self-bootstrapping installer for Linux, macOS, and Windows. On desktop systems it opens a branded animated progress window, hides terminal output from normal users, creates an isolated environment, installs declared dependencies on first start, detects CPU/GPU/RAM, persists a safe optimization profile, and starts any Nastech CLI command. Minimal or headless systems automatically use the same setup logic without the GUI. See [docs/INSTALLER.md](docs/INSTALLER.md) for the complete setup guide.
