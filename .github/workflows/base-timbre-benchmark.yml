@@ -1,0 +1,98 @@
+name: Nastech base-timbre benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      runs:
+        description: Warm cache-disabled synthesis runs per timbre
+        required: false
+        default: "3"
+        type: string
+  schedule:
+    - cron: "17 04 * * 0"
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  benchmark:
+    name: ${{ matrix.label }} — ten base timbres
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            slug: linux
+            label: Linux
+          - os: macos-latest
+            slug: macos
+            label: macOS
+          - os: windows-latest
+            slug: windows
+            label: Windows
+    env:
+      BENCHMARK_RUNS: ${{ inputs.runs || '3' }}
+      NASTECH_DEVICE: cpu
+      NASTECH_CPU_PROFILE: balanced
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install local benchmark runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install . numpy onnxruntime supertonic
+      - name: Validate benchmark harness without model download
+        run: python scripts/benchmark_base_timbres.py --output benchmark/plan-${{ matrix.slug }}.json --runs ${{ env.BENCHMARK_RUNS }} --dry-run
+      - name: Benchmark all ten local base timbres
+        run: python scripts/benchmark_base_timbres.py --output benchmark/nastech-base-timbres-${{ matrix.slug }}.json --runs ${{ env.BENCHMARK_RUNS }}
+      - name: Render platform benchmark report
+        run: python scripts/summarize_timbre_benchmark.py --input benchmark/nastech-base-timbres-${{ matrix.slug }}.json --output benchmark/Nastech_Timbre_Benchmark_${{ matrix.slug }}.md
+      - name: Validate platform report contract
+        run: python scripts/validate_timbre_benchmark.py --input benchmark/nastech-base-timbres-${{ matrix.slug }}.json --runs ${{ env.BENCHMARK_RUNS }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: nastech-base-timbre-benchmark-${{ matrix.slug }}
+          path: benchmark/
+          if-no-files-found: error
+
+  release-assets:
+    name: Publish cross-platform benchmark evidence
+    needs: benchmark
+    if: startsWith(github.ref, 'refs/tags/v') && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: nastech-base-timbre-benchmark-*
+          path: release/base_timbre_benchmarks
+      - name: Archive benchmark evidence
+        run: |
+          test "$(find release/base_timbre_benchmarks -name 'nastech-base-timbres-*.json' | wc -l)" -eq 3
+          test "$(find release/base_timbre_benchmarks -name 'Nastech_Timbre_Benchmark_*.md' | wc -l)" -eq 3
+          tar -czf "nastech-${GITHUB_REF_NAME}-base-timbre-benchmarks.tar.gz" release/base_timbre_benchmarks
+      - name: Create the tagged GitHub release if missing
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release create "$GITHUB_REF_NAME" \
+              --repo "$GITHUB_REPOSITORY" \
+              --draft \
+              --verify-tag \
+              --title "Nastech TTS $GITHUB_REF_NAME" \
+              --generate-notes
+          fi
+      - name: Upload benchmark evidence to the draft GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload "$GITHUB_REF_NAME" \
+            --repo "$GITHUB_REPOSITORY" \
+            "nastech-${GITHUB_REF_NAME}-base-timbre-benchmarks.tar.gz" \
+            --clobber

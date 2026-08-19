@@ -193,6 +193,8 @@ Nastech exposes **40 selectable English local delivery profiles** over ten verif
 
 All 23 Bantu registry targets remain visible. Eleven have verified on-demand local MMS packs and five-minute native-story CI; targets without verified public checkpoints remain marked planned or `no-verified-pack` and are never silently substituted.
 
+The [base-timbre benchmark](release/Nastech_Timbre_Benchmark_Linux.md) measures all ten English base timbres with a common cache-disabled test passage, warm speed, native process-memory observations, and WAV format/level/clipping gates. The same controlled matrix runs on Linux, macOS, and Windows by schedule, manual dispatch, and version tags; runner artifacts preserve exact host and metric-source details.
+
 ## Cross-platform installer and launcher
 
 Nastech includes a one-time self-bootstrapping installer for Linux, macOS, and Windows. On desktop systems it opens a branded animated progress window, hides terminal output from normal users, creates an isolated environment, installs declared dependencies on first start, detects CPU/GPU/RAM, persists a safe optimization profile, and starts any Nastech CLI command. Minimal or headless systems automatically use the same setup logic without the GUI. See [docs/INSTALLER.md](docs/INSTALLER.md) for the complete setup guide.
