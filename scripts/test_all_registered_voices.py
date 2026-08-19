@@ -89,8 +89,16 @@ BANTU_STORIES = {
     "ny": "Ku Nastech Research, anthu amagwira ntchito limodzi kuti apange mawu odalirika. Tsiku lililonse, Nastech Agent imamvetsera, imayesa, ndiponso imakonza ntchito mosamala. Mawu awa ndi a anthu, a ntchito, a kuphunzira, ndi a chitukuko. Anthu akamagwira ntchito limodzi, mavuto angasanduke njira zatsopano. Nastech imalemekeza choonadi, chitetezo, ndi zida zothandiza pa moyo wa tsiku ndi tsiku.",
 }
 
+# These are the routes with reviewed native-language story fixtures approved for
+# the long-form CI suite. Additional lazy packs remain selectable but do not
+# enter the story matrix until a competent language reviewer supplies a fixture.
+STORY_TEST_LANGUAGES = frozenset(
+    {"lg", "nyn", "ach", "teo", "sw", "rw", "rn", "ki", "ts", "sn", "ny"}
+)
+
 
 def _args() -> argparse.Namespace:
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--language", help="Generate one verified local voice.")
     parser.add_argument(
@@ -113,13 +121,14 @@ def _matrix() -> list[dict[str, Any]]:
             {
                 "language": code,
                 "label": definition.label,
+                "display_label": definition.display_label,
                 "iso639_3": definition.iso639_3,
                 "registry_status": definition.state,
                 "pack_state": pack.state,
                 "model_id": pack.model_id,
                 "providers": list(definition.provider_ids),
                 "story_available": code == "en"
-                or (code in BANTU_STORIES and pack.model_id is not None),
+                or (code in STORY_TEST_LANGUAGES and pack.model_id is not None),
             }
         )
     return rows
@@ -224,7 +233,7 @@ def main() -> int:
         raise RuntimeError(
             f"No verified local model pack exists for '{target}'; refusing substitution."
         )
-    if target not in BANTU_STORIES and target != "en":
+    if target not in STORY_TEST_LANGUAGES and target != "en":
         raise RuntimeError(f"No native-language story fixture exists for '{target}'.")
     data, rate = _synthesize_five_minutes(target, args.duration_seconds)
     quality = validate_release_wav(
@@ -242,6 +251,7 @@ def main() -> int:
         "status": "passed",
         "language": target,
         "label": row["label"],
+        "display_label": row["display_label"],
         "story": "Nastech Research five-minute native-language release story",
         "suite": "english-emotion-rich" if target == "en" else "bantu-native-language",
         "requested_duration_seconds": args.duration_seconds,

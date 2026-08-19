@@ -55,18 +55,15 @@ def main() -> int:
             "",
             "## Bantu language registry",
             "",
-            "| Code | Language | Registry state | Model-pack state | "
+            "| Selection label | Registry state | Model-pack state | "
             "Verified local model | Native story test |",
-            "|---|---|---|---|---|---|",
+            "|---|---|---|---|---|",
         ]
     )
     for row in bantu:
         lines.append(
-            (
-                "| {language} | {label} | {registry_status} | {pack_state} | {model} | {story} |"
-            ).format(
-                language=row["language"],
-                label=row["label"],
+            ("| {display_label} | {registry_status} | {pack_state} | {model} | {story} |").format(
+                display_label=f"{row['language']} - {row['label']}",
                 registry_status=row["registry_status"],
                 pack_state=row["pack_state"],
                 model=row["model_id"] or "No verified pack",
@@ -76,11 +73,11 @@ def main() -> int:
     lines.extend(
         [
             "",
-            "> **Evidence boundary:** Eleven Bantu languages have verified on-demand local MMS "
-            "routes and five-minute native-story CI. Other Bantu targets remain listed as planned "
-            "or no-verified-pack until an appropriate public local checkpoint is confirmed. "
-            "They are "
-            "never substituted with a different language.",
+            "> **Evidence boundary:** A `lazy-downloadable` MMS route is a local technical "
+            "route, not a verified naturalness or pure-language claim. Five-minute native-story CI "
+            "is only retained where an approved story fixture exists. Every other regional target "
+            "remains `planned` or `no-verified-pack` until an exact checkpoint and native-language "
+            "review are available; Nastech never substitutes a different language.",
             "",
         ]
     )

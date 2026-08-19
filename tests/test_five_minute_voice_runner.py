@@ -18,7 +18,8 @@ def test_voice_matrix_covers_english_and_verified_bantu_targets() -> None:
         text=True,
     )
     rows = json.loads(result.stdout)
-    assert len(rows) == 23
+    assert len(rows) == 61
+    assert rows[1]["display_label"] == "lg - Luganda"
     assert {row["language"] for row in rows if row["story_available"]} == {
         "en",
         "lg",

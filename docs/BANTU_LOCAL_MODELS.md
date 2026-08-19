@@ -1,53 +1,67 @@
-# Nastech optional Bantu local model packs
+# Nastech Optional Bantu Local Model Packs
 
-Nastech TTS keeps the compact English core separate from optional multilingual model packs. The following local checkpoints were downloaded and exercised on the current CPU host through the Hugging Face Transformers VITS interface. They are external assets under `/home/ubuntu/nastech-bantu-models`; they are not included in the compact package, Git history, or the 1 GiB core budget.
+Nastech TTS keeps the compact English core separate from optional multilingual
+model packs. A pack is **not downloaded at startup**, is not stored in Git, and
+is not included in the 1 GiB compact-core budget. The catalog presents each
+choice in a readable form such as **`lg - Luganda`**.
 
-| Nastech code | Language | Local checkpoint | State | License boundary |
-|---|---|---|---|---|
-| `lg` | Luganda | `facebook/mms-tts-lug` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `nyn` | Runyankole | `facebook/mms-tts-nyn` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `ach` | Acholi | `facebook/mms-tts-ach` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `teo` | Ateso | `facebook/mms-tts-teo` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `sw` | Kiswahili | `facebook/mms-tts-swh` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `rw` | Kinyarwanda | `facebook/mms-tts-kin` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `rn` | Kirundi | `facebook/mms-tts-run` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `ki` | Gikuyu | `facebook/mms-tts-kik` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `ts` | Xitsonga | `facebook/mms-tts-tso` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `sn` | Shona | `facebook/mms-tts-sna` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
-| `ny` | Chichewa / Nyanja | `facebook/mms-tts-nya` | downloaded, local inference exercised | CC-BY-NC-4.0; evaluation/non-commercial use only |
+## What “available” means
 
-The models are separate single-language VITS checkpoints, not a single universal multilingual voice. Their existence and local generation do not by themselves establish pronunciation quality, native-speaker acceptance, commercial redistribution rights, or production readiness. The Nastech language registry must retain those evidence boundaries.
+The following table lists the **35 exact local MMS checkpoint routes** verified
+in the official collection and model registry. “Available on demand” does not
+mean the pack is already installed on a user's computer, and it does not mean
+Nastech makes a native-speaker quality or commercial-use claim. All listed MMS
+checkpoints retain the published CC-BY-NC-4.0 boundary. [1] [2]
+
+| Regional area | Available on-demand pack labels |
+|---|---|
+| East Africa and Great Lakes | `lg - Luganda`, `nyn - Runyankole`, `ach - Acholi`, `teo - Ateso`, `sw - Kiswahili`, `rw - Kinyarwanda`, `rn - Kirundi`, `ki - Gikuyu`, `flr - Fuliiru`, `nyf - Kigiryama`, `myx - Masaaba`, `xog - Lusoga`, `nyo - Runyoro`, `nyy - Nyakyusa-Ngonde`, `hay - Haya`, `heh - Hehe`, `gog - Gogo`, `ruf - Luguru`, `cwe - Kwere`, `ziw - Zigula`, `ksb - Shambala`, `suk - Sukuma` |
+| Central Africa | `bem - Bemba`, `bss - Akoose` |
+| Southern Africa and adjacent Bantu-speaking communities | `ngl - Lomwe`, `lon - Malawi Lomwe`, `vmw - Makhuwa`, `mgh - Makhuwa-Meetto`, `kde - Makonde`, `yao - Yao`, `seh - Sena`, `toh - Malawi Tonga`, `ts - Xitsonga`, `sn - Shona`, `ny - Chichewa / Nyanja` |
+
+The complete catalog also contains `planned` targets from Kenya, Central Africa,
+Angola, South Africa, Botswana, Zimbabwe, Lesotho, and Eswatini. A planned
+entry—including `zu - isiZulu`, `xh - isiXhosa`, `st - Sesotho`, `tn -
+Setswana`, and `ve - Tshivenda`—has no exact verified pack mapping. Nastech
+fails closed instead of silently downloading or synthesizing a different
+language.
 
 ## Lazy on-demand behavior
 
-Nastech does not download all Bantu packs at startup. `GET /v1/languages/packs` and `nastech-tts language-packs` inspect the registry and external cache without network access. An operator explicitly requests one pack with `POST /v1/languages/packs/download` or `nastech-tts download-language-pack sw`; the download is resumable through the Hugging Face cache and is written atomically under `NASTECH_BANTU_CACHE` (default: `~/.cache/nastech-bantu`).
+`GET /v1/languages/packs` and `nastech-tts language-packs` inspect the registry
+and local external cache without network access. The returned data includes both
+`label` and `display_label`, with the latter always following the `code - Name`
+convention. An operator explicitly requests one pack with
+`POST /v1/languages/packs/download` or, for example,
+`nastech-tts download-language-pack lg`.
 
-Synthesis through the `mms-lazy` provider loads only the requested language. The runtime keeps one MMS model resident and evicts the previous language model before loading another, so using Swahili does not load Luganda, Shona, or every other pack into RAM. `NASTECH_ALLOW_LAZY_DOWNLOAD=1` permits a synthesis request to acquire its requested cached-missing pack; leaving it unset fails closed and requires the explicit download operation first. `NASTECH_DEVICE=auto|cpu|gpu` controls the shared hardware planner.
+The download is resumable through the Hugging Face cache and is written
+atomically under `NASTECH_BANTU_CACHE` (default: `~/.cache/nastech-bantu`).
+Synthesis through the `mms-lazy` provider loads only the requested language and
+evicts the prior MMS model before loading another. `NASTECH_ALLOW_LAZY_DOWNLOAD=1`
+permits a request to acquire an uncached selected pack; leaving it unset fails
+closed and requires the explicit download operation first.
 
-The registry is broader than the currently verified model set. For example, `zu` / isiZulu remains `no-verified-pack` in the lazy-pack inventory because the official MMS TTS language list and current checkpoint audit did not establish a Zulu checkpoint. Nastech will return a truthful unavailable-pack error rather than download a different language under the Zulu name. A future verified Zulu checkpoint can be added to the pack manifest without changing the lazy-cache architecture.
+## Quality boundary
+
+An available checkpoint only establishes an exact, local technical route. A
+language requires locally generated native-language fixtures, deterministic WAV
+checks, a pronunciation issue log, and competent native-speaker review before
+Nastech can call it a verified local voice. Neither English text nor
+transliteration may be used to make that claim.
 
 ## Hardware behavior
 
-The optional inference harness detects CUDA through PyTorch and uses CUDA only when CUDA is available and the ONNX provider inventory also registers `CUDAExecutionProvider`. Otherwise it uses CPU float32 inference and loads one model at a time to control RAM. The current host has 6 logical CPUs, approximately 23.8 GiB RAM, no CUDA device, and no registered ONNX Runtime providers; its automatic plan is CPU execution, four intra-operation threads, one inter-operation thread, at most two parallel synthesis requests, and batch size one.
-
-The core runtime exposes the same plan through `HardwarePlan` and the `/v1/platforms`, `/v1/health`, and `/v1/runtime/diagnostics` metadata. Set `NASTECH_DEVICE=auto` for automatic selection, `NASTECH_DEVICE=cpu` to force CPU, or `NASTECH_DEVICE=gpu` to require a verified CUDA plus CUDAExecutionProvider environment. A forced GPU request fails closed rather than silently falling back to CPU.
-
-## Reproducible local test
-
-From the repository root, install the optional download dependency and run:
-
-```bash
-sudo pip3 install huggingface_hub
-python3 scripts/install_mms_bantu_models.py
-PYTHONPATH=/home/ubuntu/nastech-luganda-runtime python3 scripts/test_installed_bantu_mms_voices.py
-```
-
-The test writes WAV fixtures and a deterministic `manifest.json` under `release/bantu_mms_fixtures/`. The current CPU run produced non-silent, unclipped 16 kHz mono WAVs for all eleven installed packs. This is an audio-generation smoke result, not a native-language quality certification.
+`NASTECH_DEVICE=auto|cpu|gpu` controls the shared hardware planner. In automatic
+mode, the runtime uses CUDA only when the required runtime capabilities are
+actually present; otherwise it selects CPU float32 inference. One optional model
+is kept resident at a time to control RAM. A forced GPU request fails closed
+rather than silently falling back to CPU.
 
 ## References
 
-[1]: https://huggingface.co/facebook/mms-tts "Meta MMS-TTS model collection and language coverage"
+[1] [Meta MMS TTS model card](https://huggingface.co/facebook/mms-tts)
 
-[2]: https://huggingface.co/docs/transformers/en/model_doc/mms "Transformers MMS documentation and local VITS inference"
+[2] [Official MMS TTS supported-language list](https://dl.fbaipublicfiles.com/mms/tts/all-tts-languages.html)
 
-[3]: https://huggingface.co/BrianMwangi/African-Kikuyu-TTS "Kikuyu MMS-derived model card and license metadata"
+[3] [Transformers MMS documentation](https://huggingface.co/docs/transformers/en/model_doc/mms)

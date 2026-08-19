@@ -12,6 +12,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, replace
 from typing import Any
 
+from .languages import MMS_LAZY_CODES
+
 ACTIVE_LOCAL = "active/local"
 ADAPTER_AVAILABLE = "adapter/available"
 LICENSE_REVIEW = "planned/license-review"
@@ -74,7 +76,7 @@ _PROVIDER_ROWS = (
             "Explicitly select a language; download only that pack into the external cache, "
             "load one model at a time, and retain CC-BY-NC-4.0 restrictions."
         ),
-        ("lg", "nyn", "ach", "teo", "sw", "rw", "rn", "ki", "nso", "ve", "ts", "sn", "ny"),
+        tuple(sorted(MMS_LAZY_CODES)),
     ),
     _provider(
         "kokoro-local",

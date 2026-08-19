@@ -66,7 +66,7 @@ def main() -> int:
     _require(agent.get("publisher") == "Nastech Research", "Agent catalog publisher mismatch.")
     _require(agent.get("version") == "0.12.2", "Agent catalog version mismatch.")
     _require(agent.get("provider_catalog_size") == 60, "Provider catalog size mismatch.")
-    _require(agent.get("language_registry_size") == 23, "Language registry size mismatch.")
+    _require(agent.get("language_registry_size") == 61, "Language registry size mismatch.")
     _require(
         agent.get("default_provider_id") == "nastech-native-onnx",
         "Default provider mismatch.",
@@ -104,7 +104,7 @@ def main() -> int:
     _require(summary["project"]["version"] == "0.12.2", "Project summary version mismatch.")
     _require(summary["project"]["publisher"] == "Nastech Research", "Project publisher mismatch.")
     _require(summary["runtime"]["provider_catalog_size"] == 60, "Provider catalog mismatch.")
-    _require(summary["runtime"]["language_registry_size"] == 23, "Language registry mismatch.")
+    _require(summary["runtime"]["language_registry_size"] == 61, "Language registry mismatch.")
     _require(
         summary["runtime"]["network_default"] == "disabled",
         "Provider network-default policy mismatch.",

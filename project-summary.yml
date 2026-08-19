@@ -6,16 +6,17 @@ project:
   publisher: "Nastech Research"
   repository: "https://github.com/bantuinversions/nastech-tts"
   license: "Apache-2.0"
-  language_scope: "English verified locally; optional Luganda local technical preview; Bantu-language registry with explicit evidence states"
+  language_scope: "English verified locally; 60 East, Central, and Southern African regional targets with explicit evidence states and code-first labels"
 runtime:
   provider_mixer: "Nastech"
   provider_catalog_size: 60
-  language_registry_size: 23
+  language_registry_size: 61
   language_registry: "docs/BANTU_LANGUAGE_COVERAGE.md"
   optional_luganda_provider: "coqui-luganda-openbible"
   optional_language_pack_rule: "Optional external packs are never included in the 1 GiB Nastech Compact core measurement."
   optional_bantu_model_guide: "docs/BANTU_LOCAL_MODELS.md"
-  optional_bantu_installed_packs: 11
+  optional_bantu_lazy_routes: 35
+  optional_bantu_native_story_routes: 11
   optional_bantu_license_boundary: "MMS packs are CC-BY-NC-4.0 evaluation/non-commercial assets pending separate review."
   default_provider_id: "nastech-native-onnx"
   inference: "local-first; active provider selected explicitly"
@@ -91,8 +92,8 @@ quality:
     dependency_updates: ".github/dependabot.yml"
 deployment_budget:
   maximum_mib: 1024
-  latest_verified_mib: 841.59
-  remaining_mib: 182.41
+  latest_verified_mib: 701.93
+  remaining_mib: 322.07
 agent_contract:
   descriptor: "agent_tools/nastech_tts_tool.json"
   openapi: "docs/openapi.json"

@@ -22,8 +22,11 @@ def test_bantu_language_inventory_declares_targets_without_false_availability() 
     languages = {language["code"]: language for language in inventory["languages"]}
 
     assert inventory["default_language"] == "en"
-    assert inventory["language_registry_size"] >= 20
+    assert inventory["language_registry_size"] == 61
     assert languages["lg"]["state"] == ADAPTER_AVAILABLE
+    assert languages["lg"]["display_label"] == "lg - Luganda"
+    assert languages["bem"]["display_label"] == "bem - Bemba"
+    assert languages["lin"]["display_label"] == "lin - Lingala"
     assert languages["zu"]["state"] == PLANNED
     assert languages["xh"]["state"] == PLANNED
     assert languages["tn"]["label"] == "Setswana"
@@ -35,6 +38,8 @@ def test_language_aliases_and_disabled_pack_boundary_are_explicit() -> None:
     assert get_language("lug").code == "lg"
     assert get_language("Luganda").iso639_3 == "lug"
     assert get_language("Zulu").code == "zu"
+    assert get_language("Lingala").code == "lin"
+    assert get_language("Bemba").iso639_3 == "bem"
 
     with pytest.raises(LanguageRegistryError, match="not enabled"):
         require_configured_language("lg")

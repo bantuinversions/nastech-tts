@@ -51,21 +51,32 @@ def test_english_emotion_rich_story_has_full_control_contract() -> None:
     assert "Nastech Research" in runner.ENGLISH_STORY
 
 
-def test_every_verified_bantu_route_has_a_native_story_fixture() -> None:
+def test_native_story_suite_is_a_reviewed_subset_of_the_expanded_pack_catalog() -> None:
     runner = _runner_module()
     matrix = runner._matrix()
-    verified_bantu = {
-        row["language"] for row in matrix if row["language"] != "en" and row["model_id"] is not None
+    route_by_language = {row["language"]: row for row in matrix}
+
+    assert runner.STORY_TEST_LANGUAGES == {
+        "lg",
+        "nyn",
+        "ach",
+        "teo",
+        "sw",
+        "rw",
+        "rn",
+        "ki",
+        "ts",
+        "sn",
+        "ny",
     }
-    assert verified_bantu <= set(runner.BANTU_STORIES)
-    assert len(verified_bantu) == 11
-    assert set(runner.BANTU_STORIES) - verified_bantu == {"nso", "ve"}
+    assert len(runner.STORY_TEST_LANGUAGES) == 11
+    for language in runner.STORY_TEST_LANGUAGES:
+        assert route_by_language[language]["model_id"] is not None
+        assert language in runner.BANTU_STORIES
     for language, story in runner.BANTU_STORIES.items():
         assert "Nastech Research" in story
         assert len(story.split()) >= 35
-        if language in {"nso", "ve"}:
-            continue  # Native fixture retained, but no verified public local pack exists yet.
-        assert language in verified_bantu
+        assert language in route_by_language
 
 
 def test_english_profile_inventory_has_forty_selectable_styles() -> None:

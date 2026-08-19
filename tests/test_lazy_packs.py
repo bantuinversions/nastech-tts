@@ -17,7 +17,12 @@ def test_pack_inventory_never_downloads_at_startup(monkeypatch, tmp_path: Path) 
 
     assert inventory["startup_downloads"] == 0
     assert inventory["startup_loaded_models"] == 0
-    assert {item["language"] for item in inventory["packs"]} >= {"sw", "zu"}
+    packs = {item["language"]: item for item in inventory["packs"]}
+    assert set(packs) >= {"sw", "zu", "bem", "vmw", "lin"}
+    assert packs["lg"]["display_label"] == "lg - Luganda"
+    assert packs["bem"]["model_id"] == "facebook/mms-tts-bem"
+    assert packs["vmw"]["state"] == "lazy-downloadable"
+    assert packs["lin"]["state"] == "no-verified-pack"
     assert not any(tmp_path.iterdir())
 
 
@@ -38,11 +43,12 @@ def test_explicit_download_materializes_only_requested_language(
         (destination / "config.json").write_text("{}", encoding="utf-8")
 
     monkeypatch.setattr("nastech_tts.lazy_packs._download_pack", fake_download)
-    result = download_language_pack("sw")
+    result = download_language_pack("bem")
 
-    assert result["language"] == "sw"
+    assert result["language"] == "bem"
+    assert result["display_label"] == "bem - Bemba"
     assert result["downloaded_now"] is True
-    assert (tmp_path / "sw" / "config.json").is_file()
+    assert (tmp_path / "bem" / "config.json").is_file()
     assert not (tmp_path / "rw").exists()
 
 

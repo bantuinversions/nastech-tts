@@ -40,25 +40,57 @@ class LazyPackDefinition:
     state: str
     note: str
 
+    @property
+    def display_label(self) -> str:
+        """Return the code-first label used in pack selection screens."""
+
+        return f"{self.language} - {self.label}"
+
     def as_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        result = asdict(self)
+        result["display_label"] = self.display_label
+        return result
 
 
 # Official MMS archive/Hugging Face identifiers verified in the current audit.
 # Other registry languages remain explicit no-model entries until an actual
 # checkpoint is verified; they are not silently mapped to a different language.
 _PACK_ROWS = (
-    ("lg", "lug", "Luganda", "facebook/mms-tts-lug"),
-    ("nyn", "nyn", "Runyankole", "facebook/mms-tts-nyn"),
     ("ach", "ach", "Acholi", "facebook/mms-tts-ach"),
-    ("teo", "teo", "Ateso", "facebook/mms-tts-teo"),
-    ("sw", "swa", "Kiswahili", "facebook/mms-tts-swh"),
-    ("rw", "kin", "Kinyarwanda", "facebook/mms-tts-kin"),
-    ("rn", "run", "Kirundi", "facebook/mms-tts-run"),
+    ("bem", "bem", "Bemba", "facebook/mms-tts-bem"),
+    ("bss", "bss", "Akoose", "facebook/mms-tts-bss"),
+    ("cwe", "cwe", "Kwere", "facebook/mms-tts-cwe"),
+    ("flr", "flr", "Fuliiru", "facebook/mms-tts-flr"),
+    ("gog", "gog", "Gogo", "facebook/mms-tts-gog"),
+    ("hay", "hay", "Haya", "facebook/mms-tts-hay"),
+    ("heh", "heh", "Hehe", "facebook/mms-tts-heh"),
+    ("kde", "kde", "Makonde", "facebook/mms-tts-kde"),
     ("ki", "kik", "Gikuyu", "facebook/mms-tts-kik"),
-    ("ts", "tso", "itsonga", "facebook/mms-tts-tso"),
-    ("sn", "sna", "Shona", "facebook/mms-tts-sna"),
+    ("ksb", "ksb", "Shambala", "facebook/mms-tts-ksb"),
+    ("lg", "lug", "Luganda", "facebook/mms-tts-lug"),
+    ("lon", "lon", "Malawi Lomwe", "facebook/mms-tts-lon"),
+    ("mgh", "mgh", "Makhuwa-Meetto", "facebook/mms-tts-mgh"),
+    ("myx", "myx", "Masaaba", "facebook/mms-tts-myx"),
+    ("ngl", "ngl", "Lomwe", "facebook/mms-tts-ngl"),
     ("ny", "nya", "Chichewa / Nyanja", "facebook/mms-tts-nya"),
+    ("nyf", "nyf", "Kigiryama", "facebook/mms-tts-nyf"),
+    ("nyn", "nyn", "Runyankole", "facebook/mms-tts-nyn"),
+    ("nyo", "nyo", "Runyoro", "facebook/mms-tts-nyo"),
+    ("nyy", "nyy", "Nyakyusa-Ngonde", "facebook/mms-tts-nyy"),
+    ("rn", "run", "Kirundi", "facebook/mms-tts-run"),
+    ("ruf", "ruf", "Luguru", "facebook/mms-tts-ruf"),
+    ("rw", "kin", "Kinyarwanda", "facebook/mms-tts-kin"),
+    ("seh", "seh", "Sena", "facebook/mms-tts-seh"),
+    ("sn", "sna", "Shona", "facebook/mms-tts-sna"),
+    ("suk", "suk", "Sukuma", "facebook/mms-tts-suk"),
+    ("sw", "swa", "Kiswahili", "facebook/mms-tts-swh"),
+    ("teo", "teo", "Ateso", "facebook/mms-tts-teo"),
+    ("toh", "toh", "Malawi Tonga", "facebook/mms-tts-toh"),
+    ("ts", "tso", "Xitsonga", "facebook/mms-tts-tso"),
+    ("vmw", "vmw", "Makhuwa", "facebook/mms-tts-vmw"),
+    ("xog", "xog", "Lusoga", "facebook/mms-tts-xog"),
+    ("yao", "yao", "Yao", "facebook/mms-tts-yao"),
+    ("ziw", "ziw", "Zigula", "facebook/mms-tts-ziw"),
 )
 
 _MODEL_BY_LANGUAGE = {language: model_id for language, _, _, model_id in _PACK_ROWS}

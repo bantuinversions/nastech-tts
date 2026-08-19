@@ -4,9 +4,9 @@ This inventory was generated after local deterministic verification. English has
 
 | Local verification | Result |
 |---|---:|
-| Deterministic tests | 151 passed |
-| Compact core budget | 701.57 MiB |
-| Bantu registry targets | 23 |
+| Deterministic tests | 158 passed |
+| Compact core budget | 701.93 MiB |
+| Bantu registry targets | 61 |
 | Verified Bantu story routes | 11 |
 
 ## English named profiles and delivery styles
@@ -56,30 +56,68 @@ This inventory was generated after local deterministic verification. English has
 
 ## Bantu language registry
 
-| Code | Language | Registry state | Model-pack state | Verified local model | Native story test |
-|---|---|---|---|---|---|
-| en | English | verified-local | no-verified-pack | No verified pack | Yes |
-| lg | Luganda | adapter-available | lazy-downloadable | facebook/mms-tts-lug | Yes |
-| nyn | Runyankole | adapter-available | lazy-downloadable | facebook/mms-tts-nyn | Yes |
-| ach | Acholi | adapter-available | lazy-downloadable | facebook/mms-tts-ach | Yes |
-| teo | Ateso | adapter-available | lazy-downloadable | facebook/mms-tts-teo | Yes |
-| sw | Kiswahili | adapter-available | lazy-downloadable | facebook/mms-tts-swh | Yes |
-| rw | Kinyarwanda | adapter-available | lazy-downloadable | facebook/mms-tts-kin | Yes |
-| rn | Kirundi | adapter-available | lazy-downloadable | facebook/mms-tts-run | Yes |
-| ki | Gikuyu | adapter-available | lazy-downloadable | facebook/mms-tts-kik | Yes |
-| kam | Kamba | planned | no-verified-pack | No verified pack | No |
-| luy | Luhya | planned | no-verified-pack | No verified pack | No |
-| luo | Dholuo | planned | no-verified-pack | No verified pack | No |
-| zu | isiZulu | planned | no-verified-pack | No verified pack | No |
-| xh | isiXhosa | planned | no-verified-pack | No verified pack | No |
-| st | Sesotho | planned | no-verified-pack | No verified pack | No |
-| nso | Sepedi / Northern Sotho | adapter-available | no-verified-pack | No verified pack | No |
-| tn | Setswana | planned | no-verified-pack | No verified pack | No |
-| ve | Tshivenda | adapter-available | no-verified-pack | No verified pack | No |
-| ts | Xitsonga | adapter-available | lazy-downloadable | facebook/mms-tts-tso | Yes |
-| ss | siSwati | planned | no-verified-pack | No verified pack | No |
-| nr | isiNdebele | planned | no-verified-pack | No verified pack | No |
-| sn | Shona | adapter-available | lazy-downloadable | facebook/mms-tts-sna | Yes |
-| ny | Chichewa / Nyanja | adapter-available | lazy-downloadable | facebook/mms-tts-nya | Yes |
+| Selection label | Registry state | Model-pack state | Verified local model | Native story test |
+|---|---|---|---|---|
+| en - English | verified-local | no-verified-pack | No verified pack | Yes |
+| lg - Luganda | adapter-available | lazy-downloadable | facebook/mms-tts-lug | Yes |
+| nyn - Runyankole | adapter-available | lazy-downloadable | facebook/mms-tts-nyn | Yes |
+| ach - Acholi | adapter-available | lazy-downloadable | facebook/mms-tts-ach | Yes |
+| teo - Ateso | adapter-available | lazy-downloadable | facebook/mms-tts-teo | Yes |
+| sw - Kiswahili | adapter-available | lazy-downloadable | facebook/mms-tts-swh | Yes |
+| rw - Kinyarwanda | adapter-available | lazy-downloadable | facebook/mms-tts-kin | Yes |
+| rn - Kirundi | adapter-available | lazy-downloadable | facebook/mms-tts-run | Yes |
+| ki - Gikuyu | adapter-available | lazy-downloadable | facebook/mms-tts-kik | Yes |
+| kam - Kamba | planned | no-verified-pack | No verified pack | No |
+| luy - Luhya | planned | no-verified-pack | No verified pack | No |
+| luo - Dholuo | planned | no-verified-pack | No verified pack | No |
+| flr - Fuliiru | adapter-available | lazy-downloadable | facebook/mms-tts-flr | No |
+| nyf - Kigiryama | adapter-available | lazy-downloadable | facebook/mms-tts-nyf | No |
+| myx - Masaaba | adapter-available | lazy-downloadable | facebook/mms-tts-myx | No |
+| xog - Lusoga | adapter-available | lazy-downloadable | facebook/mms-tts-xog | No |
+| nyo - Runyoro | adapter-available | lazy-downloadable | facebook/mms-tts-nyo | No |
+| nyy - Nyakyusa-Ngonde | adapter-available | lazy-downloadable | facebook/mms-tts-nyy | No |
+| hay - Haya | adapter-available | lazy-downloadable | facebook/mms-tts-hay | No |
+| heh - Hehe | adapter-available | lazy-downloadable | facebook/mms-tts-heh | No |
+| gog - Gogo | adapter-available | lazy-downloadable | facebook/mms-tts-gog | No |
+| ruf - Luguru | adapter-available | lazy-downloadable | facebook/mms-tts-ruf | No |
+| cwe - Kwere | adapter-available | lazy-downloadable | facebook/mms-tts-cwe | No |
+| ziw - Zigula | adapter-available | lazy-downloadable | facebook/mms-tts-ziw | No |
+| ksb - Shambala | adapter-available | lazy-downloadable | facebook/mms-tts-ksb | No |
+| suk - Sukuma | adapter-available | lazy-downloadable | facebook/mms-tts-suk | No |
+| bem - Bemba | adapter-available | lazy-downloadable | facebook/mms-tts-bem | No |
+| bss - Akoose | adapter-available | lazy-downloadable | facebook/mms-tts-bss | No |
+| lin - Lingala | planned | no-verified-pack | No verified pack | No |
+| kon - Kikongo | planned | no-verified-pack | No verified pack | No |
+| lua - Tshiluba | planned | no-verified-pack | No verified pack | No |
+| lub - Luba-Katanga | planned | no-verified-pack | No verified pack | No |
+| dua - Duala | planned | no-verified-pack | No verified pack | No |
+| ewo - Ewondo | planned | no-verified-pack | No verified pack | No |
+| fan - Fang | planned | no-verified-pack | No verified pack | No |
+| kmb - Kimbundu | planned | no-verified-pack | No verified pack | No |
+| umb - Umbundu | planned | no-verified-pack | No verified pack | No |
+| cjk - Chokwe | planned | no-verified-pack | No verified pack | No |
+| lun - Lunda | planned | no-verified-pack | No verified pack | No |
+| lue - Luvale | planned | no-verified-pack | No verified pack | No |
+| ngl - Lomwe | adapter-available | lazy-downloadable | facebook/mms-tts-ngl | No |
+| lon - Malawi Lomwe | adapter-available | lazy-downloadable | facebook/mms-tts-lon | No |
+| vmw - Makhuwa | adapter-available | lazy-downloadable | facebook/mms-tts-vmw | No |
+| mgh - Makhuwa-Meetto | adapter-available | lazy-downloadable | facebook/mms-tts-mgh | No |
+| kde - Makonde | adapter-available | lazy-downloadable | facebook/mms-tts-kde | No |
+| yao - Yao | adapter-available | lazy-downloadable | facebook/mms-tts-yao | No |
+| seh - Sena | adapter-available | lazy-downloadable | facebook/mms-tts-seh | No |
+| toh - Malawi Tonga | adapter-available | lazy-downloadable | facebook/mms-tts-toh | No |
+| tum - Tumbuka | planned | no-verified-pack | No verified pack | No |
+| zu - isiZulu | planned | no-verified-pack | No verified pack | No |
+| xh - isiXhosa | planned | no-verified-pack | No verified pack | No |
+| st - Sesotho | planned | no-verified-pack | No verified pack | No |
+| nso - Sepedi / Northern Sotho | planned | no-verified-pack | No verified pack | No |
+| tn - Setswana | planned | no-verified-pack | No verified pack | No |
+| ve - Tshivenda | planned | no-verified-pack | No verified pack | No |
+| ts - Xitsonga | adapter-available | lazy-downloadable | facebook/mms-tts-tso | Yes |
+| ss - siSwati | planned | no-verified-pack | No verified pack | No |
+| nd - isiNdebele (Northern) | planned | no-verified-pack | No verified pack | No |
+| nr - isiNdebele (Southern) | planned | no-verified-pack | No verified pack | No |
+| sn - Shona | adapter-available | lazy-downloadable | facebook/mms-tts-sna | Yes |
+| ny - Chichewa / Nyanja | adapter-available | lazy-downloadable | facebook/mms-tts-nya | Yes |
 
-> **Evidence boundary:** Eleven Bantu languages have verified on-demand local MMS routes and five-minute native-story CI. Other Bantu targets remain listed as planned or no-verified-pack until an appropriate public local checkpoint is confirmed. They are never substituted with a different language.
+> **Evidence boundary:** A `lazy-downloadable` MMS route is a local technical route, not a verified naturalness or pure-language claim. Five-minute native-story CI is only retained where an approved story fixture exists. Every other regional target remains `planned` or `no-verified-pack` until an exact checkpoint and native-language review are available; Nastech never substitutes a different language.

@@ -2,6 +2,7 @@
   {
     "language": "en",
     "label": "English",
+    "display_label": "en - English",
     "iso639_3": "eng",
     "registry_status": "verified-local",
     "pack_state": "no-verified-pack",
@@ -14,25 +15,26 @@
   {
     "language": "lg",
     "label": "Luganda",
+    "display_label": "lg - Luganda",
     "iso639_3": "lug",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-lug",
     "providers": [
       "coqui-luganda-openbible",
-      "mms-luganda-eval"
+      "mms-lazy"
     ],
     "story_available": true
   },
   {
     "language": "nyn",
     "label": "Runyankole",
+    "display_label": "nyn - Runyankole",
     "iso639_3": "nyn",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-nyn",
     "providers": [
-      "usoal-orpheus-luganda-family",
       "mms-lazy"
     ],
     "story_available": true
@@ -40,12 +42,12 @@
   {
     "language": "ach",
     "label": "Acholi",
+    "display_label": "ach - Acholi",
     "iso639_3": "ach",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-ach",
     "providers": [
-      "usoal-orpheus-luganda-family",
       "mms-lazy"
     ],
     "story_available": true
@@ -53,12 +55,12 @@
   {
     "language": "teo",
     "label": "Ateso",
+    "display_label": "teo - Ateso",
     "iso639_3": "teo",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-teo",
     "providers": [
-      "usoal-orpheus-luganda-family",
       "mms-lazy"
     ],
     "story_available": true
@@ -66,6 +68,7 @@
   {
     "language": "sw",
     "label": "Kiswahili",
+    "display_label": "sw - Kiswahili",
     "iso639_3": "swa",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
@@ -78,42 +81,46 @@
   {
     "language": "rw",
     "label": "Kinyarwanda",
+    "display_label": "rw - Kinyarwanda",
     "iso639_3": "kin",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-kin",
     "providers": [
-      "mms-kinyarwanda-eval"
+      "mms-lazy"
     ],
     "story_available": true
   },
   {
     "language": "rn",
     "label": "Kirundi",
+    "display_label": "rn - Kirundi",
     "iso639_3": "run",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-run",
     "providers": [
-      "mms-kirundi-eval"
+      "mms-lazy"
     ],
     "story_available": true
   },
   {
     "language": "ki",
     "label": "Gikuyu",
+    "display_label": "ki - Gikuyu",
     "iso639_3": "kik",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-kik",
     "providers": [
-      "mms-gikuyu-eval"
+      "mms-lazy"
     ],
     "story_available": true
   },
   {
     "language": "kam",
     "label": "Kamba",
+    "display_label": "kam - Kamba",
     "iso639_3": "kam",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
@@ -124,6 +131,7 @@
   {
     "language": "luy",
     "label": "Luhya",
+    "display_label": "luy - Luhya",
     "iso639_3": "luy",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
@@ -134,7 +142,463 @@
   {
     "language": "luo",
     "label": "Dholuo",
+    "display_label": "luo - Dholuo",
     "iso639_3": "luo",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "flr",
+    "label": "Fuliiru",
+    "display_label": "flr - Fuliiru",
+    "iso639_3": "flr",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-flr",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "nyf",
+    "label": "Kigiryama",
+    "display_label": "nyf - Kigiryama",
+    "iso639_3": "nyf",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-nyf",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "myx",
+    "label": "Masaaba",
+    "display_label": "myx - Masaaba",
+    "iso639_3": "myx",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-myx",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "xog",
+    "label": "Lusoga",
+    "display_label": "xog - Lusoga",
+    "iso639_3": "xog",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-xog",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "nyo",
+    "label": "Runyoro",
+    "display_label": "nyo - Runyoro",
+    "iso639_3": "nyo",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-nyo",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "nyy",
+    "label": "Nyakyusa-Ngonde",
+    "display_label": "nyy - Nyakyusa-Ngonde",
+    "iso639_3": "nyy",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-nyy",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "hay",
+    "label": "Haya",
+    "display_label": "hay - Haya",
+    "iso639_3": "hay",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-hay",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "heh",
+    "label": "Hehe",
+    "display_label": "heh - Hehe",
+    "iso639_3": "heh",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-heh",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "gog",
+    "label": "Gogo",
+    "display_label": "gog - Gogo",
+    "iso639_3": "gog",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-gog",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "ruf",
+    "label": "Luguru",
+    "display_label": "ruf - Luguru",
+    "iso639_3": "ruf",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-ruf",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "cwe",
+    "label": "Kwere",
+    "display_label": "cwe - Kwere",
+    "iso639_3": "cwe",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-cwe",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "ziw",
+    "label": "Zigula",
+    "display_label": "ziw - Zigula",
+    "iso639_3": "ziw",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-ziw",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "ksb",
+    "label": "Shambala",
+    "display_label": "ksb - Shambala",
+    "iso639_3": "ksb",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-ksb",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "suk",
+    "label": "Sukuma",
+    "display_label": "suk - Sukuma",
+    "iso639_3": "suk",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-suk",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "bem",
+    "label": "Bemba",
+    "display_label": "bem - Bemba",
+    "iso639_3": "bem",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-bem",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "bss",
+    "label": "Akoose",
+    "display_label": "bss - Akoose",
+    "iso639_3": "bss",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-bss",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "lin",
+    "label": "Lingala",
+    "display_label": "lin - Lingala",
+    "iso639_3": "lin",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "kon",
+    "label": "Kikongo",
+    "display_label": "kon - Kikongo",
+    "iso639_3": "kon",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "lua",
+    "label": "Tshiluba",
+    "display_label": "lua - Tshiluba",
+    "iso639_3": "lua",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "lub",
+    "label": "Luba-Katanga",
+    "display_label": "lub - Luba-Katanga",
+    "iso639_3": "lub",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "dua",
+    "label": "Duala",
+    "display_label": "dua - Duala",
+    "iso639_3": "dua",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "ewo",
+    "label": "Ewondo",
+    "display_label": "ewo - Ewondo",
+    "iso639_3": "ewo",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "fan",
+    "label": "Fang",
+    "display_label": "fan - Fang",
+    "iso639_3": "fan",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "kmb",
+    "label": "Kimbundu",
+    "display_label": "kmb - Kimbundu",
+    "iso639_3": "kmb",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "umb",
+    "label": "Umbundu",
+    "display_label": "umb - Umbundu",
+    "iso639_3": "umb",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "cjk",
+    "label": "Chokwe",
+    "display_label": "cjk - Chokwe",
+    "iso639_3": "cjk",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "lun",
+    "label": "Lunda",
+    "display_label": "lun - Lunda",
+    "iso639_3": "lun",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "lue",
+    "label": "Luvale",
+    "display_label": "lue - Luvale",
+    "iso639_3": "lue",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
+    "language": "ngl",
+    "label": "Lomwe",
+    "display_label": "ngl - Lomwe",
+    "iso639_3": "ngl",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-ngl",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "lon",
+    "label": "Malawi Lomwe",
+    "display_label": "lon - Malawi Lomwe",
+    "iso639_3": "lon",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-lon",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "vmw",
+    "label": "Makhuwa",
+    "display_label": "vmw - Makhuwa",
+    "iso639_3": "vmw",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-vmw",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "mgh",
+    "label": "Makhuwa-Meetto",
+    "display_label": "mgh - Makhuwa-Meetto",
+    "iso639_3": "mgh",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-mgh",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "kde",
+    "label": "Makonde",
+    "display_label": "kde - Makonde",
+    "iso639_3": "kde",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-kde",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "yao",
+    "label": "Yao",
+    "display_label": "yao - Yao",
+    "iso639_3": "yao",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-yao",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "seh",
+    "label": "Sena",
+    "display_label": "seh - Sena",
+    "iso639_3": "seh",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-seh",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "toh",
+    "label": "Malawi Tonga",
+    "display_label": "toh - Malawi Tonga",
+    "iso639_3": "toh",
+    "registry_status": "adapter-available",
+    "pack_state": "lazy-downloadable",
+    "model_id": "facebook/mms-tts-toh",
+    "providers": [
+      "mms-lazy"
+    ],
+    "story_available": false
+  },
+  {
+    "language": "tum",
+    "label": "Tumbuka",
+    "display_label": "tum - Tumbuka",
+    "iso639_3": "tum",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
     "model_id": null,
@@ -144,6 +608,7 @@
   {
     "language": "zu",
     "label": "isiZulu",
+    "display_label": "zu - isiZulu",
     "iso639_3": "zul",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
@@ -154,6 +619,7 @@
   {
     "language": "xh",
     "label": "isiXhosa",
+    "display_label": "xh - isiXhosa",
     "iso639_3": "xho",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
@@ -164,6 +630,7 @@
   {
     "language": "st",
     "label": "Sesotho",
+    "display_label": "st - Sesotho",
     "iso639_3": "sot",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
@@ -174,18 +641,18 @@
   {
     "language": "nso",
     "label": "Sepedi / Northern Sotho",
+    "display_label": "nso - Sepedi / Northern Sotho",
     "iso639_3": "nso",
-    "registry_status": "adapter-available",
+    "registry_status": "planned",
     "pack_state": "no-verified-pack",
     "model_id": null,
-    "providers": [
-      "mms-lazy"
-    ],
+    "providers": [],
     "story_available": false
   },
   {
     "language": "tn",
     "label": "Setswana",
+    "display_label": "tn - Setswana",
     "iso639_3": "tsn",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
@@ -196,30 +663,31 @@
   {
     "language": "ve",
     "label": "Tshivenda",
+    "display_label": "ve - Tshivenda",
     "iso639_3": "ven",
-    "registry_status": "adapter-available",
+    "registry_status": "planned",
     "pack_state": "no-verified-pack",
     "model_id": null,
-    "providers": [
-      "mms-lazy"
-    ],
+    "providers": [],
     "story_available": false
   },
   {
     "language": "ts",
     "label": "Xitsonga",
+    "display_label": "ts - Xitsonga",
     "iso639_3": "tso",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-tso",
     "providers": [
-      "mms-tsonga-eval"
+      "mms-lazy"
     ],
     "story_available": true
   },
   {
     "language": "ss",
     "label": "siSwati",
+    "display_label": "ss - siSwati",
     "iso639_3": "ssw",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
@@ -228,8 +696,20 @@
     "story_available": false
   },
   {
+    "language": "nd",
+    "label": "isiNdebele (Northern)",
+    "display_label": "nd - isiNdebele (Northern)",
+    "iso639_3": "nde",
+    "registry_status": "planned",
+    "pack_state": "no-verified-pack",
+    "model_id": null,
+    "providers": [],
+    "story_available": false
+  },
+  {
     "language": "nr",
-    "label": "isiNdebele",
+    "label": "isiNdebele (Southern)",
+    "display_label": "nr - isiNdebele (Southern)",
     "iso639_3": "nbl",
     "registry_status": "planned",
     "pack_state": "no-verified-pack",
@@ -240,24 +720,26 @@
   {
     "language": "sn",
     "label": "Shona",
+    "display_label": "sn - Shona",
     "iso639_3": "sna",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-sna",
     "providers": [
-      "mms-shona-eval"
+      "mms-lazy"
     ],
     "story_available": true
   },
   {
     "language": "ny",
     "label": "Chichewa / Nyanja",
+    "display_label": "ny - Chichewa / Nyanja",
     "iso639_3": "nya",
     "registry_status": "adapter-available",
     "pack_state": "lazy-downloadable",
     "model_id": "facebook/mms-tts-nya",
     "providers": [
-      "mms-chichewa-eval"
+      "mms-lazy"
     ],
     "story_available": true
   }
