@@ -61,7 +61,13 @@ py -m pip install --upgrade pip
 py -m pip install -e '.[dev]'
 ```
 
-### First local self-check
+### Browser console and first local self-check
+
+Start the local service, then open **http://127.0.0.1:8765/** in your browser. The root page is the Nastech Research Voice Console: choose Midnight, Sunrise, or Paper; select a voice, language, emotion, rate, and sounds; then select **Generate & play** to hear the returned local WAV in the page.
+
+```bash
+nastech-tts serve
+```
 
 Run these commands after either installation method. They use the local runtime and do not download optional language packs.
 
@@ -74,6 +80,23 @@ python scripts/validate_language_self_test.py
 ```
 
 The last command confirms the committed **61-language registry**, **35 audited lazy local routes**, **11 approved native-story CI routes**, code-first labels such as `lg - Luganda`, and the published all-voices inventory. Source contributors can additionally run `make verify` for linting, the full test suite, package build, contracts, and compact-budget check.
+
+### Direct Nastech Agent connection
+
+The desktop and headless Nastech TTS installers now detect the Nastech Agent home (`$NASTECH_HOME`, default `~/.nastech`) and safely register a local MCP bridge in `~/.nastech/config.yaml`. Existing MCP servers are preserved. The bridge starts only when Nastech Agent requests it and returns local WAV audio; no speech text is forwarded to a cloud proxy.
+
+```bash
+# Install Nastech Agent using its official published installer, then reopen your shell.
+curl -fsSL https://nastechresearch.github.io/nastech-agent/install.sh | bash
+
+# Install or repair Nastech TTS. This adds mcp_servers.nastech_tts safely.
+./installer/install.sh -- platforms
+
+# Start Nastech Agent and use the local tools: nastech_tts_speak or nastech_tts_status.
+nastech
+```
+
+To use a non-default agent profile directory, pass `--nastech-home /path/to/.nastech` to the headless launcher. Use `--no-nastech-connect` only when you deliberately do not want the local bridge registered. The standard Nastech Agent configuration location and MCP `mcp_servers` structure are documented by Nastech Research. [3] [4]
 
 ### Optional Bantu packs
 
@@ -298,3 +321,7 @@ Nastech source is Apache-2.0. Each provider, model, voice asset, and managed ser
 [1] [ONNX Runtime execution providers](https://onnxruntime.ai/docs/execution-providers/)
 
 [2] [ONNX Runtime mobile deployment guide](https://onnxruntime.ai/docs/tutorials/mobile/)
+
+[3] [Nastech Agent configuration directory](https://nastechresearch.github.io/nastech-agent/docs/user-guide/configuration)
+
+[4] [Nastech Agent MCP configuration](https://nastechresearch.github.io/nastech-agent/docs/user-guide/features/mcp)

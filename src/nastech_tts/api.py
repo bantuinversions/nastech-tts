@@ -11,11 +11,12 @@ from typing import Annotated, Any
 
 from fastapi import Depends, FastAPI, Header, HTTPException, Request, Response, status
 from fastapi.concurrency import run_in_threadpool
-from fastapi.responses import JSONResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from .agent_identity import agent_identity, generate_nastech_story_markup
 from .cleanup import VoiceCleanupError, clean_wav
+from .console import render_console
 from .hardware import HardwareConfigurationError, HardwarePlan
 from .languages import LanguageRegistryError, get_language, language_inventory
 from .lazy_packs import LazyPackError, download_language_pack, pack_inventory
@@ -519,6 +520,12 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         lifespan=lifespan,
     )
     app.state.runtime = runtime or SupertonicRuntime()
+
+    @app.get("/", response_class=HTMLResponse, include_in_schema=False)
+    async def console() -> HTMLResponse:
+        """Serve the local interactive voice console without external assets."""
+
+        return HTMLResponse(render_console())
 
     @app.get("/v1/health")
     async def health(local_runtime: SupertonicRuntime = Depends(_runtime)) -> dict[str, Any]:

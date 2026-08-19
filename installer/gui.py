@@ -142,9 +142,14 @@ class NastechInstaller(tk.Tk if tk is not None else object):
                 self.source_root, state_dir, no_install=False, repair=self.repair
             )
             self._set(
-                "Installing local components",
-                "Checking the Nastech core and declared dependencies…",
+                "Connecting Nastech Agent",
+                "Registering the local TTS bridge in your .nastech configuration…",
                 78,
+            )
+            from nastech_tts.agent_integration import connect_to_nastech_home, nastech_home
+
+            agent_config = connect_to_nastech_home(
+                nastech_home(), [str(python), "-m", "nastech_tts.cli", "mcp-server"]
             )
             env = os.environ.copy()
             env.update(
@@ -154,7 +159,11 @@ class NastechInstaller(tk.Tk if tk is not None else object):
                     "NASTECH_MAX_PARALLEL_SYNTHESIS": str(host["max_parallel_synthesis"]),
                 }
             )
-            self._set("Nastech is ready", "Starting your selected local command…", 94)
+            self._set(
+                "Nastech is ready",
+                f"Local TTS bridge connected: {agent_config}. Starting your selected command…",
+                94,
+            )
             subprocess.Popen([str(python), "-m", "nastech_tts.cli", *self.command], env=env)
             self._set(
                 "Installation complete",

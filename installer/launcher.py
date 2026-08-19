@@ -145,6 +145,16 @@ def main() -> int:
     )
     parser.add_argument("--diagnostics", action="store_true", help="Print detected host and exit")
     parser.add_argument(
+        "--nastech-home",
+        type=Path,
+        help="Nastech Agent data directory (default: $NASTECH_HOME or ~/.nastech).",
+    )
+    parser.add_argument(
+        "--no-nastech-connect",
+        action="store_true",
+        help="Do not register the local TTS MCP bridge in Nastech Agent configuration.",
+    )
+    parser.add_argument(
         "--reset-environment",
         action="store_true",
         help="Delete the isolated environment before setup",
@@ -166,6 +176,14 @@ def main() -> int:
     python = ensure_environment(
         args.source_root.resolve(), state_dir, no_install=args.no_install, repair=args.repair
     )
+    if not args.no_nastech_connect:
+        from nastech_tts.agent_integration import connect_to_nastech_home, nastech_home
+
+        agent_config = connect_to_nastech_home(
+            args.nastech_home or nastech_home(),
+            [str(python), "-m", "nastech_tts.cli", "mcp-server"],
+        )
+        print(f"Connected local Nastech TTS bridge: {agent_config}")
     env = os.environ.copy()
     env.update(
         {

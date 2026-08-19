@@ -140,6 +140,9 @@ def _parser() -> argparse.ArgumentParser:
         "clear-cache", help="Discard local WAV cache entries without unloading ONNX."
     )
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
+    subparsers.add_parser(
+        "mcp-server", help="Run the local Nastech TTS MCP bridge over standard input/output."
+    )
     subparsers.add_parser("providers", help="List all Nastech provider-mixer targets.")
     subparsers.add_parser("languages", help="List Bantu-language targets and evidence states.")
     subparsers.add_parser(
@@ -264,6 +267,10 @@ def _print_or_write(payload: dict[str, Any], output: Path | None) -> None:
 
 def main() -> int:
     args = _parser().parse_args()
+    if args.command == "mcp-server":
+        from .agent_bridge import run_stdio
+
+        return run_stdio()
     try:
         runtime = SupertonicRuntime()
 
