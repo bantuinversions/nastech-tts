@@ -1,0 +1,1626 @@
+{
+  "benchmark": "nastech-base-timbres-v1",
+  "measurement_boundary": {
+    "speed": "Serial local synthesis after one model warm-up; audio cache disabled.",
+    "memory": "Native process working-set signals vary by operating system; source is recorded for each observation and results must be compared within a runner class.",
+    "audio_quality": "Deterministic WAV format, duration, level, DC-offset, and clipping checks; not a subjective or linguistic-quality score."
+  },
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64",
+    "python": "3.12.10",
+    "logical_cpus": 3,
+    "hardware_plan": {
+      "requested_device": "cpu",
+      "device": "cpu",
+      "operating_system": "Darwin",
+      "logical_cpus": 3,
+      "ram_mib": null,
+      "gpu_available": false,
+      "gpu_name": null,
+      "gpu_vram_mib": null,
+      "onnx_providers": [
+        "CoreMLExecutionProvider",
+        "AzureExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "accelerator": "CPUExecutionProvider",
+      "precision": "fp32",
+      "intra_op_threads": 3,
+      "inter_op_threads": 1,
+      "max_parallel_synthesis": 1,
+      "recommended_batch_size": 1,
+      "optimizer": {
+        "thread_policy": "memory-aware bounded threads",
+        "request_policy": "bounded parallel synthesis",
+        "graph_policy": "ORT_ENABLE_ALL when supported by runtime"
+      },
+      "reason": "CPU profile selected because CUDA is unavailable or NASTECH_DEVICE=cpu."
+    },
+    "initial_memory": {
+      "current_mib": null,
+      "process_peak_mib": 823.172,
+      "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+    }
+  },
+  "benchmark_text": "Nastech Research measures local speech with care. Every voice should be fast, clear, private, and useful.",
+  "voices": [
+    {
+      "voice": "F1",
+      "first_synthesis_seconds": 3.47387,
+      "first_measurement": {
+        "elapsed_seconds": 3.40487,
+        "audio_seconds": 7.92839,
+        "real_time_factor": 0.42945,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 794.875,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 794.875,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 794.875,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 10527,
+          "peak_dbfs": -9.8626,
+          "rms_pcm": 1463.5221,
+          "rms_dbfs": -27.0007,
+          "dc_offset_pcm": -21.5507,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.39119,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.3016,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 795.297,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 797.719,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 797.703,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10599,
+            "peak_dbfs": -9.8034,
+            "rms_pcm": 1511.6884,
+            "rms_dbfs": -26.7195,
+            "dc_offset_pcm": -21.4507,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.03305,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.25643,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 804.906,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 804.906,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 804.906,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 11888,
+            "peak_dbfs": -8.8066,
+            "rms_pcm": 1550.9962,
+            "rms_dbfs": -26.4965,
+            "dc_offset_pcm": -19.0095,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.87435,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.23641,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 807.641,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 807.641,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 807.641,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 11045,
+            "peak_dbfs": -9.4454,
+            "rms_pcm": 1577.7025,
+            "rms_dbfs": -26.3482,
+            "dc_offset_pcm": -19.4761,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.09953,
+        "median_elapsed_seconds": 2.03305,
+        "best_elapsed_seconds": 1.87435,
+        "mean_real_time_factor": 0.26481,
+        "mean_audio_seconds": 7.92839
+      }
+    },
+    {
+      "voice": "F2",
+      "first_synthesis_seconds": 1.75144,
+      "first_measurement": {
+        "elapsed_seconds": 1.70687,
+        "audio_seconds": 7.44051,
+        "real_time_factor": 0.2294,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 807.688,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 807.688,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 807.688,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 328704,
+          "duration_seconds": 7.4536,
+          "peak_pcm": 11145,
+          "peak_dbfs": -9.3671,
+          "rms_pcm": 1367.6029,
+          "rms_dbfs": -27.5895,
+          "dc_offset_pcm": -21.8319,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.67089,
+          "audio_seconds": 7.44051,
+          "real_time_factor": 0.22457,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 812.031,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 812.031,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 812.031,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 11802,
+            "peak_dbfs": -8.8696,
+            "rms_pcm": 1486.9233,
+            "rms_dbfs": -26.863,
+            "dc_offset_pcm": -22.5563,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.049,
+          "audio_seconds": 7.44051,
+          "real_time_factor": 0.27538,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 812.5,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 812.5,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 812.5,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 11533,
+            "peak_dbfs": -9.0699,
+            "rms_pcm": 1481.3256,
+            "rms_dbfs": -26.8957,
+            "dc_offset_pcm": -22.7142,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.67503,
+          "audio_seconds": 7.44051,
+          "real_time_factor": 0.22512,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 812.641,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 812.641,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 812.641,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 10848,
+            "peak_dbfs": -9.6017,
+            "rms_pcm": 1412.9016,
+            "rms_dbfs": -27.3065,
+            "dc_offset_pcm": -21.7851,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.79831,
+        "median_elapsed_seconds": 1.67503,
+        "best_elapsed_seconds": 1.67089,
+        "mean_real_time_factor": 0.24169,
+        "mean_audio_seconds": 7.44051
+      }
+    },
+    {
+      "voice": "F3",
+      "first_synthesis_seconds": 1.9281,
+      "first_measurement": {
+        "elapsed_seconds": 1.88204,
+        "audio_seconds": 8.17528,
+        "real_time_factor": 0.23021,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 812.844,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 812.844,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 812.844,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 362496,
+          "duration_seconds": 8.2199,
+          "peak_pcm": 12450,
+          "peak_dbfs": -8.4053,
+          "rms_pcm": 1447.2439,
+          "rms_dbfs": -27.0979,
+          "dc_offset_pcm": -22.5262,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.88736,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.23086,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 817.25,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 817.25,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 817.25,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 13098,
+            "peak_dbfs": -7.9646,
+            "rms_pcm": 1460.164,
+            "rms_dbfs": -27.0207,
+            "dc_offset_pcm": -22.4593,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.85244,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.22659,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 817.719,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 817.719,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 817.719,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 12870,
+            "peak_dbfs": -8.1172,
+            "rms_pcm": 1410.6679,
+            "rms_dbfs": -27.3202,
+            "dc_offset_pcm": -20.2487,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.94902,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.2384,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 11392,
+            "peak_dbfs": -9.1767,
+            "rms_pcm": 1454.4074,
+            "rms_dbfs": -27.055,
+            "dc_offset_pcm": -19.8998,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.89627,
+        "median_elapsed_seconds": 1.88736,
+        "best_elapsed_seconds": 1.85244,
+        "mean_real_time_factor": 0.23195,
+        "mean_audio_seconds": 8.17528
+      }
+    },
+    {
+      "voice": "F4",
+      "first_synthesis_seconds": 1.96039,
+      "first_measurement": {
+        "elapsed_seconds": 1.92152,
+        "audio_seconds": 6.80297,
+        "real_time_factor": 0.28245,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 301056,
+          "duration_seconds": 6.8267,
+          "peak_pcm": 10098,
+          "peak_dbfs": -10.224,
+          "rms_pcm": 1637.1594,
+          "rms_dbfs": -26.0269,
+          "dc_offset_pcm": -16.3476,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.71394,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.25194,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 12536,
+            "peak_dbfs": -8.3456,
+            "rms_pcm": 1719.5971,
+            "rms_dbfs": -25.6002,
+            "dc_offset_pcm": -15.3488,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.61796,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.23783,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 9485,
+            "peak_dbfs": -10.768,
+            "rms_pcm": 1627.1672,
+            "rms_dbfs": -26.0801,
+            "dc_offset_pcm": -15.2829,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.60838,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.23642,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 10932,
+            "peak_dbfs": -9.5347,
+            "rms_pcm": 1775.267,
+            "rms_dbfs": -25.3235,
+            "dc_offset_pcm": -14.6649,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.64676,
+        "median_elapsed_seconds": 1.61796,
+        "best_elapsed_seconds": 1.60838,
+        "mean_real_time_factor": 0.24206,
+        "mean_audio_seconds": 6.80297
+      }
+    },
+    {
+      "voice": "F5",
+      "first_synthesis_seconds": 1.72386,
+      "first_measurement": {
+        "elapsed_seconds": 1.68047,
+        "audio_seconds": 7.68278,
+        "real_time_factor": 0.21873,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 340992,
+          "duration_seconds": 7.7322,
+          "peak_pcm": 10407,
+          "peak_dbfs": -9.9622,
+          "rms_pcm": 1759.0765,
+          "rms_dbfs": -25.403,
+          "dc_offset_pcm": -16.9954,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.69379,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.22047,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 10380,
+            "peak_dbfs": -9.9848,
+            "rms_pcm": 1734.7923,
+            "rms_dbfs": -25.5238,
+            "dc_offset_pcm": -18.3236,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.05761,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.26782,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 9386,
+            "peak_dbfs": -10.8591,
+            "rms_pcm": 1697.0583,
+            "rms_dbfs": -25.7148,
+            "dc_offset_pcm": -17.7487,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.81822,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.23666,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 10670,
+            "peak_dbfs": -9.7454,
+            "rms_pcm": 1789.2146,
+            "rms_dbfs": -25.2555,
+            "dc_offset_pcm": -18.6012,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.85654,
+        "median_elapsed_seconds": 1.81822,
+        "best_elapsed_seconds": 1.69379,
+        "mean_real_time_factor": 0.24165,
+        "mean_audio_seconds": 7.68278
+      }
+    },
+    {
+      "voice": "M1",
+      "first_synthesis_seconds": 1.90068,
+      "first_measurement": {
+        "elapsed_seconds": 1.85645,
+        "audio_seconds": 7.93425,
+        "real_time_factor": 0.23398,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 15862,
+          "peak_dbfs": -6.3016,
+          "rms_pcm": 1525.8827,
+          "rms_dbfs": -26.6383,
+          "dc_offset_pcm": -17.4323,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.85973,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.23439,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 19089,
+            "peak_dbfs": -4.6931,
+            "rms_pcm": 1500.1874,
+            "rms_dbfs": -26.7858,
+            "dc_offset_pcm": -16.0479,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.83565,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.23136,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 14819,
+            "peak_dbfs": -6.8924,
+            "rms_pcm": 1480.7798,
+            "rms_dbfs": -26.8989,
+            "dc_offset_pcm": -15.5855,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.82654,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.23021,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 15921,
+            "peak_dbfs": -6.2693,
+            "rms_pcm": 1534.1422,
+            "rms_dbfs": -26.5914,
+            "dc_offset_pcm": -17.7922,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.84064,
+        "median_elapsed_seconds": 1.83565,
+        "best_elapsed_seconds": 1.82654,
+        "mean_real_time_factor": 0.23199,
+        "mean_audio_seconds": 7.93425
+      }
+    },
+    {
+      "voice": "M2",
+      "first_synthesis_seconds": 2.03538,
+      "first_measurement": {
+        "elapsed_seconds": 1.99251,
+        "audio_seconds": 7.76895,
+        "real_time_factor": 0.25647,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 344064,
+          "duration_seconds": 7.8019,
+          "peak_pcm": 24444,
+          "peak_dbfs": -2.5453,
+          "rms_pcm": 1848.4922,
+          "rms_dbfs": -24.9724,
+          "dc_offset_pcm": -20.7581,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.68048,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.21631,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 24254,
+            "peak_dbfs": -2.6131,
+            "rms_pcm": 1850.3452,
+            "rms_dbfs": -24.9637,
+            "dc_offset_pcm": -20.8431,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.66257,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.214,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 21699,
+            "peak_dbfs": -3.5799,
+            "rms_pcm": 1836.2017,
+            "rms_dbfs": -25.0303,
+            "dc_offset_pcm": -15.9392,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.75015,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.22527,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 18574,
+            "peak_dbfs": -4.9306,
+            "rms_pcm": 1803.718,
+            "rms_dbfs": -25.1854,
+            "dc_offset_pcm": -18.5197,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.69773,
+        "median_elapsed_seconds": 1.68048,
+        "best_elapsed_seconds": 1.66257,
+        "mean_real_time_factor": 0.21853,
+        "mean_audio_seconds": 7.76895
+      }
+    },
+    {
+      "voice": "M3",
+      "first_synthesis_seconds": 1.53015,
+      "first_measurement": {
+        "elapsed_seconds": 1.4937,
+        "audio_seconds": 6.51584,
+        "real_time_factor": 0.22924,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 288768,
+          "duration_seconds": 6.548,
+          "peak_pcm": 12511,
+          "peak_dbfs": -8.3629,
+          "rms_pcm": 1768.2217,
+          "rms_dbfs": -25.358,
+          "dc_offset_pcm": -18.4252,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.43093,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.21961,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 12503,
+            "peak_dbfs": -8.3684,
+            "rms_pcm": 1784.104,
+            "rms_dbfs": -25.2803,
+            "dc_offset_pcm": -18.1177,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.83349,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.28139,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 10933,
+            "peak_dbfs": -9.5339,
+            "rms_pcm": 1821.612,
+            "rms_dbfs": -25.0996,
+            "dc_offset_pcm": -17.578,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.43061,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.21956,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 12404,
+            "peak_dbfs": -8.4375,
+            "rms_pcm": 1678.5596,
+            "rms_dbfs": -25.81,
+            "dc_offset_pcm": -18.2944,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.56501,
+        "median_elapsed_seconds": 1.43093,
+        "best_elapsed_seconds": 1.43061,
+        "mean_real_time_factor": 0.24019,
+        "mean_audio_seconds": 6.51584
+      }
+    },
+    {
+      "voice": "M4",
+      "first_synthesis_seconds": 1.70747,
+      "first_measurement": {
+        "elapsed_seconds": 1.66169,
+        "audio_seconds": 7.42028,
+        "real_time_factor": 0.22394,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 328704,
+          "duration_seconds": 7.4536,
+          "peak_pcm": 9598,
+          "peak_dbfs": -10.6651,
+          "rms_pcm": 1647.1369,
+          "rms_dbfs": -25.9741,
+          "dc_offset_pcm": -17.9385,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.64772,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.22206,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 10317,
+            "peak_dbfs": -10.0377,
+            "rms_pcm": 1669.44,
+            "rms_dbfs": -25.8573,
+            "dc_offset_pcm": -19.2027,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.65773,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.22341,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 9746,
+            "peak_dbfs": -10.5322,
+            "rms_pcm": 1661.0645,
+            "rms_dbfs": -25.901,
+            "dc_offset_pcm": -18.8598,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.76943,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.23846,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 10131,
+            "peak_dbfs": -10.1957,
+            "rms_pcm": 1648.2647,
+            "rms_dbfs": -25.9682,
+            "dc_offset_pcm": -17.981,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.69163,
+        "median_elapsed_seconds": 1.65773,
+        "best_elapsed_seconds": 1.64772,
+        "mean_real_time_factor": 0.22798,
+        "mean_audio_seconds": 7.42028
+      }
+    },
+    {
+      "voice": "M5",
+      "first_synthesis_seconds": 2.67232,
+      "first_measurement": {
+        "elapsed_seconds": 2.62084,
+        "audio_seconds": 7.91802,
+        "real_time_factor": 0.331,
+        "memory_before": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_after": {
+          "current_mib": null,
+          "process_peak_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": null,
+          "peak_observed_process_mib": 820.625,
+          "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 10158,
+          "peak_dbfs": -10.1726,
+          "rms_pcm": 1718.4958,
+          "rms_dbfs": -25.6058,
+          "dc_offset_pcm": -19.9367,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.92015,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.2425,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 820.625,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10236,
+            "peak_dbfs": -10.1061,
+            "rms_pcm": 1649.924,
+            "rms_dbfs": -25.9595,
+            "dc_offset_pcm": -21.1006,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.80698,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.22821,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 823.141,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 823.141,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 823.141,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 11617,
+            "peak_dbfs": -9.0069,
+            "rms_pcm": 1686.7485,
+            "rms_dbfs": -25.7677,
+            "dc_offset_pcm": -20.262,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.82775,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.23083,
+          "memory_before": {
+            "current_mib": null,
+            "process_peak_mib": 823.172,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_after": {
+            "current_mib": null,
+            "process_peak_mib": 823.172,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": null,
+            "peak_observed_process_mib": 823.172,
+            "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 11593,
+            "peak_dbfs": -9.0248,
+            "rms_pcm": 1596.5896,
+            "rms_dbfs": -26.2449,
+            "dc_offset_pcm": -21.4595,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.85163,
+        "median_elapsed_seconds": 1.82775,
+        "best_elapsed_seconds": 1.80698,
+        "mean_real_time_factor": 0.23385,
+        "mean_audio_seconds": 7.91802
+      }
+    }
+  ],
+  "model_warmup": {
+    "status": "ready",
+    "warmup_seconds": 7.7837,
+    "audio_duration_seconds": 1.7399,
+    "runtime": {
+      "provider": "supertonic-local",
+      "model_family": "supertonic-3",
+      "loaded": true,
+      "model_cache": "/Users/runner/.cache/supertonic3",
+      "model_assets_bytes": 403520873,
+      "model_assets_mib": 384.83,
+      "target_max_deployment_mib": 1024,
+      "cpu": {
+        "profile": "balanced",
+        "logical_cpus": 3,
+        "intra_op_threads": 3,
+        "inter_op_threads": 1,
+        "max_parallel_synthesis": 1,
+        "queue_timeout_seconds": 120.0,
+        "audio_cache_entries": 8,
+        "audio_cache_mib": 32,
+        "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
+        "execution_mode": "sequential (provided by Supertonic)"
+      },
+      "audio_cache": {
+        "entries": 1,
+        "bytes": 153644,
+        "mib": 0.1465
+      },
+      "metrics": {
+        "synthesis_requests": 1,
+        "synthesis_failures": 0,
+        "audio_cache_hits": 0,
+        "total_queue_wait_seconds": 2.6249999791616574e-06,
+        "total_synthesis_seconds": 7.783307791000027,
+        "mean_synthesis_seconds": 7.7833,
+        "uptime_seconds": 7.786
+      }
+    },
+    "elapsed_seconds": 7.78594
+  },
+  "runtime_status": {
+    "provider": "supertonic-local",
+    "model_family": "supertonic-3",
+    "loaded": true,
+    "model_cache": "/Users/runner/.cache/supertonic3",
+    "model_assets_bytes": 403520873,
+    "model_assets_mib": 384.83,
+    "target_max_deployment_mib": 1024,
+    "cpu": {
+      "profile": "balanced",
+      "logical_cpus": 3,
+      "intra_op_threads": 3,
+      "inter_op_threads": 1,
+      "max_parallel_synthesis": 1,
+      "queue_timeout_seconds": 120.0,
+      "audio_cache_entries": 8,
+      "audio_cache_mib": 32,
+      "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
+      "execution_mode": "sequential (provided by Supertonic)"
+    },
+    "audio_cache": {
+      "entries": 1,
+      "bytes": 153644,
+      "mib": 0.1465
+    },
+    "metrics": {
+      "synthesis_requests": 41,
+      "synthesis_failures": 0,
+      "audio_cache_hits": 0,
+      "total_queue_wait_seconds": 0.00012879200028237392,
+      "total_synthesis_seconds": 81.82372966500026,
+      "mean_synthesis_seconds": 1.9957,
+      "uptime_seconds": 83.632
+    }
+  }
+}

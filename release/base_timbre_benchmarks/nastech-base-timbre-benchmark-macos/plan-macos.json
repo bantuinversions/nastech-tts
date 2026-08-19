@@ -1,0 +1,56 @@
+{
+  "benchmark": "nastech-base-timbres-v1",
+  "host": {
+    "system": "Darwin",
+    "release": "25.5.0",
+    "machine": "arm64",
+    "python": "3.12.10",
+    "logical_cpus": 3,
+    "hardware_plan": {
+      "requested_device": "cpu",
+      "device": "cpu",
+      "operating_system": "Darwin",
+      "logical_cpus": 3,
+      "ram_mib": null,
+      "gpu_available": false,
+      "gpu_name": null,
+      "gpu_vram_mib": null,
+      "onnx_providers": [
+        "CoreMLExecutionProvider",
+        "AzureExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "accelerator": "CPUExecutionProvider",
+      "precision": "fp32",
+      "intra_op_threads": 3,
+      "inter_op_threads": 1,
+      "max_parallel_synthesis": 1,
+      "recommended_batch_size": 1,
+      "optimizer": {
+        "thread_policy": "memory-aware bounded threads",
+        "request_policy": "bounded parallel synthesis",
+        "graph_policy": "ORT_ENABLE_ALL when supported by runtime"
+      },
+      "reason": "CPU profile selected because CUDA is unavailable or NASTECH_DEVICE=cpu."
+    },
+    "initial_memory": {
+      "current_mib": null,
+      "process_peak_mib": 46.391,
+      "source": "resource.getrusage (process peak; current RSS unavailable on this platform)"
+    }
+  },
+  "voices": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5"
+  ],
+  "runs": 3,
+  "status": "planned-no-model-load"
+}

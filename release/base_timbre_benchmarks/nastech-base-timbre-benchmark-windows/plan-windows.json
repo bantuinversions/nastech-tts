@@ -1,0 +1,55 @@
+{
+  "benchmark": "nastech-base-timbres-v1",
+  "host": {
+    "system": "Windows",
+    "release": "2025Server",
+    "machine": "AMD64",
+    "python": "3.12.10",
+    "logical_cpus": 4,
+    "hardware_plan": {
+      "requested_device": "cpu",
+      "device": "cpu",
+      "operating_system": "Windows",
+      "logical_cpus": 4,
+      "ram_mib": null,
+      "gpu_available": false,
+      "gpu_name": null,
+      "gpu_vram_mib": null,
+      "onnx_providers": [
+        "AzureExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "accelerator": "CPUExecutionProvider",
+      "precision": "fp32",
+      "intra_op_threads": 4,
+      "inter_op_threads": 1,
+      "max_parallel_synthesis": 1,
+      "recommended_batch_size": 1,
+      "optimizer": {
+        "thread_policy": "memory-aware bounded threads",
+        "request_policy": "bounded parallel synthesis",
+        "graph_policy": "ORT_ENABLE_ALL when supported by runtime"
+      },
+      "reason": "CPU profile selected because CUDA is unavailable or NASTECH_DEVICE=cpu."
+    },
+    "initial_memory": {
+      "current_mib": 51.219,
+      "process_peak_mib": 51.219,
+      "source": "Windows GetProcessMemoryInfo (working set)"
+    }
+  },
+  "voices": [
+    "F1",
+    "F2",
+    "F3",
+    "F4",
+    "F5",
+    "M1",
+    "M2",
+    "M3",
+    "M4",
+    "M5"
+  ],
+  "runs": 3,
+  "status": "planned-no-model-load"
+}

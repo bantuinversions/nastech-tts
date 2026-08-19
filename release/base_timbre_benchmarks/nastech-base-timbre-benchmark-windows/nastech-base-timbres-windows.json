@@ -1,0 +1,1625 @@
+{
+  "benchmark": "nastech-base-timbres-v1",
+  "measurement_boundary": {
+    "speed": "Serial local synthesis after one model warm-up; audio cache disabled.",
+    "memory": "Native process working-set signals vary by operating system; source is recorded for each observation and results must be compared within a runner class.",
+    "audio_quality": "Deterministic WAV format, duration, level, DC-offset, and clipping checks; not a subjective or linguistic-quality score."
+  },
+  "host": {
+    "system": "Windows",
+    "release": "2025Server",
+    "machine": "AMD64",
+    "python": "3.12.10",
+    "logical_cpus": 4,
+    "hardware_plan": {
+      "requested_device": "cpu",
+      "device": "cpu",
+      "operating_system": "Windows",
+      "logical_cpus": 4,
+      "ram_mib": null,
+      "gpu_available": false,
+      "gpu_name": null,
+      "gpu_vram_mib": null,
+      "onnx_providers": [
+        "AzureExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "accelerator": "CPUExecutionProvider",
+      "precision": "fp32",
+      "intra_op_threads": 4,
+      "inter_op_threads": 1,
+      "max_parallel_synthesis": 1,
+      "recommended_batch_size": 1,
+      "optimizer": {
+        "thread_policy": "memory-aware bounded threads",
+        "request_policy": "bounded parallel synthesis",
+        "graph_policy": "ORT_ENABLE_ALL when supported by runtime"
+      },
+      "reason": "CPU profile selected because CUDA is unavailable or NASTECH_DEVICE=cpu."
+    },
+    "initial_memory": {
+      "current_mib": 547.449,
+      "process_peak_mib": 581.547,
+      "source": "Windows GetProcessMemoryInfo (working set)"
+    }
+  },
+  "benchmark_text": "Nastech Research measures local speech with care. Every voice should be fast, clear, private, and useful.",
+  "voices": [
+    {
+      "voice": "F1",
+      "first_synthesis_seconds": 3.09952,
+      "first_measurement": {
+        "elapsed_seconds": 2.9789,
+        "audio_seconds": 7.92839,
+        "real_time_factor": 0.37573,
+        "memory_before": {
+          "current_mib": 517.492,
+          "process_peak_mib": 517.492,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 539.715,
+          "process_peak_mib": 541.059,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 538.762,
+          "peak_observed_process_mib": 538.762,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 10625,
+          "peak_dbfs": -9.7822,
+          "rms_pcm": 1560.3802,
+          "rms_dbfs": -26.4441,
+          "dc_offset_pcm": -20.5495,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.9436,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.37127,
+          "memory_before": {
+            "current_mib": 542.305,
+            "process_peak_mib": 553.652,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 552.676,
+            "process_peak_mib": 554.039,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 551.746,
+            "peak_observed_process_mib": 553.652,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10465,
+            "peak_dbfs": -9.9139,
+            "rms_pcm": 1640.742,
+            "rms_dbfs": -26.0079,
+            "dc_offset_pcm": -19.9688,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.78912,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.35179,
+          "memory_before": {
+            "current_mib": 553.43,
+            "process_peak_mib": 564.777,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 553.516,
+            "process_peak_mib": 564.777,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 553.523,
+            "peak_observed_process_mib": 564.777,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10269,
+            "peak_dbfs": -10.0782,
+            "rms_pcm": 1512.8536,
+            "rms_dbfs": -26.7128,
+            "dc_offset_pcm": -19.165,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.83116,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.35709,
+          "memory_before": {
+            "current_mib": 553.695,
+            "process_peak_mib": 565.047,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 553.699,
+            "process_peak_mib": 565.047,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 553.719,
+            "peak_observed_process_mib": 565.047,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10807,
+            "peak_dbfs": -9.6346,
+            "rms_pcm": 1550.2489,
+            "rms_dbfs": -26.5007,
+            "dc_offset_pcm": -18.0449,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.85463,
+        "median_elapsed_seconds": 2.83116,
+        "best_elapsed_seconds": 2.78912,
+        "mean_real_time_factor": 0.36005,
+        "mean_audio_seconds": 7.92839
+      }
+    },
+    {
+      "voice": "F2",
+      "first_synthesis_seconds": 2.78749,
+      "first_measurement": {
+        "elapsed_seconds": 2.67726,
+        "audio_seconds": 7.4405,
+        "real_time_factor": 0.35982,
+        "memory_before": {
+          "current_mib": 553.441,
+          "process_peak_mib": 565.047,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 554.91,
+          "process_peak_mib": 565.047,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 554.934,
+          "peak_observed_process_mib": 565.047,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 328704,
+          "duration_seconds": 7.4536,
+          "peak_pcm": 11681,
+          "peak_dbfs": -8.9591,
+          "rms_pcm": 1535.5091,
+          "rms_dbfs": -26.5837,
+          "dc_offset_pcm": -23.3795,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.68833,
+          "audio_seconds": 7.4405,
+          "real_time_factor": 0.36131,
+          "memory_before": {
+            "current_mib": 556.039,
+            "process_peak_mib": 566.062,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 556.059,
+            "process_peak_mib": 566.062,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 556.062,
+            "peak_observed_process_mib": 566.062,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 12022,
+            "peak_dbfs": -8.7092,
+            "rms_pcm": 1564.5422,
+            "rms_dbfs": -26.421,
+            "dc_offset_pcm": -23.5242,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.96607,
+          "audio_seconds": 7.4405,
+          "real_time_factor": 0.39864,
+          "memory_before": {
+            "current_mib": 556.289,
+            "process_peak_mib": 566.312,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 556.27,
+            "process_peak_mib": 566.312,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 556.312,
+            "peak_observed_process_mib": 566.312,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 11920,
+            "peak_dbfs": -8.7832,
+            "rms_pcm": 1482.4651,
+            "rms_dbfs": -26.889,
+            "dc_offset_pcm": -23.0112,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.92367,
+          "audio_seconds": 7.4405,
+          "real_time_factor": 0.39294,
+          "memory_before": {
+            "current_mib": 557.207,
+            "process_peak_mib": 567.23,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 557.227,
+            "process_peak_mib": 567.23,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 557.23,
+            "peak_observed_process_mib": 567.23,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 12763,
+            "peak_dbfs": -8.1897,
+            "rms_pcm": 1568.3255,
+            "rms_dbfs": -26.4,
+            "dc_offset_pcm": -22.3643,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.85936,
+        "median_elapsed_seconds": 2.92367,
+        "best_elapsed_seconds": 2.68833,
+        "mean_real_time_factor": 0.3843,
+        "mean_audio_seconds": 7.4405
+      }
+    },
+    {
+      "voice": "F3",
+      "first_synthesis_seconds": 3.10939,
+      "first_measurement": {
+        "elapsed_seconds": 2.99293,
+        "audio_seconds": 8.17528,
+        "real_time_factor": 0.3661,
+        "memory_before": {
+          "current_mib": 557.27,
+          "process_peak_mib": 567.293,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 557.637,
+          "process_peak_mib": 567.293,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 557.547,
+          "peak_observed_process_mib": 567.293,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 362496,
+          "duration_seconds": 8.2199,
+          "peak_pcm": 13380,
+          "peak_dbfs": -7.7796,
+          "rms_pcm": 1355.2141,
+          "rms_dbfs": -27.6686,
+          "dc_offset_pcm": -18.9554,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 3.00278,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.3673,
+          "memory_before": {
+            "current_mib": 558.035,
+            "process_peak_mib": 570.574,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 558.875,
+            "process_peak_mib": 570.574,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 558.875,
+            "peak_observed_process_mib": 570.574,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 12041,
+            "peak_dbfs": -8.6955,
+            "rms_pcm": 1373.1509,
+            "rms_dbfs": -27.5544,
+            "dc_offset_pcm": -18.4113,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.89124,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.35366,
+          "memory_before": {
+            "current_mib": 559.547,
+            "process_peak_mib": 572.086,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 559.551,
+            "process_peak_mib": 572.086,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 559.57,
+            "peak_observed_process_mib": 572.086,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 11684,
+            "peak_dbfs": -8.9569,
+            "rms_pcm": 1482.8983,
+            "rms_dbfs": -26.8865,
+            "dc_offset_pcm": -21.3268,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.83633,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.34694,
+          "memory_before": {
+            "current_mib": 559.926,
+            "process_peak_mib": 572.465,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 559.922,
+            "process_peak_mib": 572.465,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 559.949,
+            "peak_observed_process_mib": 572.465,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 13666,
+            "peak_dbfs": -7.5959,
+            "rms_pcm": 1508.7431,
+            "rms_dbfs": -26.7364,
+            "dc_offset_pcm": -22.0627,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.91012,
+        "median_elapsed_seconds": 2.89124,
+        "best_elapsed_seconds": 2.83633,
+        "mean_real_time_factor": 0.35597,
+        "mean_audio_seconds": 8.17528
+      }
+    },
+    {
+      "voice": "F4",
+      "first_synthesis_seconds": 2.89515,
+      "first_measurement": {
+        "elapsed_seconds": 2.78808,
+        "audio_seconds": 6.80297,
+        "real_time_factor": 0.40983,
+        "memory_before": {
+          "current_mib": 560.609,
+          "process_peak_mib": 573.148,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 560.637,
+          "process_peak_mib": 573.148,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 560.641,
+          "peak_observed_process_mib": 573.148,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 301056,
+          "duration_seconds": 6.8267,
+          "peak_pcm": 10902,
+          "peak_dbfs": -9.5586,
+          "rms_pcm": 1768.6932,
+          "rms_dbfs": -25.3557,
+          "dc_offset_pcm": -16.0036,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.66568,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.39184,
+          "memory_before": {
+            "current_mib": 562.68,
+            "process_peak_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 562.922,
+            "process_peak_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 562.703,
+            "peak_observed_process_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 10296,
+            "peak_dbfs": -10.0554,
+            "rms_pcm": 1738.8168,
+            "rms_dbfs": -25.5037,
+            "dc_offset_pcm": -15.2729,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.58854,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.3805,
+          "memory_before": {
+            "current_mib": 562.297,
+            "process_peak_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 562.309,
+            "process_peak_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 562.316,
+            "peak_observed_process_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 10917,
+            "peak_dbfs": -9.5467,
+            "rms_pcm": 1791.2647,
+            "rms_dbfs": -25.2455,
+            "dc_offset_pcm": -15.4337,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.54985,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.37481,
+          "memory_before": {
+            "current_mib": 563.418,
+            "process_peak_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 563.359,
+            "process_peak_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 563.441,
+            "peak_observed_process_mib": 573.148,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 10940,
+            "peak_dbfs": -9.5284,
+            "rms_pcm": 1709.9916,
+            "rms_dbfs": -25.6489,
+            "dc_offset_pcm": -14.7086,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.60136,
+        "median_elapsed_seconds": 2.58854,
+        "best_elapsed_seconds": 2.54985,
+        "mean_real_time_factor": 0.38238,
+        "mean_audio_seconds": 6.80297
+      }
+    },
+    {
+      "voice": "F5",
+      "first_synthesis_seconds": 3.03539,
+      "first_measurement": {
+        "elapsed_seconds": 2.9122,
+        "audio_seconds": 7.68278,
+        "real_time_factor": 0.37906,
+        "memory_before": {
+          "current_mib": 564.547,
+          "process_peak_mib": 573.148,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 564.996,
+          "process_peak_mib": 573.148,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 564.996,
+          "peak_observed_process_mib": 573.148,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 340992,
+          "duration_seconds": 7.7322,
+          "peak_pcm": 9746,
+          "peak_dbfs": -10.5322,
+          "rms_pcm": 1722.8686,
+          "rms_dbfs": -25.5837,
+          "dc_offset_pcm": -17.4574,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.76867,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.36037,
+          "memory_before": {
+            "current_mib": 565.414,
+            "process_peak_mib": 573.625,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 565.516,
+            "process_peak_mib": 573.625,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 565.52,
+            "peak_observed_process_mib": 573.625,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 9622,
+            "peak_dbfs": -10.6434,
+            "rms_pcm": 1767.753,
+            "rms_dbfs": -25.3603,
+            "dc_offset_pcm": -16.7368,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.87461,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.37416,
+          "memory_before": {
+            "current_mib": 565.531,
+            "process_peak_mib": 574.742,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 565.531,
+            "process_peak_mib": 574.742,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 565.555,
+            "peak_observed_process_mib": 574.742,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 10400,
+            "peak_dbfs": -9.9681,
+            "rms_pcm": 1751.1486,
+            "rms_dbfs": -25.4423,
+            "dc_offset_pcm": -17.3254,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 3.0178,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.3928,
+          "memory_before": {
+            "current_mib": 566.719,
+            "process_peak_mib": 574.93,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 566.715,
+            "process_peak_mib": 574.93,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 566.738,
+            "peak_observed_process_mib": 574.93,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 9812,
+            "peak_dbfs": -10.4736,
+            "rms_pcm": 1725.091,
+            "rms_dbfs": -25.5725,
+            "dc_offset_pcm": -17.6166,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.88703,
+        "median_elapsed_seconds": 2.87461,
+        "best_elapsed_seconds": 2.76867,
+        "mean_real_time_factor": 0.37578,
+        "mean_audio_seconds": 7.68278
+      }
+    },
+    {
+      "voice": "M1",
+      "first_synthesis_seconds": 3.13057,
+      "first_measurement": {
+        "elapsed_seconds": 3.00432,
+        "audio_seconds": 7.93425,
+        "real_time_factor": 0.37865,
+        "memory_before": {
+          "current_mib": 566.121,
+          "process_peak_mib": 575.332,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 566.195,
+          "process_peak_mib": 575.332,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 566.172,
+          "peak_observed_process_mib": 575.332,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 15121,
+          "peak_dbfs": -6.7171,
+          "rms_pcm": 1414.2278,
+          "rms_dbfs": -27.2983,
+          "dc_offset_pcm": -17.1383,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.96033,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.37311,
+          "memory_before": {
+            "current_mib": 567.664,
+            "process_peak_mib": 576.016,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 567.66,
+            "process_peak_mib": 576.016,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 567.676,
+            "peak_observed_process_mib": 576.016,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 15058,
+            "peak_dbfs": -6.7534,
+            "rms_pcm": 1485.0623,
+            "rms_dbfs": -26.8738,
+            "dc_offset_pcm": -16.1816,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.83359,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.35713,
+          "memory_before": {
+            "current_mib": 568.566,
+            "process_peak_mib": 576.918,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 568.664,
+            "process_peak_mib": 576.918,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 568.59,
+            "peak_observed_process_mib": 576.918,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 16906,
+            "peak_dbfs": -5.7479,
+            "rms_pcm": 1530.358,
+            "rms_dbfs": -26.6129,
+            "dc_offset_pcm": -13.7869,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.81241,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.35446,
+          "memory_before": {
+            "current_mib": 569.852,
+            "process_peak_mib": 577.203,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 569.867,
+            "process_peak_mib": 577.203,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 569.875,
+            "peak_observed_process_mib": 577.203,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 14112,
+            "peak_dbfs": -7.317,
+            "rms_pcm": 1528.524,
+            "rms_dbfs": -26.6233,
+            "dc_offset_pcm": -14.1927,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.86878,
+        "median_elapsed_seconds": 2.83359,
+        "best_elapsed_seconds": 2.81241,
+        "mean_real_time_factor": 0.36157,
+        "mean_audio_seconds": 7.93425
+      }
+    },
+    {
+      "voice": "M2",
+      "first_synthesis_seconds": 3.10224,
+      "first_measurement": {
+        "elapsed_seconds": 2.98997,
+        "audio_seconds": 7.76895,
+        "real_time_factor": 0.38486,
+        "memory_before": {
+          "current_mib": 570.582,
+          "process_peak_mib": 577.934,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 570.723,
+          "process_peak_mib": 577.934,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 570.738,
+          "peak_observed_process_mib": 577.934,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 344064,
+          "duration_seconds": 7.8019,
+          "peak_pcm": 19125,
+          "peak_dbfs": -4.6767,
+          "rms_pcm": 1679.6646,
+          "rms_dbfs": -25.8043,
+          "dc_offset_pcm": -19.5047,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.6609,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.3425,
+          "memory_before": {
+            "current_mib": 572.098,
+            "process_peak_mib": 577.934,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 572.297,
+            "process_peak_mib": 577.934,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 572.117,
+            "peak_observed_process_mib": 577.934,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 19713,
+            "peak_dbfs": -4.4137,
+            "rms_pcm": 1779.9949,
+            "rms_dbfs": -25.3004,
+            "dc_offset_pcm": -20.8253,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.74658,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.35353,
+          "memory_before": {
+            "current_mib": 572.219,
+            "process_peak_mib": 578.477,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 572.074,
+            "process_peak_mib": 578.477,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 572.238,
+            "peak_observed_process_mib": 578.477,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 21579,
+            "peak_dbfs": -3.6281,
+            "rms_pcm": 1706.915,
+            "rms_dbfs": -25.6645,
+            "dc_offset_pcm": -18.7563,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.70832,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.34861,
+          "memory_before": {
+            "current_mib": 571.316,
+            "process_peak_mib": 578.477,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 571.332,
+            "process_peak_mib": 578.477,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 571.336,
+            "peak_observed_process_mib": 578.477,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 21159,
+            "peak_dbfs": -3.7988,
+            "rms_pcm": 1786.0573,
+            "rms_dbfs": -25.2708,
+            "dc_offset_pcm": -19.4714,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.70527,
+        "median_elapsed_seconds": 2.70832,
+        "best_elapsed_seconds": 2.6609,
+        "mean_real_time_factor": 0.34821,
+        "mean_audio_seconds": 7.76895
+      }
+    },
+    {
+      "voice": "M3",
+      "first_synthesis_seconds": 2.61176,
+      "first_measurement": {
+        "elapsed_seconds": 2.51582,
+        "audio_seconds": 6.51584,
+        "real_time_factor": 0.38611,
+        "memory_before": {
+          "current_mib": 572.242,
+          "process_peak_mib": 578.5,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 572.195,
+          "process_peak_mib": 578.5,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 572.27,
+          "peak_observed_process_mib": 578.5,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 288768,
+          "duration_seconds": 6.548,
+          "peak_pcm": 11118,
+          "peak_dbfs": -9.3882,
+          "rms_pcm": 1789.145,
+          "rms_dbfs": -25.2558,
+          "dc_offset_pcm": -18.0854,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.57989,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.39594,
+          "memory_before": {
+            "current_mib": 572.832,
+            "process_peak_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 572.812,
+            "process_peak_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 572.855,
+            "peak_observed_process_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 10924,
+            "peak_dbfs": -9.5411,
+            "rms_pcm": 1783.6472,
+            "rms_dbfs": -25.2826,
+            "dc_offset_pcm": -17.9354,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.47394,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.37968,
+          "memory_before": {
+            "current_mib": 573.105,
+            "process_peak_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 573.062,
+            "process_peak_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 573.129,
+            "peak_observed_process_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 10878,
+            "peak_dbfs": -9.5778,
+            "rms_pcm": 1699.89,
+            "rms_dbfs": -25.7003,
+            "dc_offset_pcm": -17.8932,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.53883,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.38964,
+          "memory_before": {
+            "current_mib": 573.594,
+            "process_peak_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 573.605,
+            "process_peak_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 573.613,
+            "peak_observed_process_mib": 578.5,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 11919,
+            "peak_dbfs": -8.7839,
+            "rms_pcm": 1664.89,
+            "rms_dbfs": -25.881,
+            "dc_offset_pcm": -18.3915,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.53089,
+        "median_elapsed_seconds": 2.53883,
+        "best_elapsed_seconds": 2.47394,
+        "mean_real_time_factor": 0.38842,
+        "mean_audio_seconds": 6.51584
+      }
+    },
+    {
+      "voice": "M4",
+      "first_synthesis_seconds": 3.38773,
+      "first_measurement": {
+        "elapsed_seconds": 3.23317,
+        "audio_seconds": 7.42028,
+        "real_time_factor": 0.43572,
+        "memory_before": {
+          "current_mib": 572.828,
+          "process_peak_mib": 578.5,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 572.863,
+          "process_peak_mib": 578.5,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 572.855,
+          "peak_observed_process_mib": 578.5,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 328704,
+          "duration_seconds": 7.4536,
+          "peak_pcm": 10027,
+          "peak_dbfs": -10.2853,
+          "rms_pcm": 1631.8844,
+          "rms_dbfs": -26.0549,
+          "dc_offset_pcm": -18.5828,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 3.32795,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.44849,
+          "memory_before": {
+            "current_mib": 573.211,
+            "process_peak_mib": 580.238,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 573.418,
+            "process_peak_mib": 580.238,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 573.41,
+            "peak_observed_process_mib": 580.238,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 9783,
+            "peak_dbfs": -10.4993,
+            "rms_pcm": 1652.0921,
+            "rms_dbfs": -25.948,
+            "dc_offset_pcm": -18.2648,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 3.08121,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.41524,
+          "memory_before": {
+            "current_mib": 575.277,
+            "process_peak_mib": 581.301,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 575.301,
+            "process_peak_mib": 581.301,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 575.301,
+            "peak_observed_process_mib": 581.301,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 9360,
+            "peak_dbfs": -10.8832,
+            "rms_pcm": 1670.8806,
+            "rms_dbfs": -25.8498,
+            "dc_offset_pcm": -18.795,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 3.00737,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.40529,
+          "memory_before": {
+            "current_mib": 574.523,
+            "process_peak_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 572.0,
+            "process_peak_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 574.547,
+            "peak_observed_process_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 9720,
+            "peak_dbfs": -10.5554,
+            "rms_pcm": 1634.269,
+            "rms_dbfs": -26.0423,
+            "dc_offset_pcm": -18.8632,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 3.13884,
+        "median_elapsed_seconds": 3.08121,
+        "best_elapsed_seconds": 3.00737,
+        "mean_real_time_factor": 0.42301,
+        "mean_audio_seconds": 7.42028
+      }
+    },
+    {
+      "voice": "M5",
+      "first_synthesis_seconds": 3.46073,
+      "first_measurement": {
+        "elapsed_seconds": 3.33873,
+        "audio_seconds": 7.91802,
+        "real_time_factor": 0.42166,
+        "memory_before": {
+          "current_mib": 572.383,
+          "process_peak_mib": 581.547,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_after": {
+          "current_mib": 565.324,
+          "process_peak_mib": 581.547,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 572.457,
+          "peak_observed_process_mib": 581.547,
+          "source": "Windows GetProcessMemoryInfo (working set)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 11317,
+          "peak_dbfs": -9.2341,
+          "rms_pcm": 1701.859,
+          "rms_dbfs": -25.6903,
+          "dc_offset_pcm": -20.6329,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 3.22185,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.4069,
+          "memory_before": {
+            "current_mib": 566.883,
+            "process_peak_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 561.223,
+            "process_peak_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 566.902,
+            "peak_observed_process_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 11280,
+            "peak_dbfs": -9.2626,
+            "rms_pcm": 1684.3697,
+            "rms_dbfs": -25.78,
+            "dc_offset_pcm": -20.1865,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 3.87597,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.48951,
+          "memory_before": {
+            "current_mib": 562.0,
+            "process_peak_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 557.516,
+            "process_peak_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 562.145,
+            "peak_observed_process_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10709,
+            "peak_dbfs": -9.7138,
+            "rms_pcm": 1723.139,
+            "rms_dbfs": -25.5823,
+            "dc_offset_pcm": -19.4568,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 3.4876,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.44046,
+          "memory_before": {
+            "current_mib": 557.531,
+            "process_peak_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_after": {
+            "current_mib": 548.008,
+            "process_peak_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 557.555,
+            "peak_observed_process_mib": 581.547,
+            "source": "Windows GetProcessMemoryInfo (working set)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10621,
+            "peak_dbfs": -9.7854,
+            "rms_pcm": 1676.0154,
+            "rms_dbfs": -25.8232,
+            "dc_offset_pcm": -20.9253,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 3.52847,
+        "median_elapsed_seconds": 3.4876,
+        "best_elapsed_seconds": 3.22185,
+        "mean_real_time_factor": 0.44562,
+        "mean_audio_seconds": 7.91802
+      }
+    }
+  ],
+  "model_warmup": {
+    "status": "ready",
+    "warmup_seconds": 14.2998,
+    "audio_duration_seconds": 1.7399,
+    "runtime": {
+      "provider": "supertonic-local",
+      "model_family": "supertonic-3",
+      "loaded": true,
+      "model_cache": "C:\\Users\\runneradmin\\.cache\\supertonic3",
+      "model_assets_bytes": 403521107,
+      "model_assets_mib": 384.83,
+      "target_max_deployment_mib": 1024,
+      "cpu": {
+        "profile": "balanced",
+        "logical_cpus": 4,
+        "intra_op_threads": 4,
+        "inter_op_threads": 1,
+        "max_parallel_synthesis": 1,
+        "queue_timeout_seconds": 120.0,
+        "audio_cache_entries": 8,
+        "audio_cache_mib": 32,
+        "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
+        "execution_mode": "sequential (provided by Supertonic)"
+      },
+      "audio_cache": {
+        "entries": 1,
+        "bytes": 153644,
+        "mib": 0.1465
+      },
+      "metrics": {
+        "synthesis_requests": 1,
+        "synthesis_failures": 0,
+        "audio_cache_hits": 0,
+        "total_queue_wait_seconds": 3.899999967416079e-06,
+        "total_synthesis_seconds": 14.299571599999979,
+        "mean_synthesis_seconds": 14.2996,
+        "uptime_seconds": 14.313
+      }
+    },
+    "elapsed_seconds": 14.305
+  },
+  "runtime_status": {
+    "provider": "supertonic-local",
+    "model_family": "supertonic-3",
+    "loaded": true,
+    "model_cache": "C:\\Users\\runneradmin\\.cache\\supertonic3",
+    "model_assets_bytes": 403521107,
+    "model_assets_mib": 384.83,
+    "target_max_deployment_mib": 1024,
+    "cpu": {
+      "profile": "balanced",
+      "logical_cpus": 4,
+      "intra_op_threads": 4,
+      "inter_op_threads": 1,
+      "max_parallel_synthesis": 1,
+      "queue_timeout_seconds": 120.0,
+      "audio_cache_entries": 8,
+      "audio_cache_mib": 32,
+      "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
+      "execution_mode": "sequential (provided by Supertonic)"
+    },
+    "audio_cache": {
+      "entries": 1,
+      "bytes": 153644,
+      "mib": 0.1465
+    },
+    "metrics": {
+      "synthesis_requests": 41,
+      "synthesis_failures": 0,
+      "audio_cache_hits": 0,
+      "total_queue_wait_seconds": 0.0002413999999362204,
+      "total_synthesis_seconds": 127.12461059999981,
+      "mean_synthesis_seconds": 3.1006,
+      "uptime_seconds": 135.313
+    }
+  }
+}

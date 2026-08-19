@@ -1,0 +1,1625 @@
+{
+  "benchmark": "nastech-base-timbres-v1",
+  "measurement_boundary": {
+    "speed": "Serial local synthesis after one model warm-up; audio cache disabled.",
+    "memory": "Native process working-set signals vary by operating system; source is recorded for each observation and results must be compared within a runner class.",
+    "audio_quality": "Deterministic WAV format, duration, level, DC-offset, and clipping checks; not a subjective or linguistic-quality score."
+  },
+  "host": {
+    "system": "Linux",
+    "release": "6.17.0-1022-azure",
+    "machine": "x86_64",
+    "python": "3.12.13",
+    "logical_cpus": 4,
+    "hardware_plan": {
+      "requested_device": "cpu",
+      "device": "cpu",
+      "operating_system": "Linux",
+      "logical_cpus": 4,
+      "ram_mib": 15993,
+      "gpu_available": false,
+      "gpu_name": null,
+      "gpu_vram_mib": null,
+      "onnx_providers": [
+        "AzureExecutionProvider",
+        "CPUExecutionProvider"
+      ],
+      "accelerator": "CPUExecutionProvider",
+      "precision": "fp32",
+      "intra_op_threads": 4,
+      "inter_op_threads": 1,
+      "max_parallel_synthesis": 2,
+      "recommended_batch_size": 1,
+      "optimizer": {
+        "thread_policy": "memory-aware bounded threads",
+        "request_policy": "bounded parallel synthesis",
+        "graph_policy": "ORT_ENABLE_ALL when supported by runtime"
+      },
+      "reason": "CPU profile selected because CUDA is unavailable or NASTECH_DEVICE=cpu."
+    },
+    "initial_memory": {
+      "current_mib": 643.727,
+      "process_peak_mib": 645.164,
+      "source": "/proc/self/status (VmRSS/VmHWM)"
+    }
+  },
+  "benchmark_text": "Nastech Research measures local speech with care. Every voice should be fast, clear, private, and useful.",
+  "voices": [
+    {
+      "voice": "F1",
+      "first_synthesis_seconds": 2.50426,
+      "first_measurement": {
+        "elapsed_seconds": 2.42191,
+        "audio_seconds": 7.92839,
+        "real_time_factor": 0.30547,
+        "memory_before": {
+          "current_mib": 607.797,
+          "process_peak_mib": 609.992,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 625.27,
+          "process_peak_mib": 625.27,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 625.27,
+          "peak_observed_process_mib": 625.27,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 11780,
+          "peak_dbfs": -8.8858,
+          "rms_pcm": 1647.711,
+          "rms_dbfs": -25.9711,
+          "dc_offset_pcm": -19.8372,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.39948,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.30264,
+          "memory_before": {
+            "current_mib": 625.461,
+            "process_peak_mib": 633.082,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 634.156,
+            "process_peak_mib": 634.156,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 634.16,
+            "peak_observed_process_mib": 634.16,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10444,
+            "peak_dbfs": -9.9314,
+            "rms_pcm": 1532.5718,
+            "rms_dbfs": -26.6003,
+            "dc_offset_pcm": -20.1743,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.38247,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.3005,
+          "memory_before": {
+            "current_mib": 635.859,
+            "process_peak_mib": 641.398,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 635.859,
+            "process_peak_mib": 641.398,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 635.863,
+            "peak_observed_process_mib": 641.398,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 10829,
+            "peak_dbfs": -9.617,
+            "rms_pcm": 1527.8895,
+            "rms_dbfs": -26.6269,
+            "dc_offset_pcm": -18.4096,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.38031,
+          "audio_seconds": 7.92839,
+          "real_time_factor": 0.30023,
+          "memory_before": {
+            "current_mib": 635.684,
+            "process_peak_mib": 641.398,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 635.684,
+            "process_peak_mib": 641.398,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 635.688,
+            "peak_observed_process_mib": 641.398,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 11506,
+            "peak_dbfs": -9.0902,
+            "rms_pcm": 1569.6234,
+            "rms_dbfs": -26.3928,
+            "dc_offset_pcm": -19.3118,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.38742,
+        "median_elapsed_seconds": 2.38247,
+        "best_elapsed_seconds": 2.38031,
+        "mean_real_time_factor": 0.30112,
+        "mean_audio_seconds": 7.92839
+      }
+    },
+    {
+      "voice": "F2",
+      "first_synthesis_seconds": 2.45609,
+      "first_measurement": {
+        "elapsed_seconds": 2.37845,
+        "audio_seconds": 7.44051,
+        "real_time_factor": 0.31966,
+        "memory_before": {
+          "current_mib": 635.43,
+          "process_peak_mib": 641.398,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 637.438,
+          "process_peak_mib": 641.398,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 637.438,
+          "peak_observed_process_mib": 641.398,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 328704,
+          "duration_seconds": 7.4536,
+          "peak_pcm": 11556,
+          "peak_dbfs": -9.0526,
+          "rms_pcm": 1581.9401,
+          "rms_dbfs": -26.3249,
+          "dc_offset_pcm": -23.3419,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 3.2152,
+          "audio_seconds": 7.44051,
+          "real_time_factor": 0.43212,
+          "memory_before": {
+            "current_mib": 637.258,
+            "process_peak_mib": 642.988,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 637.258,
+            "process_peak_mib": 642.988,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 637.262,
+            "peak_observed_process_mib": 642.988,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 12454,
+            "peak_dbfs": -8.4026,
+            "rms_pcm": 1501.1313,
+            "rms_dbfs": -26.7804,
+            "dc_offset_pcm": -22.3648,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.23913,
+          "audio_seconds": 7.44051,
+          "real_time_factor": 0.30094,
+          "memory_before": {
+            "current_mib": 638.348,
+            "process_peak_mib": 643.125,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 638.348,
+            "process_peak_mib": 643.125,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 638.352,
+            "peak_observed_process_mib": 643.125,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 12142,
+            "peak_dbfs": -8.6229,
+            "rms_pcm": 1480.4958,
+            "rms_dbfs": -26.9006,
+            "dc_offset_pcm": -21.8972,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.2202,
+          "audio_seconds": 7.44051,
+          "real_time_factor": 0.29839,
+          "memory_before": {
+            "current_mib": 638.258,
+            "process_peak_mib": 643.125,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 638.258,
+            "process_peak_mib": 643.125,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 638.262,
+            "peak_observed_process_mib": 643.125,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 13584,
+            "peak_dbfs": -7.6482,
+            "rms_pcm": 1523.4885,
+            "rms_dbfs": -26.652,
+            "dc_offset_pcm": -21.1527,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.55818,
+        "median_elapsed_seconds": 2.23913,
+        "best_elapsed_seconds": 2.2202,
+        "mean_real_time_factor": 0.34382,
+        "mean_audio_seconds": 7.44051
+      }
+    },
+    {
+      "voice": "F3",
+      "first_synthesis_seconds": 2.4836,
+      "first_measurement": {
+        "elapsed_seconds": 2.40067,
+        "audio_seconds": 8.17528,
+        "real_time_factor": 0.29365,
+        "memory_before": {
+          "current_mib": 639.109,
+          "process_peak_mib": 643.125,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 639.109,
+          "process_peak_mib": 643.125,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 639.113,
+          "peak_observed_process_mib": 643.125,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 362496,
+          "duration_seconds": 8.2199,
+          "peak_pcm": 13253,
+          "peak_dbfs": -7.8624,
+          "rms_pcm": 1445.7236,
+          "rms_dbfs": -27.107,
+          "dc_offset_pcm": -22.518,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.42036,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.29606,
+          "memory_before": {
+            "current_mib": 639.422,
+            "process_peak_mib": 644.105,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 639.938,
+            "process_peak_mib": 644.105,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 639.941,
+            "peak_observed_process_mib": 644.105,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 12354,
+            "peak_dbfs": -8.4726,
+            "rms_pcm": 1506.6528,
+            "rms_dbfs": -26.7485,
+            "dc_offset_pcm": -21.6218,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.40016,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.29359,
+          "memory_before": {
+            "current_mib": 639.508,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 639.508,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 639.512,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 13164,
+            "peak_dbfs": -7.921,
+            "rms_pcm": 1498.7457,
+            "rms_dbfs": -26.7942,
+            "dc_offset_pcm": -21.8567,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.42546,
+          "audio_seconds": 8.17528,
+          "real_time_factor": 0.29668,
+          "memory_before": {
+            "current_mib": 640.141,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 640.141,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 640.145,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 362496,
+            "duration_seconds": 8.2199,
+            "peak_pcm": 12481,
+            "peak_dbfs": -8.3837,
+            "rms_pcm": 1482.0443,
+            "rms_dbfs": -26.8915,
+            "dc_offset_pcm": -20.9122,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.41533,
+        "median_elapsed_seconds": 2.42036,
+        "best_elapsed_seconds": 2.40016,
+        "mean_real_time_factor": 0.29544,
+        "mean_audio_seconds": 8.17528
+      }
+    },
+    {
+      "voice": "F4",
+      "first_synthesis_seconds": 2.22754,
+      "first_measurement": {
+        "elapsed_seconds": 2.15423,
+        "audio_seconds": 6.80297,
+        "real_time_factor": 0.31666,
+        "memory_before": {
+          "current_mib": 640.27,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 640.273,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 640.277,
+          "peak_observed_process_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 301056,
+          "duration_seconds": 6.8267,
+          "peak_pcm": 9756,
+          "peak_dbfs": -10.5233,
+          "rms_pcm": 1630.5048,
+          "rms_dbfs": -26.0623,
+          "dc_offset_pcm": -15.4996,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.16844,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.31875,
+          "memory_before": {
+            "current_mib": 640.281,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 640.281,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 640.285,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 10860,
+            "peak_dbfs": -9.5921,
+            "rms_pcm": 1655.8577,
+            "rms_dbfs": -25.9283,
+            "dc_offset_pcm": -13.8355,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.11771,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.31129,
+          "memory_before": {
+            "current_mib": 640.113,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 640.113,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 640.117,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 10571,
+            "peak_dbfs": -9.8264,
+            "rms_pcm": 1666.3,
+            "rms_dbfs": -25.8737,
+            "dc_offset_pcm": -14.3191,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.1201,
+          "audio_seconds": 6.80297,
+          "real_time_factor": 0.31164,
+          "memory_before": {
+            "current_mib": 640.188,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 640.188,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 640.191,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 301056,
+            "duration_seconds": 6.8267,
+            "peak_pcm": 12594,
+            "peak_dbfs": -8.3055,
+            "rms_pcm": 1686.745,
+            "rms_dbfs": -25.7677,
+            "dc_offset_pcm": -14.4309,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.13542,
+        "median_elapsed_seconds": 2.1201,
+        "best_elapsed_seconds": 2.11771,
+        "mean_real_time_factor": 0.31389,
+        "mean_audio_seconds": 6.80297
+      }
+    },
+    {
+      "voice": "F5",
+      "first_synthesis_seconds": 2.33047,
+      "first_measurement": {
+        "elapsed_seconds": 2.25058,
+        "audio_seconds": 7.68278,
+        "real_time_factor": 0.29294,
+        "memory_before": {
+          "current_mib": 640.105,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 640.105,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 640.109,
+          "peak_observed_process_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 340992,
+          "duration_seconds": 7.7322,
+          "peak_pcm": 9696,
+          "peak_dbfs": -10.5769,
+          "rms_pcm": 1724.8883,
+          "rms_dbfs": -25.5735,
+          "dc_offset_pcm": -17.977,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.20291,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.28673,
+          "memory_before": {
+            "current_mib": 639.625,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 639.625,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 639.629,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 9836,
+            "peak_dbfs": -10.4524,
+            "rms_pcm": 1734.8837,
+            "rms_dbfs": -25.5233,
+            "dc_offset_pcm": -18.595,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.24044,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.29162,
+          "memory_before": {
+            "current_mib": 639.574,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 639.574,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 639.578,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 10078,
+            "peak_dbfs": -10.2412,
+            "rms_pcm": 1704.0927,
+            "rms_dbfs": -25.6789,
+            "dc_offset_pcm": -16.7996,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.25548,
+          "audio_seconds": 7.68278,
+          "real_time_factor": 0.29358,
+          "memory_before": {
+            "current_mib": 640.527,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 640.527,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 640.531,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 340992,
+            "duration_seconds": 7.7322,
+            "peak_pcm": 9440,
+            "peak_dbfs": -10.8093,
+            "rms_pcm": 1710.3164,
+            "rms_dbfs": -25.6472,
+            "dc_offset_pcm": -18.4776,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.23294,
+        "median_elapsed_seconds": 2.24044,
+        "best_elapsed_seconds": 2.20291,
+        "mean_real_time_factor": 0.29064,
+        "mean_audio_seconds": 7.68278
+      }
+    },
+    {
+      "voice": "M1",
+      "first_synthesis_seconds": 2.45468,
+      "first_measurement": {
+        "elapsed_seconds": 2.37431,
+        "audio_seconds": 7.93425,
+        "real_time_factor": 0.29925,
+        "memory_before": {
+          "current_mib": 641.426,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 641.426,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 641.43,
+          "peak_observed_process_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 14559,
+          "peak_dbfs": -7.0461,
+          "rms_pcm": 1455.4879,
+          "rms_dbfs": -27.0486,
+          "dc_offset_pcm": -18.4751,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.3737,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.29917,
+          "memory_before": {
+            "current_mib": 641.316,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 641.316,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 641.32,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 15315,
+            "peak_dbfs": -6.6064,
+            "rms_pcm": 1522.2842,
+            "rms_dbfs": -26.6588,
+            "dc_offset_pcm": -15.7088,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 3.48737,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.43953,
+          "memory_before": {
+            "current_mib": 642.18,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 642.18,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 642.184,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 14251,
+            "peak_dbfs": -7.2318,
+            "rms_pcm": 1438.9106,
+            "rms_dbfs": -27.1481,
+            "dc_offset_pcm": -14.8828,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.38501,
+          "audio_seconds": 7.93425,
+          "real_time_factor": 0.3006,
+          "memory_before": {
+            "current_mib": 641.996,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 641.996,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 642.0,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 14714,
+            "peak_dbfs": -6.9541,
+            "rms_pcm": 1444.8493,
+            "rms_dbfs": -27.1123,
+            "dc_offset_pcm": -16.7693,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.74869,
+        "median_elapsed_seconds": 2.38501,
+        "best_elapsed_seconds": 2.3737,
+        "mean_real_time_factor": 0.34643,
+        "mean_audio_seconds": 7.93425
+      }
+    },
+    {
+      "voice": "M2",
+      "first_synthesis_seconds": 2.38268,
+      "first_measurement": {
+        "elapsed_seconds": 2.23002,
+        "audio_seconds": 7.76895,
+        "real_time_factor": 0.28704,
+        "memory_before": {
+          "current_mib": 643.281,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 643.281,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 643.285,
+          "peak_observed_process_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 344064,
+          "duration_seconds": 7.8019,
+          "peak_pcm": 19148,
+          "peak_dbfs": -4.6663,
+          "rms_pcm": 1776.1421,
+          "rms_dbfs": -25.3192,
+          "dc_offset_pcm": -21.27,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.20111,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.28332,
+          "memory_before": {
+            "current_mib": 642.848,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 642.848,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 642.852,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 20182,
+            "peak_dbfs": -4.2094,
+            "rms_pcm": 1648.6573,
+            "rms_dbfs": -25.9661,
+            "dc_offset_pcm": -20.8582,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.19905,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.28306,
+          "memory_before": {
+            "current_mib": 643.598,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 643.598,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 643.602,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 19814,
+            "peak_dbfs": -4.3693,
+            "rms_pcm": 1782.7846,
+            "rms_dbfs": -25.2868,
+            "dc_offset_pcm": -19.599,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.18825,
+          "audio_seconds": 7.76895,
+          "real_time_factor": 0.28167,
+          "memory_before": {
+            "current_mib": 643.598,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 643.598,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 643.602,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 344064,
+            "duration_seconds": 7.8019,
+            "peak_pcm": 22604,
+            "peak_dbfs": -3.225,
+            "rms_pcm": 1792.6186,
+            "rms_dbfs": -25.239,
+            "dc_offset_pcm": -20.1711,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.19614,
+        "median_elapsed_seconds": 2.19905,
+        "best_elapsed_seconds": 2.18825,
+        "mean_real_time_factor": 0.28268,
+        "mean_audio_seconds": 7.76895
+      }
+    },
+    {
+      "voice": "M3",
+      "first_synthesis_seconds": 2.03287,
+      "first_measurement": {
+        "elapsed_seconds": 1.9637,
+        "audio_seconds": 6.51584,
+        "real_time_factor": 0.30137,
+        "memory_before": {
+          "current_mib": 643.953,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 643.961,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 643.961,
+          "peak_observed_process_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 288768,
+          "duration_seconds": 6.548,
+          "peak_pcm": 11819,
+          "peak_dbfs": -8.8571,
+          "rms_pcm": 1833.2087,
+          "rms_dbfs": -25.0445,
+          "dc_offset_pcm": -17.3112,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 1.95691,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.30033,
+          "memory_before": {
+            "current_mib": 643.961,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 643.961,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 643.965,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 11253,
+            "peak_dbfs": -9.2834,
+            "rms_pcm": 1676.6614,
+            "rms_dbfs": -25.8198,
+            "dc_offset_pcm": -17.6541,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.92998,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.2962,
+          "memory_before": {
+            "current_mib": 643.961,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 643.961,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 643.965,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 10765,
+            "peak_dbfs": -9.6685,
+            "rms_pcm": 1668.058,
+            "rms_dbfs": -25.8645,
+            "dc_offset_pcm": -18.8246,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 1.96444,
+          "audio_seconds": 6.51584,
+          "real_time_factor": 0.30149,
+          "memory_before": {
+            "current_mib": 643.961,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 643.961,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 643.965,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 288768,
+            "duration_seconds": 6.548,
+            "peak_pcm": 12492,
+            "peak_dbfs": -8.3761,
+            "rms_pcm": 1710.7499,
+            "rms_dbfs": -25.645,
+            "dc_offset_pcm": -18.3266,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 1.95044,
+        "median_elapsed_seconds": 1.95691,
+        "best_elapsed_seconds": 1.92998,
+        "mean_real_time_factor": 0.29934,
+        "mean_audio_seconds": 6.51584
+      }
+    },
+    {
+      "voice": "M4",
+      "first_synthesis_seconds": 2.30225,
+      "first_measurement": {
+        "elapsed_seconds": 2.22659,
+        "audio_seconds": 7.42028,
+        "real_time_factor": 0.30007,
+        "memory_before": {
+          "current_mib": 643.961,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 643.961,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 643.965,
+          "peak_observed_process_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 328704,
+          "duration_seconds": 7.4536,
+          "peak_pcm": 9383,
+          "peak_dbfs": -10.8619,
+          "rms_pcm": 1622.532,
+          "rms_dbfs": -26.1049,
+          "dc_offset_pcm": -19.0332,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 3.19613,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.43073,
+          "memory_before": {
+            "current_mib": 644.148,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 644.148,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 644.152,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 10377,
+            "peak_dbfs": -9.9873,
+            "rms_pcm": 1746.8083,
+            "rms_dbfs": -25.4638,
+            "dc_offset_pcm": -19.1779,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.1964,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.296,
+          "memory_before": {
+            "current_mib": 644.148,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 644.148,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 644.152,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 9582,
+            "peak_dbfs": -10.6796,
+            "rms_pcm": 1621.7256,
+            "rms_dbfs": -26.1092,
+            "dc_offset_pcm": -19.2789,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.22469,
+          "audio_seconds": 7.42028,
+          "real_time_factor": 0.29981,
+          "memory_before": {
+            "current_mib": 644.402,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 644.402,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 644.406,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 328704,
+            "duration_seconds": 7.4536,
+            "peak_pcm": 11114,
+            "peak_dbfs": -9.3913,
+            "rms_pcm": 1688.1209,
+            "rms_dbfs": -25.7607,
+            "dc_offset_pcm": -18.3129,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.53907,
+        "median_elapsed_seconds": 2.22469,
+        "best_elapsed_seconds": 2.1964,
+        "mean_real_time_factor": 0.34218,
+        "mean_audio_seconds": 7.42028
+      }
+    },
+    {
+      "voice": "M5",
+      "first_synthesis_seconds": 2.45399,
+      "first_measurement": {
+        "elapsed_seconds": 2.37442,
+        "audio_seconds": 7.91802,
+        "real_time_factor": 0.29988,
+        "memory_before": {
+          "current_mib": 644.402,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_after": {
+          "current_mib": 644.402,
+          "process_peak_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "memory_during": {
+          "peak_sampled_current_mib": 644.406,
+          "peak_observed_process_mib": 645.164,
+          "source": "/proc/self/status (VmRSS/VmHWM)"
+        },
+        "audio_quality": {
+          "format": "mono-16-bit-pcm-wav",
+          "channels": 1,
+          "sample_width_bytes": 2,
+          "sample_rate_hz": 44100,
+          "frames": 350208,
+          "duration_seconds": 7.9412,
+          "peak_pcm": 10627,
+          "peak_dbfs": -9.7805,
+          "rms_pcm": 1653.247,
+          "rms_dbfs": -25.942,
+          "dc_offset_pcm": -20.2776,
+          "clipped_samples": 0
+        }
+      },
+      "warm_runs": [
+        {
+          "elapsed_seconds": 2.35308,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.29718,
+          "memory_before": {
+            "current_mib": 643.797,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 643.797,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 643.801,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 11125,
+            "peak_dbfs": -9.3827,
+            "rms_pcm": 1640.4178,
+            "rms_dbfs": -26.0096,
+            "dc_offset_pcm": -22.5617,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.41291,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.30474,
+          "memory_before": {
+            "current_mib": 643.855,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 643.855,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 643.859,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 9678,
+            "peak_dbfs": -10.593,
+            "rms_pcm": 1629.9908,
+            "rms_dbfs": -26.065,
+            "dc_offset_pcm": -21.2951,
+            "clipped_samples": 0
+          }
+        },
+        {
+          "elapsed_seconds": 2.35636,
+          "audio_seconds": 7.91802,
+          "real_time_factor": 0.29759,
+          "memory_before": {
+            "current_mib": 643.98,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_after": {
+            "current_mib": 643.98,
+            "process_peak_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "memory_during": {
+            "peak_sampled_current_mib": 643.984,
+            "peak_observed_process_mib": 645.164,
+            "source": "/proc/self/status (VmRSS/VmHWM)"
+          },
+          "audio_quality": {
+            "format": "mono-16-bit-pcm-wav",
+            "channels": 1,
+            "sample_width_bytes": 2,
+            "sample_rate_hz": 44100,
+            "frames": 350208,
+            "duration_seconds": 7.9412,
+            "peak_pcm": 11243,
+            "peak_dbfs": -9.2911,
+            "rms_pcm": 1609.1354,
+            "rms_dbfs": -26.1769,
+            "dc_offset_pcm": -21.3598,
+            "clipped_samples": 0
+          }
+        }
+      ],
+      "warm_summary": {
+        "count": 3,
+        "mean_elapsed_seconds": 2.37412,
+        "median_elapsed_seconds": 2.35636,
+        "best_elapsed_seconds": 2.35308,
+        "mean_real_time_factor": 0.29984,
+        "mean_audio_seconds": 7.91802
+      }
+    }
+  ],
+  "model_warmup": {
+    "status": "ready",
+    "warmup_seconds": 4.0629,
+    "audio_duration_seconds": 1.7399,
+    "runtime": {
+      "provider": "supertonic-local",
+      "model_family": "supertonic-3",
+      "loaded": true,
+      "model_cache": "/home/runner/.cache/supertonic3",
+      "model_assets_bytes": 403520887,
+      "model_assets_mib": 384.83,
+      "target_max_deployment_mib": 1024,
+      "cpu": {
+        "profile": "balanced",
+        "logical_cpus": 4,
+        "intra_op_threads": 4,
+        "inter_op_threads": 1,
+        "max_parallel_synthesis": 1,
+        "queue_timeout_seconds": 120.0,
+        "audio_cache_entries": 8,
+        "audio_cache_mib": 32,
+        "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
+        "execution_mode": "sequential (provided by Supertonic)"
+      },
+      "audio_cache": {
+        "entries": 1,
+        "bytes": 153644,
+        "mib": 0.1465
+      },
+      "metrics": {
+        "synthesis_requests": 1,
+        "synthesis_failures": 0,
+        "audio_cache_hits": 0,
+        "total_queue_wait_seconds": 5.351000005759943e-06,
+        "total_synthesis_seconds": 4.062660624000003,
+        "mean_synthesis_seconds": 4.0627,
+        "uptime_seconds": 4.067
+      }
+    },
+    "elapsed_seconds": 4.06715
+  },
+  "runtime_status": {
+    "provider": "supertonic-local",
+    "model_family": "supertonic-3",
+    "loaded": true,
+    "model_cache": "/home/runner/.cache/supertonic3",
+    "model_assets_bytes": 403520887,
+    "model_assets_mib": 384.83,
+    "target_max_deployment_mib": 1024,
+    "cpu": {
+      "profile": "balanced",
+      "logical_cpus": 4,
+      "intra_op_threads": 4,
+      "inter_op_threads": 1,
+      "max_parallel_synthesis": 1,
+      "queue_timeout_seconds": 120.0,
+      "audio_cache_entries": 8,
+      "audio_cache_mib": 32,
+      "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
+      "execution_mode": "sequential (provided by Supertonic)"
+    },
+    "audio_cache": {
+      "entries": 1,
+      "bytes": 153644,
+      "mib": 0.1465
+    },
+    "metrics": {
+      "synthesis_requests": 41,
+      "synthesis_failures": 0,
+      "audio_cache_hits": 0,
+      "total_queue_wait_seconds": 0.00015361099990940374,
+      "total_synthesis_seconds": 97.43044982000006,
+      "mean_synthesis_seconds": 2.3764,
+      "uptime_seconds": 100.663
+    }
+  }
+}
