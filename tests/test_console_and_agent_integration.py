@@ -6,6 +6,7 @@ from fastapi.testclient import TestClient
 from nastech_tts.agent_bridge import TOOLS, handle
 from nastech_tts.agent_integration import connect_to_nastech_home
 from nastech_tts.api import create_app
+from nastech_tts.console import CONSOLE_FEATURES, render_console
 from nastech_tts.supertonic import CompactSettings
 
 
@@ -17,6 +18,31 @@ class ConsoleRuntime:
         return {"model_family": "supertonic-3", "provider": "supertonic-local"}
 
 
+def test_console_feature_catalog_has_more_than_forty_local_features() -> None:
+    document = render_console()
+
+    assert len(CONSOLE_FEATURES) >= 40
+    assert len(CONSOLE_FEATURES) == len(set(CONSOLE_FEATURES))
+    for feature in (
+        "draft_autosave",
+        "voice_favorites",
+        "audio_visualizer",
+        "serial_line_batch",
+        "download_session_json",
+        "keyboard_shortcuts",
+    ):
+        assert feature in CONSOLE_FEATURES
+    for control in (
+        'id="queueLines"',
+        'id="history"',
+        'id="visualizer"',
+        'id="playbackRate"',
+        'id="highContrast"',
+        'id="downloadSession"',
+    ):
+        assert control in document
+
+
 def test_root_console_is_served_with_themes_and_real_audio_route() -> None:
     response = TestClient(create_app(ConsoleRuntime())).get("/")
 
@@ -25,6 +51,9 @@ def test_root_console_is_served_with_themes_and_real_audio_route() -> None:
     assert "Midnight" in response.text
     assert "Sunrise" in response.text
     assert "Paper" in response.text
+    assert "Studio preferences" in response.text
+    assert "Local session history" in response.text
+    assert "Render lines in order" in response.text
     assert "/v1/agent/speech" in response.text
     assert "Generate &amp; play" in response.text or "Generate & play" in response.text
 

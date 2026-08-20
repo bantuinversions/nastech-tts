@@ -92,8 +92,8 @@ quality:
     dependency_updates: ".github/dependabot.yml"
 deployment_budget:
   maximum_mib: 1024
-  latest_verified_mib: 702.09
-  remaining_mib: 321.91
+  latest_verified_mib: 702.2
+  remaining_mib: 321.8
 agent_contract:
   descriptor: "agent_tools/nastech_tts_tool.json"
   openapi: "docs/openapi.json"

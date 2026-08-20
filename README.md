@@ -63,7 +63,7 @@ py -m pip install -e '.[dev]'
 
 ### Browser console and first local self-check
 
-Start the local service, then open **http://127.0.0.1:8765/** in your browser. The root page is the Nastech Research Voice Console: choose Midnight, Sunrise, or Paper; select a voice, language, emotion, rate, and sounds; then select **Generate & play** to hear the returned local WAV in the page.
+Start the local service, then open **http://127.0.0.1:8765/** in your browser. The root page is the **Nastech Research Voice Studio**: choose Midnight, Sunrise, or Paper; select a voice, language, emotion, rate, and sounds; then select **Generate & play** to hear the returned local WAV in the page. The expanded studio includes more than forty practical local controls for templates, accessibility, voice favourites, preview, serial line batches, local history, playback, downloads, and session export. See [Voice Studio features](docs/VOICE_STUDIO_FEATURES.md) for the complete guide.
 
 ```bash
 nastech-tts serve

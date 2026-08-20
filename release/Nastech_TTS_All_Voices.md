@@ -4,8 +4,8 @@ This inventory was generated after local deterministic verification. English has
 
 | Local verification | Result |
 |---|---:|
-| Deterministic tests | 165 passed |
-| Compact core budget | 702.09 MiB |
+| Deterministic tests | 166 passed |
+| Compact core budget | 702.20 MiB |
 | Bantu registry targets | 61 |
 | Verified Bantu story routes | 11 |
 
