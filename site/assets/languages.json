@@ -1,0 +1,614 @@
+{
+  "languages": [
+    {
+      "code": "en",
+      "label": "English",
+      "display_label": "en - English",
+      "iso639_3": "eng",
+      "region": "Global",
+      "state": "verified-local",
+      "pack_state": "no-verified-pack",
+      "story_available": true
+    },
+    {
+      "code": "lg",
+      "label": "Luganda",
+      "display_label": "lg - Luganda",
+      "iso639_3": "lug",
+      "region": "East Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "nyn",
+      "label": "Runyankole",
+      "display_label": "nyn - Runyankole",
+      "iso639_3": "nyn",
+      "region": "East Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "ach",
+      "label": "Acholi",
+      "display_label": "ach - Acholi",
+      "iso639_3": "ach",
+      "region": "East Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "teo",
+      "label": "Ateso",
+      "display_label": "teo - Ateso",
+      "iso639_3": "teo",
+      "region": "East Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "sw",
+      "label": "Kiswahili",
+      "display_label": "sw - Kiswahili",
+      "iso639_3": "swa",
+      "region": "East Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "rw",
+      "label": "Kinyarwanda",
+      "display_label": "rw - Kinyarwanda",
+      "iso639_3": "kin",
+      "region": "Great Lakes",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "rn",
+      "label": "Kirundi",
+      "display_label": "rn - Kirundi",
+      "iso639_3": "run",
+      "region": "Great Lakes",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "ki",
+      "label": "Gikuyu",
+      "display_label": "ki - Gikuyu",
+      "iso639_3": "kik",
+      "region": "East Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "kam",
+      "label": "Kamba",
+      "display_label": "kam - Kamba",
+      "iso639_3": "kam",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "luy",
+      "label": "Luhya",
+      "display_label": "luy - Luhya",
+      "iso639_3": "luy",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "luo",
+      "label": "Dholuo",
+      "display_label": "luo - Dholuo",
+      "iso639_3": "luo",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "flr",
+      "label": "Fuliiru",
+      "display_label": "flr - Fuliiru",
+      "iso639_3": "flr",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "nyf",
+      "label": "Kigiryama",
+      "display_label": "nyf - Kigiryama",
+      "iso639_3": "nyf",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "myx",
+      "label": "Masaaba",
+      "display_label": "myx - Masaaba",
+      "iso639_3": "myx",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "xog",
+      "label": "Lusoga",
+      "display_label": "xog - Lusoga",
+      "iso639_3": "xog",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "nyo",
+      "label": "Runyoro",
+      "display_label": "nyo - Runyoro",
+      "iso639_3": "nyo",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "nyy",
+      "label": "Nyakyusa-Ngonde",
+      "display_label": "nyy - Nyakyusa-Ngonde",
+      "iso639_3": "nyy",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "hay",
+      "label": "Haya",
+      "display_label": "hay - Haya",
+      "iso639_3": "hay",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "heh",
+      "label": "Hehe",
+      "display_label": "heh - Hehe",
+      "iso639_3": "heh",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "gog",
+      "label": "Gogo",
+      "display_label": "gog - Gogo",
+      "iso639_3": "gog",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "ruf",
+      "label": "Luguru",
+      "display_label": "ruf - Luguru",
+      "iso639_3": "ruf",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "cwe",
+      "label": "Kwere",
+      "display_label": "cwe - Kwere",
+      "iso639_3": "cwe",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "ziw",
+      "label": "Zigula",
+      "display_label": "ziw - Zigula",
+      "iso639_3": "ziw",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "ksb",
+      "label": "Shambala",
+      "display_label": "ksb - Shambala",
+      "iso639_3": "ksb",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "suk",
+      "label": "Sukuma",
+      "display_label": "suk - Sukuma",
+      "iso639_3": "suk",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "bem",
+      "label": "Bemba",
+      "display_label": "bem - Bemba",
+      "iso639_3": "bem",
+      "region": "Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "bss",
+      "label": "Akoose",
+      "display_label": "bss - Akoose",
+      "iso639_3": "bss",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "lin",
+      "label": "Lingala",
+      "display_label": "lin - Lingala",
+      "iso639_3": "lin",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "kon",
+      "label": "Kikongo",
+      "display_label": "kon - Kikongo",
+      "iso639_3": "kon",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "lua",
+      "label": "Tshiluba",
+      "display_label": "lua - Tshiluba",
+      "iso639_3": "lua",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "lub",
+      "label": "Luba-Katanga",
+      "display_label": "lub - Luba-Katanga",
+      "iso639_3": "lub",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "dua",
+      "label": "Duala",
+      "display_label": "dua - Duala",
+      "iso639_3": "dua",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "ewo",
+      "label": "Ewondo",
+      "display_label": "ewo - Ewondo",
+      "iso639_3": "ewo",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "fan",
+      "label": "Fang",
+      "display_label": "fan - Fang",
+      "iso639_3": "fan",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "kmb",
+      "label": "Kimbundu",
+      "display_label": "kmb - Kimbundu",
+      "iso639_3": "kmb",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "umb",
+      "label": "Umbundu",
+      "display_label": "umb - Umbundu",
+      "iso639_3": "umb",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "cjk",
+      "label": "Chokwe",
+      "display_label": "cjk - Chokwe",
+      "iso639_3": "cjk",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "lun",
+      "label": "Lunda",
+      "display_label": "lun - Lunda",
+      "iso639_3": "lun",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "lue",
+      "label": "Luvale",
+      "display_label": "lue - Luvale",
+      "iso639_3": "lue",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "ngl",
+      "label": "Lomwe",
+      "display_label": "ngl - Lomwe",
+      "iso639_3": "ngl",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "lon",
+      "label": "Malawi Lomwe",
+      "display_label": "lon - Malawi Lomwe",
+      "iso639_3": "lon",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "vmw",
+      "label": "Makhuwa",
+      "display_label": "vmw - Makhuwa",
+      "iso639_3": "vmw",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "mgh",
+      "label": "Makhuwa-Meetto",
+      "display_label": "mgh - Makhuwa-Meetto",
+      "iso639_3": "mgh",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "kde",
+      "label": "Makonde",
+      "display_label": "kde - Makonde",
+      "iso639_3": "kde",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "yao",
+      "label": "Yao",
+      "display_label": "yao - Yao",
+      "iso639_3": "yao",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "seh",
+      "label": "Sena",
+      "display_label": "seh - Sena",
+      "iso639_3": "seh",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "toh",
+      "label": "Malawi Tonga",
+      "display_label": "toh - Malawi Tonga",
+      "iso639_3": "toh",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": false
+    },
+    {
+      "code": "tum",
+      "label": "Tumbuka",
+      "display_label": "tum - Tumbuka",
+      "iso639_3": "tum",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "zu",
+      "label": "isiZulu",
+      "display_label": "zu - isiZulu",
+      "iso639_3": "zul",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "xh",
+      "label": "isiXhosa",
+      "display_label": "xh - isiXhosa",
+      "iso639_3": "xho",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "st",
+      "label": "Sesotho",
+      "display_label": "st - Sesotho",
+      "iso639_3": "sot",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "nso",
+      "label": "Sepedi / Northern Sotho",
+      "display_label": "nso - Sepedi / Northern Sotho",
+      "iso639_3": "nso",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "tn",
+      "label": "Setswana",
+      "display_label": "tn - Setswana",
+      "iso639_3": "tsn",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "ve",
+      "label": "Tshivenda",
+      "display_label": "ve - Tshivenda",
+      "iso639_3": "ven",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "ts",
+      "label": "Xitsonga",
+      "display_label": "ts - Xitsonga",
+      "iso639_3": "tso",
+      "region": "East, Central, or Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "ss",
+      "label": "siSwati",
+      "display_label": "ss - siSwati",
+      "iso639_3": "ssw",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "nd",
+      "label": "isiNdebele (Northern)",
+      "display_label": "nd - isiNdebele (Northern)",
+      "iso639_3": "nde",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "nr",
+      "label": "isiNdebele (Southern)",
+      "display_label": "nr - isiNdebele (Southern)",
+      "iso639_3": "nbl",
+      "region": "East, Central, or Southern Africa",
+      "state": "planned",
+      "pack_state": "no-verified-pack",
+      "story_available": false
+    },
+    {
+      "code": "sn",
+      "label": "Shona",
+      "display_label": "sn - Shona",
+      "iso639_3": "sna",
+      "region": "Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    },
+    {
+      "code": "ny",
+      "label": "Chichewa / Nyanja",
+      "display_label": "ny - Chichewa / Nyanja",
+      "iso639_3": "nya",
+      "region": "Southern Africa",
+      "state": "adapter-available",
+      "pack_state": "lazy-downloadable",
+      "story_available": true
+    }
+  ]
+}

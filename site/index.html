@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Nastech Research local-first expressive multilingual text-to-speech documentation and verified voice previews.">
+  <title>Nastech Research | Local Voice Studio</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Nastech Research home">
+      <span class="brand-mark" aria-hidden="true">N</span>
+      <span><strong>Nastech</strong> <small>Research</small></span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#start">Start</a>
+      <a href="#voices">Voices</a>
+      <a href="#languages">Languages</a>
+      <a href="#agents">AI agents</a>
+      <a href="#endurance">Reliability</a>
+      <a href="instructions.html">Full instructions</a>
+    </nav>
+    <button class="theme-button" id="theme-toggle" type="button" aria-label="Switch theme">Theme</button>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div>
+        <p class="eyebrow">Nastech Research · local-first expressive speech</p>
+        <h1>Make voice responses that remain <em>on your machine.</em></h1>
+        <p class="lead">Nastech TTS is a CPU-first local speech system with named English voices, optional Bantu language packs, expressive controls, a browser studio, a command-line interface, and an agent bridge.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#start">Install and speak</a>
+          <a class="button secondary" href="#voices">Hear verified voices</a>
+        </div>
+      </div>
+      <aside class="status-card" aria-label="Published local verification summary">
+        <p class="status-label">Verified local core</p>
+        <dl>
+          <div><dt>English profiles</dt><dd>40</dd></div>
+          <div><dt>Base timbres</dt><dd>10</dd></div>
+          <div><dt>Language registry</dt><dd>61</dd></div>
+          <div><dt>Lazy local packs</dt><dd>35</dd></div>
+        </dl>
+        <p class="quiet">Voice previews below are WAV files generated locally from the verified English runtime. Bantu routes are clearly labelled by pack and review status.</p>
+      </aside>
+    </section>
+
+    <section class="section" id="start">
+      <div class="section-heading"><p class="eyebrow">Start here</p><h2>Install, run, listen.</h2></div>
+      <div class="grid three">
+        <article class="card"><span class="step">01</span><h3>Get the project</h3><pre><code>git clone https://github.com/bantuinversions/nastech-tts.git
+cd nastech-tts</code></pre></article>
+        <article class="card"><span class="step">02</span><h3>Install locally</h3><pre><code>./installer/install.sh -- platforms</code></pre><p>The normal installer detects the platform and prepares a local environment.</p></article>
+        <article class="card"><span class="step">03</span><h3>Open the studio</h3><pre><code>nastech-tts serve</code></pre><p>Open <strong>http://127.0.0.1:8765/</strong>, then select <strong>Generate &amp; play</strong>.</p></article>
+      </div>
+      <p class="callout">The local runtime runs without a speech cloud proxy. Optional language packs are downloaded only when you choose them. Read the <a href="instructions.html">full installation and operating instructions</a> before use.</p>
+    </section>
+
+    <section class="section tinted" id="voices">
+      <div class="section-heading split"><div><p class="eyebrow">Verified English voice previews</p><h2>Hear every selectable profile.</h2><p>Each preview says the same local sentence. Use search and filters to compare named base profiles with clear, soft, and dynamic delivery variants.</p></div><div class="stat-pill" id="voice-count">Loading previews…</div></div>
+      <div class="tool-row" aria-label="Voice preview controls">
+        <label>Find a voice <input id="voice-search" type="search" placeholder="Siya, F1, soft…"></label>
+        <label>Show <select id="voice-kind"><option value="all">All profiles</option><option value="named-base-profile">Named base profiles</option><option value="delivery-profile">Delivery variants</option></select></label>
+        <button class="button secondary" id="stop-audio" type="button">Stop playback</button>
+      </div>
+      <div class="voice-grid" id="voice-grid" aria-live="polite"></div>
+      <noscript><p class="callout">Enable JavaScript to load the ordered voice preview catalogue and audio players.</p></noscript>
+    </section>
+
+    <section class="section" id="expressive-demo">
+      <div class="section-heading split"><div><p class="eyebrow">Complete expressive test</p><h2>All emotions. All effects. One local WAV.</h2><p>This 55.93-second demonstration requests the ten local emotion controls and all eleven sound cues in an explicitly ordered script. Read the validation record before treating an approximation as a separate trained style.</p></div><div class="stat-pill">10 emotions · 11 cues</div></div>
+      <article class="card"><h3>Nastech Research all-effects demonstration</h3><audio controls preload="metadata" src="assets/expressive-all-effects-demo.wav" aria-label="Play all emotions and all effects local demonstration"></audio><p class="voice-meta">Mono 16-bit PCM WAV · 44.1 kHz · 55.93 seconds · zero clipped samples. <a href="assets/expressive-all-effects-demo.validation.json">Open validation JSON</a>.</p></article>
+    </section>
+
+    <section class="section" id="languages">
+      <div class="section-heading split"><div><p class="eyebrow">East to Southern Africa</p><h2>Code-first language coverage.</h2><p>Language labels always show a short code first—for example, <strong>lg - Luganda</strong>. A local route is never silently replaced with another language.</p></div><div class="stat-pill">61 targets</div></div>
+      <div class="language-summary" id="language-summary">Loading language registry…</div>
+      <div class="tool-row"><label>Find a language <input id="language-search" type="search" placeholder="lg, Luganda, Shona…"></label><label><input id="show-planned" type="checkbox"> Show planned targets</label></div>
+      <div class="table-wrap"><table><thead><tr><th>Language</th><th>Region</th><th>Local status</th><th>How to use it</th></tr></thead><tbody id="language-table"></tbody></table></div>
+      <p class="callout">Only a route marked <strong>adapter available</strong> can be downloaded as a local on-demand MMS pack. The first selected pack is downloaded with <code>nastech-tts download-language-pack lg</code>; planned targets remain visible for coverage planning but cannot be substituted.</p>
+    </section>
+
+    <section class="section dark" id="agents">
+      <div class="section-heading"><p class="eyebrow">AI agent voice responses</p><h2>Let an agent ask, verify, then speak locally.</h2><p>Agents can discover the exact runtime contract before they generate a response. Natural phrases such as <code>joyful</code>, <code>awe</code>, or <code>triumphant</code> resolve transparently to supported local controls.</p></div>
+      <div class="grid two">
+        <article class="code-card"><h3>Discover current controls</h3><pre><code>nastech-tts agent-capabilities</code></pre><p>Returns machine-readable voices, languages, ten core emotions, eleven sound cues, aliases, rates, volumes, and explicit rendering limits.</p></article>
+        <article class="code-card"><h3>Generate a local AI response</h3><pre><code>nastech-tts agent-speak \
+  "I am ready to help." \
+  --voice siya \
+  --emotion joyful \
+  --sound laughter \
+  --sound sigh \
+  --output response.wav</code></pre><p>Writes a WAV, a manifest, and JSON that states the requested and rendered emotional controls.</p></article>
+      </div>
+      <p><a class="button secondary inverse" href="https://github.com/bantuinversions/nastech-tts/blob/main/docs/AI_AGENT_VOICE_RESPONSES.md">Read the full AI agent voice-response guide</a></p>
+    </section>
+
+    <section class="section" id="endurance">
+      <div class="section-heading"><p class="eyebrow">Long conversation reliability</p><h2>Two hours, measured—not claimed.</h2><p>The scheduled endurance suite renders a deterministic two-hour English dialogue as bounded local segments, concatenates it to a two-hour WAV, and records timing, real-time factor, duration, WAV levels, clipping, chunk completion, memory observations, and a reproducible manifest. The large WAV is not committed or published as a Pages asset.</p></div>
+      <div class="grid three">
+        <article class="card"><h3>Conversation contract</h3><p>Alternating Nastech Research turns, named voices, emotion transitions, pauses, and sound cues exercise production-style dialogue without a cloud service.</p></article>
+        <article class="card"><h3>Quality gates</h3><p>The run fails for missing chunks, an incorrect duration, clipping, unexpected sample format, unsafe DC offset, or a failed local response request.</p></article>
+        <article class="card"><h3>Published evidence</h3><p>The workflow uploads the JSON analysis, chunk manifest, and a short listening excerpt. It records minutes required rather than guessing a universal speed.</p></article>
+      </div>
+      <p class="callout">A successful endurance report proves the documented runner, hardware, dependency revision, and input completed that run. It is evidence for that environment, not a blanket guarantee for every computer, language pack, or future model revision.</p>
+    </section>
+
+    <section class="section brand-section">
+      <p class="eyebrow">Ownership and provenance</p>
+      <h2>Built and published as <strong>Nastech Research</strong>.</h2>
+      <p>Nastech TTS is maintained under the Nastech Research brand. Local model and pack licences remain visible in the project documentation; contributors should read the release, runtime, model, and third-party licence notices before redistribution.</p>
+      <p><a class="button secondary" href="https://github.com/bantuinversions/nastech-tts">Open the source repository</a> <a class="button secondary" href="instructions.html">Read complete instructions</a></p>
+    </section>
+  </main>
+
+  <footer><span>Nastech Research</span><span>Local-first expressive speech · <a href="https://github.com/bantuinversions/nastech-tts">Source and release evidence</a></span></footer>
+  <script src="assets/site.js"></script>
+</body>
+</html>

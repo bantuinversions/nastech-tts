@@ -1,0 +1,54 @@
+{
+  "status": "passed",
+  "publisher": "Nastech Research",
+  "audio": {
+    "path": "Nastech_All_Emotions_All_Effects_Demo.wav",
+    "bytes": 4933184,
+    "levels": {
+      "format": "mono-16-bit-pcm-wav",
+      "channels": 1,
+      "sample_width_bytes": 2,
+      "sample_rate_hz": 44100,
+      "frames": 2466570,
+      "duration_seconds": 55.9313,
+      "peak_pcm": 14417,
+      "peak_dbfs": -7.1312,
+      "rms_pcm": 1627.5073,
+      "rms_dbfs": -26.0783,
+      "dc_offset_pcm": 0.0868,
+      "clipped_samples": 0
+    }
+  },
+  "coverage": {
+    "requested_emotions": [
+      "angry",
+      "calm",
+      "disgusted",
+      "excited",
+      "fearful",
+      "frustrated",
+      "happy",
+      "neutral",
+      "sad",
+      "surprised"
+    ],
+    "requested_emotion_count": 10,
+    "requested_sounds": [
+      "chuckle",
+      "cough",
+      "cry",
+      "gasp",
+      "groan",
+      "laugh",
+      "scream",
+      "sigh",
+      "sniffle",
+      "throatclear",
+      "yawn"
+    ],
+    "requested_sound_count": 11,
+    "missing_emotions": [],
+    "missing_sounds": []
+  },
+  "manifest_request_id": "63296ecc74d4f2e609ec20ef"
+}

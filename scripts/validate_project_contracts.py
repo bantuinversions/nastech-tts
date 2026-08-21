@@ -125,6 +125,17 @@ def main() -> int:
         (ROOT / "release" / "multilingual_fixtures" / "nastech-expressive-audition.xml").is_file(),
         "Expressive fixture source is missing.",
     )
+    site = ROOT / "site"
+    _require((site / "index.html").is_file(), "GitHub Pages homepage is missing.")
+    _require((site / "instructions.html").is_file(), "GitHub Pages instruction page is missing.")
+    preview_catalog = _read_json(site / "assets" / "voice-previews.json")
+    _require(preview_catalog.get("voice_count") == 40, "Pages preview count mismatch.")
+    _require(
+        len(list((site / "assets" / "voice-previews").glob("*.wav"))) == 40,
+        "Pages preview WAV asset count mismatch.",
+    )
+    page_languages = _read_json(site / "assets" / "languages.json")
+    _require(len(page_languages.get("languages", [])) == 61, "Pages language catalog mismatch.")
 
     yaml_paths = [
         ROOT / ".github" / "dependabot.yml",
@@ -136,6 +147,8 @@ def main() -> int:
         ROOT / ".github" / "workflows" / "release.yml",
         ROOT / ".github" / "workflows" / "release_audio_test.yml",
         ROOT / ".github" / "workflows" / "voice-release-tests.yml",
+        ROOT / ".github" / "workflows" / "pages.yml",
+        ROOT / ".github" / "workflows" / "two-hour-endurance.yml",
     ]
     for path in yaml_paths:
         _require(_read_yaml(path) is not None, f"YAML contract is empty: {path.relative_to(ROOT)}")
@@ -146,6 +159,16 @@ def main() -> int:
         any(item.get("cron") == "37 03 * * *" for item in voice_triggers.get("schedule", [])),
         "Daily voice self-test schedule is missing.",
     )
+
+    endurance_workflow = _read_yaml(ROOT / ".github" / "workflows" / "two-hour-endurance.yml")
+    endurance_triggers = endurance_workflow.get("on", endurance_workflow.get(True, {}))
+    _require(
+        any(item.get("cron") == "23 1 * * 0" for item in endurance_triggers.get("schedule", [])),
+        "Weekly two-hour endurance schedule is missing.",
+    )
+    pages_workflow = _read_yaml(ROOT / ".github" / "workflows" / "pages.yml")
+    pages_triggers = pages_workflow.get("on", pages_workflow.get(True, {}))
+    _require("workflow_dispatch" in pages_triggers, "Pages manual publish trigger is missing.")
 
     ci = _read_yaml(ROOT / ".github" / "workflows" / "ci.yml")
     triggers = ci.get("on", ci.get(True, {}))

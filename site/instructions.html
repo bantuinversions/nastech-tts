@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Complete Nastech Research local TTS installation and operating instructions.">
+  <title>Nastech Research | Complete Instructions</title>
+  <link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header"><a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">N</span><span><strong>Nastech</strong> <small>Research</small></span></a><nav aria-label="Primary navigation"><a href="index.html#start">Start</a><a href="index.html#voices">Voices</a><a href="index.html#languages">Languages</a><a href="index.html#agents">AI agents</a><a href="index.html#endurance">Reliability</a></nav><button class="theme-button" id="theme-toggle" type="button" aria-label="Switch theme">Theme</button></header>
+  <main id="main">
+    <section class="section">
+      <p class="eyebrow">Complete operating guide</p><h1>Nastech TTS instructions for every local user.</h1>
+      <p class="lead">Use the installer when you want the simplest desktop setup. Use the Python route when you contribute to the project or need direct command-line control. Both run speech locally after required files are installed.</p>
+    </section>
+    <section class="section tinted"><div class="section-heading"><p class="eyebrow">1. Install</p><h2>Choose the route that fits your computer.</h2></div>
+      <div class="grid two"><article class="card"><h3>Desktop installer</h3><p>From a clone of the repository, run the cross-platform installer. The normal graphical route hides the terminal; the flag shown below uses the available local platform configuration.</p><pre><code>git clone https://github.com/bantuinversions/nastech-tts.git
+cd nastech-tts
+./installer/install.sh -- platforms</code></pre><p>On Windows, use <code>installer\install.ps1</code>. On macOS and Linux, use <code>installer/install.sh</code>.</p></article><article class="card"><h3>Python source route</h3><p>Use a virtual environment and install the editable local package.</p><pre><code>python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -e '.[dev]'</code></pre><p>Windows PowerShell activation uses <code>.venv\Scripts\Activate.ps1</code>.</p></article></div>
+    </section>
+    <section class="section"><div class="section-heading"><p class="eyebrow">2. First local speech</p><h2>Open the Voice Studio or use a command.</h2></div>
+      <div class="grid two"><article class="card"><h3>Browser Voice Studio</h3><pre><code>nastech-tts serve</code></pre><p>Open <strong>http://127.0.0.1:8765/</strong>. Pick a theme, voice, emotion, rate, sound cue, and language, then select <strong>Generate &amp; play</strong>. The player and download button appear after local synthesis completes.</p></article><article class="card"><h3>Command-line speech</h3><pre><code>printf '&lt;speak voice="siya"&gt;Hello from Nastech Research.&lt;/speak&gt;' &gt; hello.xml
+nastech-tts synthesize hello.xml --output hello.wav</code></pre><p>Every synthesis also writes a JSON manifest unless you supply a different manifest destination.</p></article></div>
+    </section>
+    <section class="section tinted"><div class="section-heading"><p class="eyebrow">3. Voices and expression</p><h2>Use named voices and explicit markup.</h2></div>
+      <div class="grid three"><article class="card"><h3>List available voices</h3><pre><code>nastech-tts voices</code></pre><p>The ordered English list includes named Siya, Nasi, Jafta, Della, Axam, Alicia, Shanice, Adam, Shakira, and Shimah, plus delivery variants.</p></article><article class="card"><h3>Add emotions</h3><pre><code>&lt;emotion name="happy" intensity="0.72"&gt;
+  This is a happy response.
+&lt;/emotion&gt;</code></pre><p>Core values are neutral, calm, happy, excited, surprised, sad, angry, frustrated, fearful, and disgusted.</p></article><article class="card"><h3>Add a sound cue</h3><pre><code>&lt;sound type="laugh" /&gt;
+&lt;sound type="sigh" /&gt;</code></pre><p>Available cues are laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, cry, scream, and throatclear.</p></article></div>
+    </section>
+    <section class="section"><div class="section-heading"><p class="eyebrow">4. Bantu language packs</p><h2>Download one exact pack only when you select it.</h2><p>Start with the catalog and use code-first labels. An on-demand route is a pack availability state, not a claim that all routes have equal human voice-review evidence.</p></div>
+      <pre><code>nastech-tts languages
+nastech-tts language-packs
+nastech-tts download-language-pack lg   # lg - Luganda
+nastech-tts download-language-pack sw   # sw - Kiswahili
+nastech-tts download-language-pack bem  # bem - Bemba</code></pre>
+      <p class="callout">Planned language targets are listed without a replacement model. If a pack has no auditable local route, Nastech TTS refuses substitution rather than speaking the wrong language.</p>
+    </section>
+    <section class="section dark"><div class="section-heading"><p class="eyebrow">5. AI-agent responses</p><h2>Inspect, plan, then generate a local response.</h2></div>
+      <pre><code>nastech-tts agent-capabilities
+nastech-tts agent-markup "That is remarkable." --emotion awe --sound laughter
+nastech-tts agent-speak "I am ready to help." \
+  --voice siya --emotion joyful --sound laughter --output response.wav</code></pre>
+      <p>Aliases such as <code>joyful</code>, <code>awe</code>, <code>relieved</code>, <code>anxious</code>, and <code>triumphant</code> map transparently to verified local controls. The JSON result tells the agent what actually rendered.</p>
+      <p><a class="button secondary inverse" href="https://github.com/bantuinversions/nastech-tts/blob/main/docs/AI_AGENT_VOICE_RESPONSES.md">Read the detailed agent contract</a></p>
+    </section>
+    <section class="section"><div class="section-heading"><p class="eyebrow">6. Nastech Agent connection</p><h2>Register the local MCP voice bridge.</h2></div>
+      <pre><code>./installer/install.sh -- platforms
+nastech</code></pre>
+      <p>The installer preserves existing <code>~/.nastech/config.yaml</code> entries and registers local tools for speech, status, and capabilities. Restart Nastech Agent after installation so it discovers the bridge.</p>
+    </section>
+    <section class="section tinted"><div class="section-heading"><p class="eyebrow">7. Safe long-form use</p><h2>Make long conversations measurable.</h2></div>
+      <p>For long material, split the script into bounded turns or paragraphs, retain each manifest, and concatenate only after checking every segment. The scheduled endurance suite uses the same approach for a two-hour deterministic dialogue: it records chunk counts, elapsed minutes, real-time factor, sample format, clipping, DC offset, and a small listening excerpt. It does not claim that one successful runner guarantees every machine, pack, or future version.</p>
+      <pre><code>make verify
+python scripts/validate_language_self_test.py
+nastech-tts status</code></pre>
+    </section>
+    <section class="section"><div class="section-heading"><p class="eyebrow">Troubleshooting</p><h2>Check the local service first.</h2></div>
+      <div class="table-wrap"><table><thead><tr><th>What you see</th><th>What to do</th></tr></thead><tbody><tr><td>The browser page does not open.</td><td>Run <code>nastech-tts serve</code>, then open exactly <code>http://127.0.0.1:8765/</code>. Do not use a different port unless you selected one.</td></tr><tr><td>A language cannot speak.</td><td>Run <code>nastech-tts language-preflight CODE</code>, then download an exact pack only if the route is marked adapter available.</td></tr><tr><td>Generation takes time on the first request.</td><td>The first local request loads the selected model. Use <code>nastech-tts warmup</code> when you want to prepare the local English runtime before a conversation.</td></tr><tr><td>An agent cannot find TTS capabilities.</td><td>Re-run the installer, restart Nastech Agent, and call <code>nastech_tts_capabilities</code> before speech generation.</td></tr></tbody></table></div>
+    </section>
+  </main>
+  <footer><span>Nastech Research</span><span><a href="index.html">Voice previews and status</a> · <a href="https://github.com/bantuinversions/nastech-tts">Source repository</a></span></footer>
+  <script src="assets/site.js"></script>
+</body>
+</html>

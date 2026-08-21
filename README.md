@@ -85,6 +85,10 @@ The last command confirms the committed **61-language registry**, **35 audited l
 
 A local AI agent can discover the exact emotion and sound contract with `nastech-tts agent-capabilities`, inspect an auditable expression plan with `nastech-tts agent-markup`, and generate a real local WAV response with `nastech-tts agent-speak`. The command accepts all eleven supported sound cues—including laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, cry, scream, and throat-clear—as well as documented natural-language emotion aliases such as `joyful`, `awe`, `relieved`, `anxious`, and `triumphant`. See [AI Agent local voice responses](docs/AI_AGENT_VOICE_RESPONSES.md) for examples, the transparent mapping boundary, and the research basis.
 
+### Public documentation, previews, and endurance evidence
+
+The Nastech Research documentation site is published at [bantuinversions.github.io/nastech-tts](https://bantuinversions.github.io/nastech-tts/). It provides the complete installation guide, all forty ordered local English voice previews, the all-emotions and all-effects demonstration, code-first Bantu coverage, AI-agent command examples, and long-conversation reliability boundaries. Maintainers should follow [GitHub Pages and long-conversation operations](docs/GITHUB_PAGES_AND_ENDURANCE.md) for preview publishing, CI evidence, and the weekly two-hour endurance suite.
+
 ### Direct Nastech Agent connection
 
 The desktop and headless Nastech TTS installers now detect the Nastech Agent home (`$NASTECH_HOME`, default `~/.nastech`) and safely register a local MCP bridge in `~/.nastech/config.yaml`. Existing MCP servers are preserved. The bridge starts only when Nastech Agent requests it and returns local WAV audio; no speech text is forwarded to a cloud proxy.

@@ -1,0 +1,70 @@
+name: Two-hour local conversation endurance
+
+on:
+  schedule:
+    - cron: "23 1 * * 0"
+  workflow_dispatch:
+    inputs:
+      duration_seconds:
+        description: "Target local audio duration in seconds; use 7200 for the full two-hour contract"
+        required: false
+        default: "7200"
+        type: string
+      segment_seconds:
+        description: "Bounded target duration per local inference segment"
+        required: false
+        default: "60"
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: two-hour-local-endurance-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  endurance:
+    name: Two-hour local Nastech conversation
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out Nastech Research source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install local runtime and verification dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+
+      - name: Render and analyse bounded local conversation turns
+        env:
+          DURATION_SECONDS: ${{ inputs.duration_seconds || '7200' }}
+          SEGMENT_SECONDS: ${{ inputs.segment_seconds || '60' }}
+        run: |
+          python scripts/run_long_conversation_endurance.py \
+            --duration-seconds "$DURATION_SECONDS" \
+            --segment-seconds "$SEGMENT_SECONDS" \
+            --require-full-coverage \
+            --output-dir release/two_hour_endurance
+
+      - name: Show observed duration and minutes required
+        run: |
+          python scripts/summarize_long_conversation_endurance.py \
+            release/two_hour_endurance/two-hour-local-conversation-report.json
+
+      - name: Upload endurance analysis and listening excerpt
+        uses: actions/upload-artifact@v4
+        with:
+          name: nastech-two-hour-local-endurance-${{ github.run_id }}
+          path: |
+            release/two_hour_endurance/two-hour-local-conversation-report.json
+            release/two_hour_endurance/two-hour-local-conversation-excerpt.wav
+          if-no-files-found: error
+          retention-days: 90

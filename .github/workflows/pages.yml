@@ -1,0 +1,72 @@
+name: Publish Nastech Research Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "docs/**"
+      - "README.md"
+      - "release/nastech-bantu-language-voice-registry.json"
+      - "release/nastech-english-voice-profiles.json"
+      - "src/nastech_tts/voices.py"
+      - "scripts/generate_pages_voice_previews.py"
+      - "scripts/build_pages_language_catalog.py"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Nastech Research site source
+        uses: actions/checkout@v4
+
+      - name: Set up Python for local preview generation
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Build current local preview and language assets
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]'
+          python scripts/build_pages_language_catalog.py
+          python scripts/generate_pages_voice_previews.py --force
+
+      - name: Validate published static assets
+        run: |
+          test -f site/index.html
+          test -f site/instructions.html
+          test -f site/assets/site.css
+          test -f site/assets/site.js
+          test -f site/assets/voice-previews.json
+          test -f site/assets/languages.json
+          test -f site/assets/expressive-all-effects-demo.wav
+          test -f site/assets/expressive-all-effects-demo.validation.json
+          test "$(find site/assets/voice-previews -name '*.wav' | wc -l)" -eq 40
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy Nastech Research Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

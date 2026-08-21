@@ -1,0 +1,44 @@
+<speak voice="siya">
+  <emotion name="neutral" intensity="0.50">This is Nastech Research local voice testing every emotion and every vocal effect.</emotion>
+  <pause ms="350" />
+
+  <emotion name="calm" intensity="0.45">First, I am calm, gentle, and steady.</emotion>
+  <sound type="sigh" />
+  <pause ms="400" />
+
+  <emotion name="happy" intensity="0.68">Now I am happy. This local voice test is going well.</emotion>
+  <sound type="laugh" />
+  <sound type="chuckle" />
+  <pause ms="400" />
+
+  <emotion name="excited" intensity="0.80">I am excited to share a clear voice response.</emotion>
+  <sound type="gasp" />
+  <pause ms="400" />
+
+  <emotion name="surprised" intensity="0.76">What a surprise. Every local expressive control is active.</emotion>
+  <pause ms="400" />
+
+  <emotion name="sad" intensity="0.74">Now the tone becomes sad and reflective.</emotion>
+  <sound type="cry" />
+  <sound type="sniffle" />
+  <pause ms="400" />
+
+  <emotion name="angry" intensity="0.82">I am angry, but the words remain clear and controlled.</emotion>
+  <sound type="cough" />
+  <pause ms="400" />
+
+  <emotion name="frustrated" intensity="0.76">This is frustration. I will pause, focus, and continue.</emotion>
+  <sound type="groan" />
+  <pause ms="400" />
+
+  <emotion name="fearful" intensity="0.78">I sound fearful as I carefully call for help.</emotion>
+  <sound type="scream" />
+  <pause ms="400" />
+
+  <emotion name="disgusted" intensity="0.70">This reaction is disgusted. Let us move on.</emotion>
+  <sound type="throatclear" />
+  <sound type="yawn" />
+  <pause ms="450" />
+
+  <emotion name="neutral" intensity="0.52">The test is complete. Nastech Research generated this response locally with all ten emotions and all eleven effects.</emotion>
+</speak>
