@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from nastech_tts.audio_levels import validate_release_wav  # noqa: E402
+from nastech_tts.cleanup import clean_wav  # noqa: E402
 from nastech_tts.supertonic import SupertonicRuntime, compile_nastechml  # noqa: E402
 
 OUTPUT_RATE = 44_100
@@ -163,7 +164,8 @@ def main() -> int:
             segment_started = time.perf_counter()
             compiled = compile_nastechml(markup, runtime.settings)
             audio = runtime.synthesize(compiled, use_cache=False)
-            source_rate, samples = _wav_parts(audio.data)
+            cleaned = clean_wav(audio.data)
+            source_rate, samples = _wav_parts(cleaned.data)
             samples = _resample(samples, source_rate)
             remaining = target_frames - total_frames
             emitted = samples[:remaining]
@@ -179,6 +181,7 @@ def main() -> int:
                     "real_time_factor": round(elapsed / emitted_seconds, 4),
                     "frames": int(len(emitted)),
                     "runtime_peak_rss_mib": _resource_memory_mib(),
+                    "cleanup": cleaned.report,
                     "turns": [
                         {"voice": voice, "emotion": emotion, "sound": sound}
                         for voice, emotion, _text, sound in selected_turns
@@ -235,6 +238,7 @@ def main() -> int:
             "emotion_controls": required_emotions,
             "sound_cues": required_sounds,
             "cache_disabled_per_segment": True,
+            "local_cleanup_per_segment": True,
         },
         "observed": {
             "elapsed_seconds": round(elapsed_total, 4),

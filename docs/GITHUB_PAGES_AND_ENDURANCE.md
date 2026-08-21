@@ -92,7 +92,7 @@ The scheduled **Two-hour local conversation endurance** workflow runs weekly at 
 | Speed | Observed elapsed minutes and overall real-time factor. |
 | Reliability | Segment count, per-segment timing, and peak observed process-memory signal. |
 | Expressive coverage | All scripted voices, ten emotion controls, and eleven sound cues must render at least once. |
-| Audio quality | Mono 16-bit PCM, 44.1 kHz, safe duration, no clipping, and quality levels. |
+| Audio quality | Each bounded segment receives conservative local PCM hygiene—DC offset removal, near-silence gating, peak limiting when required, and edge fades—before the assembled mono 16-bit PCM 44.1 kHz, safe-duration, zero-clipping, and level gates. |
 | Reproducibility | JSON analysis report, segment records, runner contract, and a short listening excerpt. |
 
 The full two-hour WAV is deliberately deleted after validation to avoid storing a large binary in the repository or artifact. The workflow uploads only the JSON report and a listening excerpt. The report records how many minutes that specific runner required; it does not promise the same time, memory, or quality outcome for every computer, language pack, or future model revision.
