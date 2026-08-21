@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 import base64
-import html
 import json
 import sys
 from typing import Any
 
+from .agent_response import agent_expression_capabilities, agent_markup
 from .languages import get_language
 from .providers import require_active_provider_for_language, synthesize_with_provider
 from .supertonic import SupertonicRuntime, compile_nastechml
@@ -28,46 +28,36 @@ TOOLS = [
                 "language": {"type": "string", "default": "en"},
                 "emotion": {
                     "type": "string",
-                    "enum": [
-                        "neutral",
-                        "calm",
-                        "happy",
-                        "excited",
-                        "surprised",
-                        "sad",
-                        "angry",
-                        "frustrated",
-                        "fearful",
-                        "disgusted",
-                    ],
                     "default": "neutral",
+                    "description": (
+                        "Core local emotion or documented alias, for example joyful, awe, "
+                        "relieved, anxious, or triumphant."
+                    ),
                 },
                 "rate": {"type": "string", "enum": ["slow", "normal", "fast"], "default": "normal"},
                 "sounds": {
                     "type": "array",
                     "items": {
                         "type": "string",
-                        "enum": [
-                            "laugh",
-                            "chuckle",
-                            "sigh",
-                            "cough",
-                            "sniffle",
-                            "groan",
-                            "yawn",
-                            "gasp",
-                            "cry",
-                            "scream",
-                            "throatclear",
-                        ],
+                        "description": (
+                            "Core cue or alias, for example laugh, laughter, chuckle, sigh, "
+                            "gasp, cry, scream, shriek, or throat-clear."
+                        ),
                     },
-                    "maxItems": 3,
                     "default": [],
                 },
             },
             "required": ["text"],
             "additionalProperties": False,
         },
+    },
+    {
+        "name": "nastech_tts_capabilities",
+        "description": (
+            "Read the exact local emotion, alias, sound, rate, volume, and rendering "
+            "boundary contract without generating audio."
+        ),
+        "inputSchema": {"type": "object", "properties": {}, "additionalProperties": False},
     },
     {
         "name": "nastech_tts_status",
@@ -85,15 +75,14 @@ def _error(request_id: Any, code: int, message: str) -> dict[str, Any]:
     return {"jsonrpc": "2.0", "id": request_id, "error": {"code": code, "message": message}}
 
 
-def _markup(arguments: dict[str, Any]) -> str:
-    text = html.escape(str(arguments["text"]))
-    voice = html.escape(str(arguments.get("voice") or "siya"), quote=True)
-    emotion = str(arguments.get("emotion") or "neutral")
-    rate = str(arguments.get("rate") or "normal")
-    sounds = arguments.get("sounds") or []
-    spoken = text if emotion == "neutral" else f'<emotion name="{emotion}">{text}</emotion>'
-    cues = "".join(f'<sound type="{html.escape(str(sound), quote=True)}" />' for sound in sounds)
-    return f'<speak voice="{voice}"><prosody rate="{rate}">{spoken}{cues}</prosody></speak>'
+def _markup(arguments: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+    return agent_markup(
+        str(arguments["text"]),
+        voice=str(arguments.get("voice") or "siya"),
+        emotion=str(arguments.get("emotion") or "neutral"),
+        rate=str(arguments.get("rate") or "normal"),
+        sounds=arguments.get("sounds") or [],
+    )
 
 
 def _tool_result(
@@ -101,12 +90,22 @@ def _tool_result(
 ) -> dict[str, Any]:
     if name == "nastech_tts_status":
         return {"content": [{"type": "text", "text": json.dumps(runtime.status(), indent=2)}]}
+    if name == "nastech_tts_capabilities":
+        return {
+            "content": [
+                {
+                    "type": "text",
+                    "text": json.dumps(agent_expression_capabilities(), indent=2),
+                }
+            ]
+        }
     if name != "nastech_tts_speak":
         raise ValueError(f"Unknown Nastech TTS tool: {name}.")
 
     language = get_language(str(arguments.get("language") or "en"))
     provider = require_active_provider_for_language(None, language.code)
-    compiled = compile_nastechml(_markup(arguments), runtime.settings, language=language.code)
+    markup, expression = _markup(arguments)
+    compiled = compile_nastechml(markup, runtime.settings, language=language.code)
     audio = synthesize_with_provider(provider.id, runtime, compiled, language=language.code)
     return {
         "content": [
@@ -124,6 +123,7 @@ def _tool_result(
                         "language": language.display_label,
                         "provider": provider.id,
                         "duration_seconds": round(audio.duration_seconds, 3),
+                        "expression": expression,
                         "delivery": "local WAV via Nastech TTS MCP bridge",
                     }
                 ),

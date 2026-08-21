@@ -17,6 +17,11 @@ from .agent_identity import (
     supported_story_sounds,
     supported_story_themes,
 )
+from .agent_response import (
+    AgentExpressionError,
+    agent_expression_capabilities,
+    agent_markup,
+)
 from .cleanup import VoiceCleanupError, clean_wav
 from .cpu import CpuConfigurationError
 from .languages import get_language, language_inventory
@@ -140,6 +145,63 @@ def _parser() -> argparse.ArgumentParser:
         "clear-cache", help="Discard local WAV cache entries without unloading ONNX."
     )
     subparsers.add_parser("agent-tools", help="Print machine-readable agent tool descriptors.")
+    subparsers.add_parser(
+        "agent-capabilities",
+        help="Print the local AI-agent voice, emotion, sound, and response contract as JSON.",
+    )
+    agent_markup = subparsers.add_parser(
+        "agent-markup",
+        help="Resolve natural-language emotion and sound labels into auditable NastechML JSON.",
+    )
+    agent_markup.add_argument("text", help="Text for the proposed local voice response.")
+    agent_markup.add_argument("--voice", default="siya", help="Voice profile (default: siya).")
+    agent_markup.add_argument(
+        "--emotion", default="neutral", help="Core emotion or supported alias."
+    )
+    agent_markup.add_argument("--intensity", type=float, help="Emotion intensity from 0 to 1.")
+    agent_markup.add_argument("--rate", help="Optional rate override: slow, normal, or fast.")
+    agent_markup.add_argument("--volume", help="Optional volume override: soft, normal, or loud.")
+    agent_markup.add_argument(
+        "--sound",
+        dest="sounds",
+        action="append",
+        default=[],
+        help="Sound cue or alias; may be used multiple times.",
+    )
+    agent_markup.add_argument("--output", type=Path, help="Optional JSON response report path.")
+    agent_speak = subparsers.add_parser(
+        "agent-speak",
+        help="Generate one auditable local AI voice-response WAV and structured JSON result.",
+    )
+    agent_speak.add_argument("text", help="Text for the local voice response.")
+    agent_speak.add_argument("--output", type=Path, required=True, help="Destination WAV path.")
+    agent_speak.add_argument(
+        "--manifest", type=Path, help="Optional compiled-manifest destination."
+    )
+    agent_speak.add_argument(
+        "--report", type=Path, help="Optional structured JSON response report path."
+    )
+    agent_speak.add_argument("--voice", default="siya", help="Voice profile (default: siya).")
+    agent_speak.add_argument(
+        "--language", default="en", help="Registered language code (default: en)."
+    )
+    agent_speak.add_argument("--provider", help="Optional provider ID override.")
+    agent_speak.add_argument(
+        "--emotion", default="neutral", help="Core emotion or supported alias."
+    )
+    agent_speak.add_argument("--intensity", type=float, help="Emotion intensity from 0 to 1.")
+    agent_speak.add_argument("--rate", help="Optional rate override: slow, normal, or fast.")
+    agent_speak.add_argument("--volume", help="Optional volume override: soft, normal, or loud.")
+    agent_speak.add_argument(
+        "--sound",
+        dest="sounds",
+        action="append",
+        default=[],
+        help="Sound cue or alias; may be used multiple times.",
+    )
+    agent_speak.add_argument(
+        "--clean", action="store_true", help="Apply conservative local WAV cleanup."
+    )
     subparsers.add_parser(
         "mcp-server", help="Run the local Nastech TTS MCP bridge over standard input/output."
     )
@@ -356,6 +418,98 @@ def main() -> int:
             )
             return 0
 
+        if args.command == "agent-capabilities":
+            print(
+                json.dumps(
+                    {
+                        "service": "nastech-tts",
+                        "version": VERSION,
+                        "agent_expression": agent_expression_capabilities(),
+                        "voices": english_voice_summary(),
+                        "languages": language_inventory(),
+                    },
+                    indent=2,
+                )
+            )
+            return 0
+
+        if args.command == "agent-markup":
+            markup, expression = agent_markup(
+                args.text,
+                voice=args.voice,
+                emotion=args.emotion,
+                intensity=args.intensity,
+                rate=args.rate,
+                volume=args.volume,
+                sounds=args.sounds,
+            )
+            _print_or_write(
+                {
+                    "service": "nastech-tts",
+                    "version": VERSION,
+                    "kind": "agent_voice_response_plan",
+                    "local_only": True,
+                    "markup": markup,
+                    "expression": expression,
+                },
+                args.output,
+            )
+            return 0
+
+        if args.command == "agent-speak":
+            markup, expression = agent_markup(
+                args.text,
+                voice=args.voice,
+                emotion=args.emotion,
+                intensity=args.intensity,
+                rate=args.rate,
+                volume=args.volume,
+                sounds=args.sounds,
+            )
+            from .api import AgentCompileRequest, _compiled
+
+            compiled = _compiled(
+                AgentCompileRequest(
+                    markup=markup,
+                    voice=args.voice,
+                    provider_id=args.provider,
+                    language=args.language,
+                ),
+                runtime,
+            )
+            audio = synthesize_with_provider(
+                args.provider,
+                runtime,
+                compiled,
+                language=compiled.manifest["language"],
+            )
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_bytes(audio.data)
+            manifest_path = args.manifest or args.output.with_suffix(
+                args.output.suffix + ".manifest.json"
+            )
+            _write_json(manifest_path, compiled.manifest)
+            response: dict[str, Any] = {
+                "service": "nastech-tts",
+                "version": VERSION,
+                "kind": "agent_voice_response",
+                "local_only": True,
+                "output_audio": str(args.output),
+                "output_manifest": str(manifest_path),
+                "mime_type": "audio/wav",
+                "duration_seconds": round(audio.duration_seconds, 4),
+                "language": compiled.manifest["language"],
+                "provider": compiled.manifest["provider"],
+                "expression": expression,
+                "next_action": "play_or_attach_local_wav",
+            }
+            if args.clean:
+                cleaned = clean_wav(audio.data)
+                args.output.write_bytes(cleaned.data)
+                response["cleanup"] = cleaned.report
+            _print_or_write(response, args.report)
+            return 0
+
         if args.command == "clean":
             cleaned = clean_wav(args.input.read_bytes())
             args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -510,6 +664,7 @@ def main() -> int:
         VoiceCleanupError,
         PlatformPlanError,
         ProviderActivationError,
+        AgentExpressionError,
     ) as exc:
         print(f"Nastech error: {exc}")
         return 2

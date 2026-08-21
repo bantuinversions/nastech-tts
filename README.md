@@ -81,6 +81,10 @@ python scripts/validate_language_self_test.py
 
 The last command confirms the committed **61-language registry**, **35 audited lazy local routes**, **11 approved native-story CI routes**, code-first labels such as `lg - Luganda`, and the published all-voices inventory. Source contributors can additionally run `make verify` for linting, the full test suite, package build, contracts, and compact-budget check.
 
+### AI-agent voice responses
+
+A local AI agent can discover the exact emotion and sound contract with `nastech-tts agent-capabilities`, inspect an auditable expression plan with `nastech-tts agent-markup`, and generate a real local WAV response with `nastech-tts agent-speak`. The command accepts all eleven supported sound cues—including laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, cry, scream, and throat-clear—as well as documented natural-language emotion aliases such as `joyful`, `awe`, `relieved`, `anxious`, and `triumphant`. See [AI Agent local voice responses](docs/AI_AGENT_VOICE_RESPONSES.md) for examples, the transparent mapping boundary, and the research basis.
+
 ### Direct Nastech Agent connection
 
 The desktop and headless Nastech TTS installers now detect the Nastech Agent home (`$NASTECH_HOME`, default `~/.nastech`) and safely register a local MCP bridge in `~/.nastech/config.yaml`. Existing MCP servers are preserved. The bridge starts only when Nastech Agent requests it and returns local WAV audio; no speech text is forwarded to a cloud proxy.

@@ -73,7 +73,11 @@ def test_agent_integration_preserves_existing_mcp_entries(tmp_path) -> None:
     bridge = config["mcp_servers"]["nastech_tts"]
     assert bridge["command"] == "python"
     assert bridge["args"] == ["-m", "nastech_tts.cli", "mcp-server"]
-    assert bridge["tools"]["include"] == ["nastech_tts_speak", "nastech_tts_status"]
+    assert bridge["tools"]["include"] == [
+        "nastech_tts_speak",
+        "nastech_tts_status",
+        "nastech_tts_capabilities",
+    ]
 
 
 def test_agent_bridge_lists_tools_and_reads_local_status() -> None:
@@ -94,7 +98,24 @@ def test_agent_bridge_lists_tools_and_reads_local_status() -> None:
         },
         StatusRuntime(),
     )
+    capabilities = handle(
+        {
+            "jsonrpc": "2.0",
+            "id": 4,
+            "method": "tools/call",
+            "params": {"name": "nastech_tts_capabilities"},
+        },
+        StatusRuntime(),
+    )
 
     assert initialized["result"]["serverInfo"]["name"] == "nastech-tts"
     assert listing["result"]["tools"] == TOOLS
+    assert {tool["name"] for tool in TOOLS} >= {
+        "nastech_tts_speak",
+        "nastech_tts_status",
+        "nastech_tts_capabilities",
+    }
     assert json.loads(status["result"]["content"][0]["text"])["cache_entries"] == 0
+    expression = json.loads(capabilities["result"]["content"][0]["text"])
+    assert expression["emotion_aliases"]["triumphant"] == "excited"
+    assert expression["sound_aliases"]["laughter"] == "laugh"

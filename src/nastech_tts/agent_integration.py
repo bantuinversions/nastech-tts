@@ -27,7 +27,13 @@ def bridge_config(command: Sequence[str]) -> dict[str, Any]:
         "command": command[0],
         "args": list(command[1:]),
         "enabled": True,
-        "tools": {"include": ["nastech_tts_speak", "nastech_tts_status"]},
+        "tools": {
+            "include": [
+                "nastech_tts_speak",
+                "nastech_tts_status",
+                "nastech_tts_capabilities",
+            ]
+        },
     }
 
 
