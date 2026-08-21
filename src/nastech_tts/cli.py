@@ -35,6 +35,14 @@ from .providers import (
     synthesize_with_provider,
 )
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
+from .vocal_events import (
+    VocalEventError,
+    render_vocal_event,
+    supported_event_sounds,
+)
+from .vocal_events import (
+    pack_status as vocal_events_pack_status,
+)
 from .voices import english_voice_inventory, english_voice_summary
 
 VERSION = "0.12.2"
@@ -136,6 +144,37 @@ def _parser() -> argparse.ArgumentParser:
     clean.add_argument("input", type=Path, help="Input mono signed-16-bit PCM WAV.")
     clean.add_argument("--output", type=Path, required=True, help="Cleaned WAV destination path.")
     clean.add_argument("--report", type=Path, help="Optional JSON cleanup report destination.")
+
+    subparsers.add_parser(
+        "vocal-events",
+        help="Inspect the optional local Nastech Vocal Events Pack without loading it.",
+    )
+    vocal_event = subparsers.add_parser(
+        "vocal-event",
+        help="Render one native local vocal event through the optional Nastech Vocal Events Pack.",
+    )
+    vocal_event.add_argument("sound", choices=supported_event_sounds(), help="Nastech sound cue.")
+    vocal_event.add_argument(
+        "--reference-audio",
+        type=Path,
+        required=True,
+        help="Authorized 10+ second WAV reference for local event voice conditioning.",
+    )
+    vocal_event.add_argument(
+        "--confirm-reference-authorized",
+        action="store_true",
+        help="Required confirmation that you have authorization to use the reference voice.",
+    )
+    vocal_event.add_argument(
+        "--output", type=Path, required=True, help="Native-event WAV destination."
+    )
+    vocal_event.add_argument(
+        "--manifest", type=Path, help="Optional native-event manifest destination."
+    )
+    vocal_event.add_argument("--report", type=Path, help="Optional JSON event report destination.")
+    vocal_event.add_argument(
+        "--clean", action="store_true", help="Apply conservative local WAV cleanup."
+    )
 
     subparsers.add_parser("status", help="Show model, CPU policy, cache, and runtime status.")
     subparsers.add_parser(
@@ -335,6 +374,40 @@ def main() -> int:
         return run_stdio()
     try:
         runtime = SupertonicRuntime()
+
+        if args.command == "vocal-events":
+            print(json.dumps(vocal_events_pack_status(), indent=2))
+            return 0
+
+        if args.command == "vocal-event":
+            if not args.confirm_reference_authorized:
+                raise VocalEventError(
+                    "--confirm-reference-authorized is required before using a voice reference."
+                )
+            data, manifest = render_vocal_event(args.sound, args.reference_audio)
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_bytes(data)
+            if args.clean:
+                cleaned = clean_wav(data)
+                args.output.write_bytes(cleaned.data)
+                manifest["cleanup"] = cleaned.report
+            manifest_path = args.manifest or args.output.with_suffix(
+                args.output.suffix + ".manifest.json"
+            )
+            _write_json(manifest_path, manifest)
+            _print_or_write(
+                {
+                    "service": "nastech-tts",
+                    "kind": "native_local_vocal_event",
+                    "output_audio": str(args.output),
+                    "output_manifest": str(manifest_path),
+                    "sound": args.sound,
+                    "render_route": manifest["render_route"],
+                    "local_only": True,
+                },
+                args.report,
+            )
+            return 0
 
         if args.command == "status":
             payload = {"service": "nastech-tts", "version": VERSION, **runtime.status()}
@@ -665,6 +738,7 @@ def main() -> int:
         PlatformPlanError,
         ProviderActivationError,
         AgentExpressionError,
+        VocalEventError,
     ) as exc:
         print(f"Nastech error: {exc}")
         return 2

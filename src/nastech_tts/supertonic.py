@@ -20,6 +20,7 @@ from typing import Any
 from .cpu import CpuTuning
 from .markup import parse_nastechml
 from .types import AudioSpan, Fidelity, SpanKind
+from .vocal_events import event_route
 from .voices import resolve_english_voice_profile
 
 
@@ -143,6 +144,7 @@ def _compile_span(span: AudioSpan, index: int) -> tuple[str, dict[str, Any], flo
             compiled_controls=[tag],
             fidelity=fidelity.value,
             reason=reason,
+            optional_vocal_event=event_route(str(span.value)).as_dict(),
         )
         return tag, decision, speed
 

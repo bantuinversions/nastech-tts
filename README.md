@@ -119,6 +119,21 @@ nastech-tts download-language-pack bem   # bem - Bemba
 
 A `lazy-downloadable` pack is a local technical route and remains outside the 1 GiB compact core. It does not by itself establish native-speaker quality, dialect coverage, or commercial deployment rights. `planned` languages—for example `zu - isiZulu`, `xh - isiXhosa`, `tn - Setswana`, and `ve - Tshivenda`—are shown honestly but are not substituted with another voice. See [BANTU_LANGUAGE_COVERAGE.md](docs/BANTU_LANGUAGE_COVERAGE.md) and [BANTU_LOCAL_MODELS.md](docs/BANTU_LOCAL_MODELS.md).
 
+### Optional Nastech Vocal Events Pack
+
+The **Nastech Vocal Events Pack** is an explicit, English-only, local add-on for more natural non-verbal reactions. It is not installed, downloaded, or loaded by the compact core. Install it only when you need native local event rendering:
+
+```bash
+python -m pip install -e '.[vocal-events]'
+nastech-tts vocal-events
+nastech-tts vocal-event laugh \
+  --reference-audio authorized-reference.wav \
+  --confirm-reference-authorized \
+  --output laugh.wav --clean
+```
+
+The pack requires an operator-authorized 10+ second reference WAV and remains local after its optional model download. Native routes are currently acceptance-gated for **laugh**, **chuckle**, **cough**, **sigh**, **gasp**, **sniffle**, **groan**, and **throat-clear**. **Cry**, **scream**, and **yawn** remain explicitly on the Nastech Voice Core expression fallback route until a native local event is validated; Nastech TTS does not claim they are natural event audio today. The full model, licence, and dataset research boundary is recorded in [non-verbal vocalization research](docs/research_nonverbal_vocalization_options.md).
+
 ### Generate the supplied English story
 
 The first real English synthesis prepares the configured local core assets in the local cache:
@@ -162,6 +177,8 @@ nastech-tts synthesize release/multilingual_fixtures/nastech-luganda-pure.xml \
 | `nastech-tts compile FILE.xml --provider nastech-native-onnx` | Compile NastechML into an active Nastech provider request and fidelity manifest |
 | `nastech-tts synthesize FILE.xml --output FILE.wav --clean` | Run local inference and optionally apply PCM cleanup |
 | `nastech-tts clean INPUT.wav --output CLEAN.wav` | Clean an existing mono signed-16-bit PCM WAV without a model or cloud service |
+| `nastech-tts vocal-events` | Inspect the optional, unloaded Nastech Vocal Events Pack and its per-cue fidelity boundary |
+| `nastech-tts vocal-event laugh --reference-audio AUTH.wav --confirm-reference-authorized --output laugh.wav` | Generate an explicitly authorized, native local laughter event when the optional pack is installed |
 | `nastech-tts status` / `warmup` / `clear-cache` | Inspect and operate the local ONNX runtime |
 | `nastech-tts benchmark FILE.xml --runs 3` | Measure cache-bypassing CPU synthesis |
 | `nastech-tts providers` | List the 60 Nastech provider targets and their truthful activation states |

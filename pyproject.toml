@@ -32,6 +32,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+vocal-events = [
+  "chatterbox-tts>=0.1.0",
+]
 dev = [
   "build>=1.2",
   "pytest>=8.3",
