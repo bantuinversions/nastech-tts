@@ -1,11 +1,11 @@
-# Nastech Compact TTS
+# Nastech TTS
 
 [![CI](https://github.com/bantuinversions/nastech-tts/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/bantuinversions/nastech-tts/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-Apache--2.0-4D8CC9)](LICENSE)
 [![Provider mixer](https://img.shields.io/badge/providers-60%20catalog-0B7A75)](docs/PROVIDER_CATALOG_50.md)
 
-**Nastech Compact TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.2** adds automatic CPU/GPU hardware planning and an explicit 61-language registry spanning East, Central, and Southern African targets, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; 35 exact Bantu routes are optional lazy local packs. Unconfigured adapters never download a model, contact a provider, or claim to be active.
+**Nastech TTS** is a Nastech Research, local-first expressive text-to-speech platform. Version **0.12.2** adds automatic CPU/GPU hardware planning and an explicit 61-language registry spanning East, Central, and Southern African targets, with one stable request format, **60 provider targets**, strict explicit provider and language selection, and a network-disabled default. English is verified in the compact local core; 35 exact Bantu routes are optional lazy local packs. Unconfigured adapters never download a model, contact a provider, or claim to be active.
 
 > **Deployment contract:** The full verified environment remains below the strict **1 GiB** cap. Run `make budget` for the exact target-host measurement before any production deployment.
 
@@ -144,7 +144,7 @@ The resulting 30-minute WAV is published as a release artifact rather than commi
 
 The neutral continuity test isolates duration and PCM stability. Its separate [expressive audition](release/multilingual_fixtures/nastech-expressive-audition.xml) exercises sadness, anger, happiness, sighing, coughing, and laughter through the real local Nastech runtime, with a generated decision manifest and deterministic WAV-level report.
 
-Nastech also includes a real local **Luganda** technical preview through a separately installed OpenBible VITS provider pack. It uses a declared training-set speaker, performs CPU-only local inference, and normalizes the provider output to Nastech mono 16-bit PCM at 44.1 kHz. The preview is not bundled in Nastech Compact’s 1 GiB core and is not yet called a pure or quality-verified Luganda voice: that claim requires native-speaker review. The exact Bantu-language states, licence boundaries, and next evidence gates are in [BANTU_LANGUAGE_COVERAGE.md](docs/BANTU_LANGUAGE_COVERAGE.md).
+Nastech also includes a real local **Luganda** technical preview through a separately installed OpenBible VITS provider pack. It uses a declared training-set speaker, performs CPU-only local inference, and normalizes the provider output to Nastech mono 16-bit PCM at 44.1 kHz. The preview is not bundled in Nastech TTS’s 1 GiB core and is not yet called a pure or quality-verified Luganda voice: that claim requires native-speaker review. The exact Bantu-language states, licence boundaries, and next evidence gates are in [BANTU_LANGUAGE_COVERAGE.md](docs/BANTU_LANGUAGE_COVERAGE.md).
 
 ```bash
 nastech-tts languages
@@ -248,13 +248,13 @@ The runtime now exposes an automatic hardware plan through `HardwarePlan` and `/
 </speak>
 ```
 
-Every compilation emits a decision manifest that classifies requested controls as `direct`, `approximated`, or `unavailable`. The upstream Supertonic expression vocabulary includes `<laugh>`, `<breath>`, `<surprise>`, `<sigh>`, `<scream>`, `<throatclear>`, `<sad>`, `<angry>`, `<cough>`, and `<yawn>`. Nastech exposes these through semantic emotion and sound requests, including `surprised`, `scream`, and `throatclear`. Additional semantic sounds such as `chuckle`, `sniffle`, `groan`, and `cry` are explicitly marked as approximations when they map to a related model control. This is not a claim that every human emotion or vocalization is equally reproducible; the manifest records the actual local fidelity for every request.
+Every compilation emits a decision manifest that classifies requested controls as `direct`, `approximated`, or `unavailable`. The upstream Nastech Voice Core expression vocabulary includes `<laugh>`, `<breath>`, `<surprise>`, `<sigh>`, `<scream>`, `<throatclear>`, `<sad>`, `<angry>`, `<cough>`, and `<yawn>`. Nastech exposes these through semantic emotion and sound requests, including `surprised`, `scream`, and `throatclear`. Additional semantic sounds such as `chuckle`, `sniffle`, `groan`, and `cry` are explicitly marked as approximations when they map to a related model control. This is not a claim that every human emotion or vocalization is equally reproducible; the manifest records the actual local fidelity for every request.
 
 The compact runtime currently accepts these emotion names: `neutral`, `calm`, `happy`, `excited`, `surprised`, `sad`, `angry`, `frustrated`, `fearful`, and `disgusted`. It accepts these sound names: `laugh`, `chuckle`, `sigh`, `cough`, `sniffle`, `groan`, `yawn`, `gasp`, `cry`, `scream`, and `throatclear`.
 
 ### Mixed voices and delivery styles
 
-Use `SupertonicRuntime.synthesize_mixed()` when one document must switch voices or styles. Each span can select a voice, emotion, rate, and volume independently; `soft` applies bounded attenuation, while `loud` applies bounded gain before WAV assembly.
+Use `Nastech Voice CoreRuntime.synthesize_mixed()` when one document must switch voices or styles. Each span can select a voice, emotion, rate, and volume independently; `soft` applies bounded attenuation, while `loud` applies bounded gain before WAV assembly.
 
 ```xml
 <speak voice="F1">
@@ -276,7 +276,7 @@ Mixed synthesis remains entirely local. The returned manifest records every segm
 
 ## English and Bantu voice inventory
 
-Nastech exposes **40 selectable English local delivery profiles** over ten verified Supertonic base timbres. The named base profiles are **Siya, Nasi, Jafta, Della, Axam, Alicia, Shanice, Adam, Shakira,** and **Shimah**; the other thirty selectors are documented clear, soft, and dynamic delivery profiles. Names and profiles are not claimed as separately trained speaker identities. List them without loading a model with `nastech-tts voices` or `GET /v1/voices`. The complete locally validated inventory is available in [release/Nastech_TTS_All_Voices.md](release/Nastech_TTS_All_Voices.md).
+Nastech exposes **40 selectable English local delivery profiles** over ten verified Nastech Voice Core base timbres. The named base profiles are **Siya, Nasi, Jafta, Della, Axam, Alicia, Shanice, Adam, Shakira,** and **Shimah**; the other thirty selectors are documented clear, soft, and dynamic delivery profiles. Names and profiles are not claimed as separately trained speaker identities. List them without loading a model with `nastech-tts voices` or `GET /v1/voices`. The complete locally validated inventory is available in [release/Nastech_TTS_All_Voices.md](release/Nastech_TTS_All_Voices.md).
 
 All **60 regional African targets** remain visible with code-first labels, alongside the English core. **Thirty-five** have audited on-demand local MMS routes, while **eleven** have approved five-minute native-story CI. Targets without an exact verified public checkpoint remain marked planned or `no-verified-pack` and are never silently substituted.
 

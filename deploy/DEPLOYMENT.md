@@ -1,15 +1,15 @@
-# Nastech Compact Deployment
+# Nastech TTS Deployment
 
-Nastech Compact is a **single local service**. It contains the Nastech agent API and uses Supertonic 3 ONNX assets on the same CPU host. It has no cloud TTS dependency and needs no GPU.
+Nastech TTS is a **single local service**. It contains the Nastech agent API and uses Nastech Voice Core assets on the same CPU host. It has no cloud TTS dependency and needs no GPU.
 
 ## Size Contract
 
-The target maximum full deployment budget is **1 GiB**. The verified release measurement is **676.42 MiB**, consisting of 384.83 MiB of real Supertonic assets, 289.15 MiB of runtime and quality-tool dependencies, and 2.44 MiB of Nastech release assets. This leaves 347.58 MiB of headroom. Run the budget check after every dependency or model update.
+The target maximum full deployment budget is **1 GiB**. The verified release measurement is **676.42 MiB**, consisting of 384.83 MiB of real Nastech Voice Core assets, 289.15 MiB of runtime and quality-tool dependencies, and 2.44 MiB of Nastech release assets. This leaves 347.58 MiB of headroom. Run the budget check after every dependency or model update.
 
 ```bash
 python scripts/check_compact_budget.py \
   --runtime /path/to/.venv \
-  --model-cache ~/.cache/supertonic3 \
+  --model-cache ~/.cache/nastech-voice-core \
   --release . \
   --limit-mib 1024
 ```
@@ -61,7 +61,7 @@ The benchmark reports elapsed time, audio duration, real-time factor, wall-clock
 
 ## Docker Deployment
 
-The Dockerfile pre-downloads the real Supertonic assets, selects the balanced CPU profile, and enables startup warm-up. Build and run it locally:
+The Dockerfile pre-downloads the real Nastech Voice Core assets, selects the balanced CPU profile, and enables startup warm-up. Build and run it locally:
 
 ```bash
 docker build -t nastech-compact:0.8.0 .
@@ -95,4 +95,4 @@ Put any Internet-facing deployment behind TLS and a reverse proxy. If a local de
 
 ## Persistent-Service Boundary
 
-The current sandbox can build and test the compact system but hibernates when inactive. For a persistent API, deploy the same package or Docker image to a persistent CPU server. No GPU system is required for the selected Supertonic runtime.
+The current sandbox can build and test the compact system but hibernates when inactive. For a persistent API, deploy the same package or Docker image to a persistent CPU server. No GPU system is required for the selected Nastech Voice Core runtime.

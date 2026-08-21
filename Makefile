@@ -24,7 +24,7 @@ openapi:
 	python scripts/export_openapi.py
 
 budget:
-	python scripts/check_compact_budget.py --runtime $${VIRTUAL_ENV:?activate a virtual environment} --model-cache $${NASTECH_MODEL_CACHE:-$$HOME/.cache/supertonic3} --release . --limit-mib 1024
+	python scripts/check_compact_budget.py --runtime $${VIRTUAL_ENV:?activate a virtual environment} --model-cache $${NASTECH_MODEL_CACHE:-$$HOME/.cache/nastech-voice-core} --release . --limit-mib 1024
 
 verify: lint test catalog openapi contract build budget
 

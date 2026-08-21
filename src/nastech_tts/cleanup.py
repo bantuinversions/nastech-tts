@@ -1,4 +1,4 @@
-"""Deterministic local WAV cleanup for Nastech Compact output.
+"""Deterministic local WAV cleanup for Nastech TTS output.
 
 The cleanup stage is deliberately conservative. It does not imitate, replace, or
 transform a speaker; it only performs bounded PCM hygiene on mono 16-bit WAV

@@ -1,4 +1,4 @@
-"""Portable CPU tuning policies for Nastech Compact local ONNX inference."""
+"""Portable CPU tuning policies for Nastech TTS local ONNX inference."""
 
 from __future__ import annotations
 
@@ -55,7 +55,7 @@ def _positive_float(name: str, default: float) -> float:
 class CpuTuning:
     """Validated ONNX CPU and request-scheduling controls.
 
-    The upstream Supertonic runtime already enables ORT_ENABLE_ALL graph
+    The upstream Nastech Voice Core runtime already enables ORT_ENABLE_ALL graph
     optimizations and executes the dependent ONNX stages sequentially. This
     policy supplies thread counts and prevents request-level oversubscription.
     """
@@ -128,6 +128,6 @@ class CpuTuning:
             "queue_timeout_seconds": self.queue_timeout_seconds,
             "audio_cache_entries": self.audio_cache_entries,
             "audio_cache_mib": self.audio_cache_mib,
-            "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
-            "execution_mode": "sequential (provided by Supertonic)",
+            "graph_optimization": "ORT_ENABLE_ALL (provided by Nastech Voice Core)",
+            "execution_mode": "sequential (provided by Nastech Voice Core)",
         }

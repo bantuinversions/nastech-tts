@@ -12,7 +12,7 @@
       "base_voice": "F1",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic F1. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F1. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "nasi",
@@ -20,7 +20,7 @@
       "base_voice": "F2",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic F2. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F2. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "jafta",
@@ -28,7 +28,7 @@
       "base_voice": "M1",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic M1. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M1. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "della",
@@ -36,7 +36,7 @@
       "base_voice": "F3",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic F3. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F3. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "axam",
@@ -44,7 +44,7 @@
       "base_voice": "M2",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic M2. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M2. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "alicia",
@@ -52,7 +52,7 @@
       "base_voice": "F4",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic F4. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F4. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "shanice",
@@ -60,7 +60,7 @@
       "base_voice": "F5",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic F5. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F5. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "adam",
@@ -68,7 +68,7 @@
       "base_voice": "M3",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic M3. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M3. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "shakira",
@@ -76,7 +76,7 @@
       "base_voice": "M4",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic M4. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M4. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "shimah",
@@ -84,7 +84,7 @@
       "base_voice": "M5",
       "default_speed": 1.0,
       "kind": "named-base-profile",
-      "description": "Named Nastech profile backed by verified Supertonic M5. The display name is not claimed as a separately trained speaker identity."
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M5. The display name is not claimed as a separately trained speaker identity."
     },
     {
       "profile_id": "en-f1-clear",
@@ -92,7 +92,7 @@
       "base_voice": "F1",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F1. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f1-soft",
@@ -100,7 +100,7 @@
       "base_voice": "F1",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F1. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f1-dynamic",
@@ -108,7 +108,7 @@
       "base_voice": "F1",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F1. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f2-clear",
@@ -116,7 +116,7 @@
       "base_voice": "F2",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F2. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f2-soft",
@@ -124,7 +124,7 @@
       "base_voice": "F2",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F2. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f2-dynamic",
@@ -132,7 +132,7 @@
       "base_voice": "F2",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F2. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f3-clear",
@@ -140,7 +140,7 @@
       "base_voice": "F3",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F3. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f3-soft",
@@ -148,7 +148,7 @@
       "base_voice": "F3",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F3. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f3-dynamic",
@@ -156,7 +156,7 @@
       "base_voice": "F3",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F3. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f4-clear",
@@ -164,7 +164,7 @@
       "base_voice": "F4",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F4. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f4-soft",
@@ -172,7 +172,7 @@
       "base_voice": "F4",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F4. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f4-dynamic",
@@ -180,7 +180,7 @@
       "base_voice": "F4",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F4. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f5-clear",
@@ -188,7 +188,7 @@
       "base_voice": "F5",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F5. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f5-soft",
@@ -196,7 +196,7 @@
       "base_voice": "F5",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F5. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-f5-dynamic",
@@ -204,7 +204,7 @@
       "base_voice": "F5",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F5. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m1-clear",
@@ -212,7 +212,7 @@
       "base_voice": "M1",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M1. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m1-soft",
@@ -220,7 +220,7 @@
       "base_voice": "M1",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M1. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m1-dynamic",
@@ -228,7 +228,7 @@
       "base_voice": "M1",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M1. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m2-clear",
@@ -236,7 +236,7 @@
       "base_voice": "M2",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M2. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m2-soft",
@@ -244,7 +244,7 @@
       "base_voice": "M2",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M2. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m2-dynamic",
@@ -252,7 +252,7 @@
       "base_voice": "M2",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M2. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m3-clear",
@@ -260,7 +260,7 @@
       "base_voice": "M3",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M3. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m3-soft",
@@ -268,7 +268,7 @@
       "base_voice": "M3",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M3. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m3-dynamic",
@@ -276,7 +276,7 @@
       "base_voice": "M3",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M3. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m4-clear",
@@ -284,7 +284,7 @@
       "base_voice": "M4",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M4. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m4-soft",
@@ -292,7 +292,7 @@
       "base_voice": "M4",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M4. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m4-dynamic",
@@ -300,7 +300,7 @@
       "base_voice": "M4",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M4. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m5-clear",
@@ -308,7 +308,7 @@
       "base_voice": "M5",
       "default_speed": 1.0,
       "kind": "delivery-profile",
-      "description": "Neutral, measured delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M5. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m5-soft",
@@ -316,7 +316,7 @@
       "base_voice": "M5",
       "default_speed": 0.9,
       "kind": "delivery-profile",
-      "description": "Slower, gentle delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M5. This is a delivery profile, not a distinct trained speaker identity."
     },
     {
       "profile_id": "en-m5-dynamic",
@@ -324,7 +324,7 @@
       "base_voice": "M5",
       "default_speed": 1.1,
       "kind": "delivery-profile",
-      "description": "Faster, energetic delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity."
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M5. This is a delivery profile, not a distinct trained speaker identity."
     }
   ]
 }

@@ -18,4 +18,4 @@ Project stewards may edit, remove, or reject contributions that violate this cod
 
 ## Scope
 
-This code applies to repository spaces, release discussions, issue and pull-request interactions, and any event or communication explicitly representing Nastech Research or Nastech Compact TTS.
+This code applies to repository spaces, release discussions, issue and pull-request interactions, and any event or communication explicitly representing Nastech Research or Nastech TTS.

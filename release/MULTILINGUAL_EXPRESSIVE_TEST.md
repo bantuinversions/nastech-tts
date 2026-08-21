@@ -20,7 +20,7 @@ The expressive source requests `<emotion name="sad">`, `<emotion name="angry">`,
 
 The Luganda run uses the public `multilingual-tts/VITS-OpenBible-Luganda` multi-speaker VITS checkpoint, whose model card specifies Luganda data, a Coqui TTS local inference path, training-set speaker selection, and 22.05 kHz provider output.[1] Nastech invokes the model only through an operator-managed local command and converts its successful provider WAV to mono signed-16-bit PCM at 44.1 kHz before applying deterministic cleanup.
 
-The provider model is a separate optional pack. Its published repository reports approximately 997,713,840 bytes of model storage, before its isolated Coqui-compatible CPU runtime.[2] It therefore is **not** bundled in the ≤1 GiB Nastech Compact core. The model card reports CC-BY-SA-4.0; any distribution must preserve applicable attribution and share-alike obligations.[1]
+The provider model is a separate optional pack. Its published repository reports approximately 997,713,840 bytes of model storage, before its isolated Coqui-compatible CPU runtime.[2] It therefore is **not** bundled in the ≤1 GiB Nastech TTS core. The model card reports CC-BY-SA-4.0; any distribution must preserve applicable attribution and share-alike obligations.[1]
 
 The pure-Luganda fixture source intentionally excludes English product names and typographic curly apostrophes. The local model emitted vocabulary warnings for both in the initial mixed-language probe, so that probe is not release evidence. The retained source rendered without a missing-character warning.
 

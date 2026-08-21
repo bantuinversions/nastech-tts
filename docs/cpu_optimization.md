@@ -1,8 +1,8 @@
-# Nastech Compact CPU Optimization Report
+# Nastech TTS CPU Optimization Report
 
 ## Scope
 
-Nastech Compact v0.9.1 runs the verified **Nastech native local provider** through ONNX Runtime on CPU. The optimizer layer preserves real local inference for the active provider; it does not introduce a cloud proxy, GPU dependency, model merge, unreviewed fallback, or silent provider substitution. The local loader exposes ONNX Runtime intra-operation and inter-operation thread controls and enables full graph optimization for its model sessions. [1]
+Nastech TTS v0.9.1 runs the verified **Nastech native local provider** through ONNX Runtime on CPU. The optimizer layer preserves real local inference for the active provider; it does not introduce a cloud proxy, GPU dependency, model merge, unreviewed fallback, or silent provider substitution. The local loader exposes ONNX Runtime intra-operation and inter-operation thread controls and enables full graph optimization for its model sessions. [1]
 
 ## Implemented Controls
 
@@ -65,4 +65,4 @@ Use `GET /v1/runtime/diagnostics` during operation to confirm the effective poli
 
 ## References
 
-[1] [Supertonic Python SDK: ONNX Runtime threading and loader configuration](https://github.com/supertone-inc/supertonic-py)
+[1] [Nastech Voice Core Python SDK: ONNX Runtime threading and loader configuration](https://github.com/bantuinversions/nastech-tts)

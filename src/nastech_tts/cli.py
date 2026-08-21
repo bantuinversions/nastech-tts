@@ -1,4 +1,4 @@
-"""Command-line interface for Nastech Compact local Supertonic TTS."""
+"""Command-line interface for Nastech TTS and Nastech Voice Core."""
 
 from __future__ import annotations
 
@@ -42,7 +42,7 @@ VERSION = "0.12.2"
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="nastech-tts", description="Nastech Compact local expressive CPU TTS."
+        prog="nastech-tts", description="Nastech TTS local expressive speech platform."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 

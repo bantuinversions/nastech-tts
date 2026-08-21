@@ -56,7 +56,7 @@ def test_profile_alias_resolves_to_a_verified_base_timbre() -> None:
         "kind": "delivery-profile",
         "default_speed": 0.9,
         "description": (
-            "Slower, gentle delivery using verified Supertonic F3. "
+            "Slower, gentle delivery using verified Nastech Voice Core timbre F3. "
             "This is a delivery profile, not a distinct trained speaker identity."
         ),
     }

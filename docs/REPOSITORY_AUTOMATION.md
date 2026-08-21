@@ -1,6 +1,6 @@
 # Repository Automation and Templates
 
-Nastech Compact includes a small, reviewable GitHub automation layer. The workflows favor deterministic local checks and draft releases; they do not send text to a cloud TTS provider and do not publish packages automatically to PyPI.
+Nastech TTS includes a small, reviewable GitHub automation layer. The workflows favor deterministic local checks and draft releases; they do not send text to a cloud TTS provider and do not publish packages automatically to PyPI.
 
 | YAML or template | Trigger or use | Maintainer outcome |
 |---|---|---|

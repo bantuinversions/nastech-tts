@@ -76,7 +76,7 @@ NARRATIVE_BEATS = (
 )
 
 AUDITION_TEXT = (
-    "This is a verified Nastech Compact local preset-style audition. "
+    "This is a verified Nastech TTS local preset-style audition. "
     "The voice is speaking English, locally, with a measured level and a clear release record."
 )
 

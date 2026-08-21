@@ -1,17 +1,17 @@
-# Nastech Compact TTS Project Summary
+# Nastech TTS Project Summary
 
 ## Purpose
 
-Nastech Compact TTS is an **English-only, real local expressive TTS service**. It runs Supertonic 3 ONNX inference on the host CPU and layers stable markup, agent operations, conservative local audio hygiene, and operational safeguards around that one model family. It never routes speech text or audio through a cloud synthesis provider. [1] [2]
+Nastech TTS is an **English-only, real local expressive TTS service**. It runs Nastech Voice Core inference on the host CPU and layers stable markup, agent operations, conservative local audio hygiene, and operational safeguards around that one model family. It never routes speech text or audio through a cloud synthesis provider. [1] [2]
 
-> **Scope boundary:** Nastech is a local application/control layer. It does not claim ownership of Supertonic model weights, merge unrelated speech models, or advertise unverified expression tags as deterministic behavior.
+> **Scope boundary:** Nastech is a local application/control layer. It does not claim ownership of Nastech Voice Core model weights, merge unrelated speech models, or advertise unverified expression tags as deterministic behavior.
 
 ## Architecture
 
 | Layer | Responsibility | Principal artifacts |
 |---|---|---|
 | NastechML parser | Validates English markup and produces typed speech, sound, and pause spans | `src/nastech_tts/markup.py` |
-| Compiler and runtime | Builds the auditable Supertonic prompt, loads ONNX locally, and manages CPU, queue, cache, and warm-up | `src/nastech_tts/supertonic.py`, `src/nastech_tts/cpu.py` |
+| Compiler and runtime | Builds the auditable Nastech Voice Core prompt, loads ONNX locally, and manages CPU, queue, cache, and warm-up | `src/nastech_tts/voice_core.py`, `src/nastech_tts/cpu.py` |
 | Agent planning | Presents delivery choice, cleanup intent, local execution steps, and fidelity counts before synthesis | `POST /v1/agent/plan` |
 | Delivery | Returns standard WAV or a completed local WAV in bounded post-synthesis chunks | `POST /v1/agent/speech`, `POST /v1/agent/speech/stream` |
 | Cleanup | Performs deterministic mono PCM hygiene with no learned second model | `src/nastech_tts/cleanup.py`, `POST /v1/audio/clean` |
@@ -26,7 +26,7 @@ Nastech Compact TTS is an **English-only, real local expressive TTS service**. I
 | Agent planning | No synthesis occurs; execution/fidelity/delivery choices are visible first | Autonomous cloud model reasoning or hidden provider delegation |
 | Chunked transfer | One local WAV is sent in bounded byte chunks after completion | Incremental ONNX inference, lower model time-to-first-audio, or text-token streaming |
 | PCM cleanup | DC bias removal, near-silence gating, clipping protection, and short click-safe fades | Voice conversion, speaker cloning, learned denoising, or professional mastering |
-| Platform preflight | Host/provider facts and evidence requirements for CPU, GPU, Android, iOS, and browser targets | That an available provider, a listed target, or a roadmap item has executed Supertonic successfully |
+| Platform preflight | Host/provider facts and evidence requirements for CPU, GPU, Android, iOS, and browser targets | That an available provider, a listed target, or a roadmap item has executed Nastech Voice Core successfully |
 | 500-capability catalog | A classified, reproducible product/research roadmap | That every catalog record is currently implemented or tested |
 | Daily CI | Repeatable deterministic checks every day at 03:17 UTC | Real model downloading, cloud speech calls, or listening acceptance tests |
 
@@ -50,6 +50,6 @@ Run `make verify` before every release-oriented change. Update or add focused te
 
 ## References
 
-[1] [Supertonic official repository](https://github.com/supertone-inc/supertonic)
+[1] [Nastech Voice Core official repository](https://github.com/bantuinversions/nastech-tts)
 
-[2] [Supertonic Python SDK](https://github.com/supertone-inc/supertonic-py)
+[2] [Nastech Voice Core Python SDK](https://github.com/bantuinversions/nastech-tts)

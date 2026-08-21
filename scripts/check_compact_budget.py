@@ -1,4 +1,4 @@
-"""Check whether a Nastech Compact deployment stays within its configured size budget."""
+"""Check whether a Nastech TTS deployment stays within its configured size budget."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ def directory_bytes(path: Path) -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Check the Nastech Compact deployment budget.")
+    parser = argparse.ArgumentParser(description="Check the Nastech TTS deployment budget.")
     parser.add_argument(
         "--runtime", type=Path, required=True, help="Python virtual environment path."
     )

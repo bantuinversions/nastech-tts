@@ -1,6 +1,6 @@
 schema_version: "1.2"
 project:
-  name: "Nastech Compact TTS"
+  name: "Nastech TTS"
   package: "nastech-tts"
   version: "0.12.2"
   publisher: "Nastech Research"
@@ -13,7 +13,7 @@ runtime:
   language_registry_size: 61
   language_registry: "docs/BANTU_LANGUAGE_COVERAGE.md"
   optional_luganda_provider: "coqui-luganda-openbible"
-  optional_language_pack_rule: "Optional external packs are never included in the 1 GiB Nastech Compact core measurement."
+  optional_language_pack_rule: "Optional external packs are never included in the 1 GiB Nastech TTS core measurement."
   optional_bantu_model_guide: "docs/BANTU_LOCAL_MODELS.md"
   optional_bantu_lazy_routes: 35
   optional_bantu_native_story_routes: 11

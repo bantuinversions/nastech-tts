@@ -1,4 +1,4 @@
-# Nastech Compact v0.8 Release Checklist
+# Nastech TTS v0.8 Release Checklist
 
 ## Required Verification
 

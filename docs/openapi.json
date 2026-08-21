@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "Nastech Compact TTS",
-    "description": "A Nastech-branded, local-first, agent-ready expressive TTS API with a provider mixer, auditable provider selection, and bounded WAV delivery.",
+    "title": "Nastech TTS",
+    "description": "Nastech TTS is a local-first, expressive multilingual speech platform developed by Nastech Research. Nastech Voice Core provides local-first, agent-ready expressive speech with auditable provider selection and bounded WAV delivery.",
     "version": "0.12.2"
   },
   "paths": {
@@ -1597,7 +1597,7 @@
           "model": {
             "type": "string",
             "title": "Model",
-            "default": "nastech-compact-en-v1"
+            "default": "nastech-tts-local-en-v1"
           },
           "input": {
             "type": "string",

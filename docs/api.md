@@ -1,6 +1,6 @@
 # Nastech TTS API Reference
 
-Nastech Compact v0.9.1 is a **local-first, English expressive TTS provider mixer** published by Nastech Research. It presents a single NastechML request contract, routes each synthesis request through one explicitly selected active provider, applies deterministic optional WAV cleanup, and returns auditable provider metadata. The default core is real local CPU synthesis; network providers are disabled by default and inactive catalog entries cannot synthesize.
+Nastech TTS v0.9.1 is a **local-first, English expressive TTS provider mixer** published by Nastech Research. It presents a single NastechML request contract, routes each synthesis request through one explicitly selected active provider, applies deterministic optional WAV cleanup, and returns auditable provider metadata. The default core is real local CPU synthesis; network providers are disabled by default and inactive catalog entries cannot synthesize.
 
 > **Provider honesty:** a target in the 50-provider catalog is not necessarily installed, configured, licenced for a particular use, or eligible for synthesis. Call `POST /v1/providers/preflight` to receive its zero-side-effect activation requirements. See [PROVIDER_CATALOG_50.md](PROVIDER_CATALOG_50.md) and [PROVIDER_ARCHITECTURE.md](PROVIDER_ARCHITECTURE.md).
 

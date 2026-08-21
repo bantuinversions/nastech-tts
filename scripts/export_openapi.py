@@ -1,4 +1,4 @@
-"""Export the Nastech Compact OpenAPI schema without starting a network service."""
+"""Export the Nastech TTS OpenAPI schema without starting a network service."""
 
 from __future__ import annotations
 

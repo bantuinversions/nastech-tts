@@ -1,5 +1,6 @@
-"""Nastech Compact: local-first expressive TTS with a multilingual provider mixer."""
+"""Nastech TTS: local-first expressive TTS with a multilingual provider mixer."""
 
+from .brand import PRODUCT_NAME, PRODUCT_SLUG, PUBLISHER, VOICE_CORE_NAME, product_identity
 from .cpu import CpuConfigurationError, CpuTuning
 from .hardware import HardwareConfigurationError, HardwarePlan
 from .languages import LanguageRegistryError, get_language, language_inventory
@@ -12,16 +13,16 @@ from .providers import (
     provider_preflight,
     require_active_provider,
 )
-from .supertonic import (
+from .voice_core import (
     CompactAudio,
     CompactCompiledRequest,
     CompactRuntimeError,
     CompactSettings,
-    SupertonicRuntime,
+    NastechVoiceCoreRuntime,
     compile_nastechml,
 )
 
-NastechLocalRuntime = SupertonicRuntime
+NastechLocalRuntime = NastechVoiceCoreRuntime
 
 __all__ = [
     "CompactAudio",
@@ -33,10 +34,15 @@ __all__ = [
     "CompactRuntimeError",
     "CompactSettings",
     "NastechLocalRuntime",
+    "NastechVoiceCoreRuntime",
+    "PRODUCT_NAME",
+    "PRODUCT_SLUG",
+    "PUBLISHER",
+    "VOICE_CORE_NAME",
     "NastechMarkupError",
     "LanguageRegistryError",
     "ProviderActivationError",
-    "SupertonicRuntime",
+    "product_identity",
     "compile_nastechml",
     "get_language",
     "get_provider",

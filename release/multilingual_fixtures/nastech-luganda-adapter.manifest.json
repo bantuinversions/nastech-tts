@@ -1,7 +1,7 @@
 {
   "request_id": "4e7e566a979c4b4c5364fb0b",
   "language": "lg",
-  "model_family": "supertonic-3",
+  "voice_core": "nastech-voice-core",
   "source_markup": "<speak>Olunaku luno tukola ku bigambo bya Luganda. Tusoma obulungi era tuwulira eddoboozi erya bulijjo.</speak>\n",
   "compiled_text": "Olunaku luno tukola ku bigambo bya Luganda. Tusoma obulungi era tuwulira eddoboozi erya bulijjo.",
   "voice": "F1",

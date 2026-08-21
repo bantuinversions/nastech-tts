@@ -9,11 +9,11 @@ Research date: 2026-08-15.
 | Android baseline | ONNX Runtime mobile supports Android Java/C/C++ packages, CPU by default, and Android NNAPI/XNNPACK acceleration options. [2] | A native Android client is technically viable but needs an Android artifact, model compatibility test, device memory check, and performance validation. |
 | Android hardware acceleration | The NNAPI execution provider is an Android API 8.1+ interface for CPU, GPU, and NN accelerators; Android 9+ is recommended. Unsupported model operators can cause partitions/fallback and performance is device/model specific. [3] | Android GPU/NPU support must be treated as a **device-specific planned/validated capability**, not a universal promise. |
 | Mobile size and performance | ONNX Runtime recommends measuring device disk, memory, latency, and power; custom minimal builds and model quantization can reduce mobile size but require model/operator validation. [2] | The current ~385 MiB model does not meet a universal phone-install target; an Android package should use a separately measured mobile profile and a compatible compact/quantized asset strategy. |
-| Supertonic ecosystem | The upstream repository documents ONNX-based on-device inference and examples across Python, Node.js, browser, Java, C++, C#, Go, Swift, iOS, Rust, and Flutter. It also carries a July 2026 notice of archive/no further official open-source support. [4] | Nastech can build portable clients around a stable ONNX contract, but must pin and mirror all upstream licensing/asset provenance information for long-term maintenance. |
+| Nastech Voice Core ecosystem | The upstream repository documents ONNX-based on-device inference and examples across Python, Node.js, browser, Java, C++, C#, Go, Swift, iOS, Rust, and Flutter. It also carries a July 2026 notice of archive/no further official open-source support. [4] | Nastech can build portable clients around a stable ONNX contract, but must pin and mirror all upstream licensing/asset provenance information for long-term maintenance. |
 
 ## Architecture Decision
 
-Nastech v0.7 retains the verified CPU Python runtime as the default. The next portable layer will provide capability discovery, platform profiles, request compatibility validation, and client/packaging templates. It will not claim working CUDA, NNAPI, XNNPACK, WebGPU, or Android inference until the real Supertonic graph has been validated on that provider and target device.
+Nastech v0.7 retains the verified CPU Python runtime as the default. The next portable layer will provide capability discovery, platform profiles, request compatibility validation, and client/packaging templates. It will not claim working CUDA, NNAPI, XNNPACK, WebGPU, or Android inference until the real Nastech Voice Core graph has been validated on that provider and target device.
 
 ## References
 
@@ -23,7 +23,7 @@ Nastech v0.7 retains the verified CPU Python runtime as the default. The next po
 
 [3] [ONNX Runtime NNAPI execution provider](https://onnxruntime.ai/docs/execution-providers/NNAPI-ExecutionProvider.html)
 
-[4] [Supertonic official repository](https://github.com/supertone-inc/supertonic)
+[4] [Nastech Voice Core official repository](https://github.com/bantuinversions/nastech-tts)
 
 ## Capability-Family Research
 
