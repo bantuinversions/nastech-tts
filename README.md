@@ -81,6 +81,18 @@ python scripts/validate_language_self_test.py
 
 The last command confirms the committed **61-language registry**, **35 audited lazy local routes**, **11 approved native-story CI routes**, code-first labels such as `lg - Luganda`, and the published all-voices inventory. Source contributors can additionally run `make verify` for linting, the full test suite, package build, contracts, and compact-budget check.
 
+### Fast CPU operation without taking every core
+
+Nastech TTS keeps one logical CPU free for the operating system by default on multi-core machines, serializes interactive synthesis, and uses a bounded in-memory WAV cache for exact repeated requests. For a low-contention interactive profile, set the following before starting the service:
+
+```bash
+export NASTECH_CPU_PROFILE=latency
+export NASTECH_RESERVED_CORES=1
+nastech-tts serve
+```
+
+The `latency` profile uses up to the remaining protected cores for one local render at a time and a bounded **64-entry / 256 MiB** RAM response cache. The `memory` profile uses fewer inference threads and a **96-entry / 384 MiB** cache when repeated short responses are more important than cold-render throughput. `nastech-tts benchmark FILE.xml` reports full cache-disabled model time separately from exact repeat-request RAM-cache time. A cache hit is not fresh synthesis. Set `NASTECH_ALLOW_ALL_CORES=1` only when the host is dedicated to Nastech TTS and you explicitly want to remove the default system-core reserve.
+
 ### AI-agent voice responses
 
 A local AI agent can discover the exact emotion and sound contract with `nastech-tts agent-capabilities`, inspect an auditable expression plan with `nastech-tts agent-markup`, and generate a real local WAV response with `nastech-tts agent-speak`. The command accepts all eleven supported sound cues—including laugh, chuckle, sigh, cough, sniffle, groan, yawn, gasp, cry, scream, and throat-clear—as well as documented natural-language emotion aliases such as `joyful`, `awe`, `relieved`, `anxious`, and `triumphant`. See [AI Agent local voice responses](docs/AI_AGENT_VOICE_RESPONSES.md) for examples, the transparent mapping boundary, and the research basis.

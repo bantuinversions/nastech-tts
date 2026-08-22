@@ -244,6 +244,7 @@ class SupertonicRuntime:
             "synthesis_requests": 0,
             "synthesis_failures": 0,
             "audio_cache_hits": 0,
+            "total_cache_hit_seconds": 0.0,
             "total_queue_wait_seconds": 0.0,
             "total_synthesis_seconds": 0.0,
         },
@@ -347,6 +348,14 @@ class SupertonicRuntime:
                     float(metrics["total_synthesis_seconds"]) / requests, 4
                 )
                 if requests
+                else 0.0,
+                "mean_cache_hit_milliseconds": round(
+                    1000
+                    * float(metrics["total_cache_hit_seconds"])
+                    / int(metrics["audio_cache_hits"]),
+                    4,
+                )
+                if int(metrics["audio_cache_hits"])
                 else 0.0,
                 "uptime_seconds": round(time.monotonic() - self._started_at, 3),
             },
@@ -461,9 +470,11 @@ class SupertonicRuntime:
     ) -> CompactAudio:
         """Generate local WAV audio, optionally bypassing the bounded response cache."""
         key = self._cache_key(compiled)
+        call_started = time.perf_counter()
         if use_cache:
             cached = self._read_cached_audio(key)
             if cached is not None:
+                self._record("total_cache_hit_seconds", time.perf_counter() - call_started)
                 return cached
 
         queue_started = time.perf_counter()
@@ -480,6 +491,7 @@ class SupertonicRuntime:
             if use_cache:
                 cached = self._read_cached_audio(key)
                 if cached is not None:
+                    self._record("total_cache_hit_seconds", time.perf_counter() - call_started)
                     return cached
             started = time.perf_counter()
             tts = self._load()

@@ -271,7 +271,8 @@ def _parser() -> argparse.ArgumentParser:
     )
 
     benchmark = subparsers.add_parser(
-        "benchmark", help="Measure warmed local ONNX synthesis with cache disabled per run."
+        "benchmark",
+        help="Measure warmed full local synthesis and bounded RAM-cache hits separately.",
     )
     benchmark.add_argument("input", type=Path, help="Input NastechML document.")
     benchmark.add_argument(
@@ -339,11 +340,38 @@ def _benchmark(
     wall_clock_seconds = time.perf_counter() - batch_started
     elapsed = [measurement["elapsed_seconds"] for measurement in measurements]
     rtf = [measurement["real_time_factor"] for measurement in measurements]
+
+    # Seed the bounded RAM cache once, then measure exact repeat-request service.
+    # These timings intentionally exclude compilation and model inference; they are
+    # reported separately so a cache hit is never represented as fresh audio generation.
+    cache_compiled = compile_nastechml(markup, runtime.settings)
+    cache_seed_started = time.perf_counter()
+    runtime.synthesize(cache_compiled, use_cache=True)
+    cache_seed_seconds = time.perf_counter() - cache_seed_started
+    cache_hits: list[float] = []
+    for _ in range(runs):
+        cache_started = time.perf_counter()
+        runtime.synthesize(cache_compiled, use_cache=True)
+        cache_hits.append(time.perf_counter() - cache_started)
+
     return {
         "service": "nastech-tts",
         "version": VERSION,
         "warmup": warmup_result,
         "runs": measurements,
+        "ram_cache": {
+            "seed_full_render_seconds": round(cache_seed_seconds, 4),
+            "repeat_request_seconds": [round(value, 7) for value in cache_hits],
+            "summary": {
+                "count": len(cache_hits),
+                "mean_milliseconds": round(1000 * statistics.fmean(cache_hits), 4),
+                "median_milliseconds": round(1000 * statistics.median(cache_hits), 4),
+                "best_milliseconds": round(1000 * min(cache_hits), 4),
+                "contract": (
+                    "Exact repeat-request RAM-cache lookup only; not fresh model synthesis."
+                ),
+            },
+        },
         "summary": {
             "count": len(measurements),
             "requested_concurrency": concurrency,
