@@ -2,7 +2,7 @@
 
 This module reports registered runtime capabilities without equating provider
 registration to successful model execution. A non-CPU target remains planned
-until a real Supertonic synthesis acceptance record is attached.
+until a real Nastech Voice Core synthesis acceptance record is attached.
 """
 
 from __future__ import annotations
@@ -49,9 +49,9 @@ _PROFILES = (
         status="verified",
         execution_providers=("CPUExecutionProvider",),
         target_environment="Linux, macOS, or Windows Python host",
-        requirements=("Python 3.10+", "Supertonic ONNX assets", "onnxruntime CPU runtime"),
+        requirements=("Python 3.10+", "Nastech Voice Core assets", "onnxruntime CPU runtime"),
         evidence_required=("real local synthesis", "WAV validity", "bundle budget check"),
-        claim_boundary="The verified Nastech Compact runtime is CPU-first and English-only.",
+        claim_boundary="The verified Nastech TTS runtime is CPU-first and English-only.",
     ),
     PlatformProfile(
         identifier="python-cuda",
@@ -61,11 +61,11 @@ _PROFILES = (
         target_environment="NVIDIA GPU host with CUDA/cuDNN-compatible ONNX Runtime",
         requirements=(
             "CUDA provider registered in the target runtime",
-            "Supertonic graph provider compatibility",
+            "Nastech Voice Core graph provider compatibility",
             "explicit provider ordering in local sessions",
         ),
         evidence_required=(
-            "real CUDA Supertonic synthesis",
+            "real CUDA Nastech Voice Core synthesis",
             "provider assignment record",
             "audio/latency/memory acceptance",
         ),
@@ -114,7 +114,8 @@ _PROFILES = (
         requirements=("OpenVINO provider build", "supported model conversion/execution"),
         evidence_required=("real OpenVINO synthesis", "audio parity", "latency/memory benchmark"),
         claim_boundary=(
-            "OpenVINO is planned until the Supertonic graph is validated on the target device."
+            "OpenVINO is planned until the Nastech Voice Core graph is validated on the "
+            "target device."
         ),
     ),
     PlatformProfile(
@@ -261,7 +262,7 @@ def platform_preflight(target: str) -> dict[str, Any]:
         "readiness": readiness,
         "activation_steps": [
             "Install or package the target-specific ONNX Runtime provider.",
-            "Pass the provider priority explicitly into Supertonic ONNX sessions.",
+            "Pass the provider priority explicitly into Nastech Voice Core ONNX sessions.",
             "Run real synthesis on the target hardware or device.",
             "Record provider use, audio validity, latency, memory, and target package size.",
             "Mark the profile verified only after acceptance evidence is committed.",

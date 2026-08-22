@@ -1,4 +1,4 @@
-"""Local Supertonic runtime for Nastech Compact.
+"""Local Supertonic runtime for Nastech TTS.
 
 The runtime loads one ONNX model family locally. It never proxies synthesis to a
 cloud provider and exposes bounded CPU execution appropriate for small servers.
@@ -20,22 +20,23 @@ from typing import Any
 from .cpu import CpuTuning
 from .markup import parse_nastechml
 from .types import AudioSpan, Fidelity, SpanKind
+from .vocal_events import event_route
 from .voices import resolve_english_voice_profile
 
 
 class CompactRuntimeError(RuntimeError):
-    """Raised when local Supertonic inference is unavailable or fails."""
+    """Raised when Nastech Voice Core local inference is unavailable or fails."""
 
 
 @dataclass(frozen=True)
 class CompactSettings:
-    """Configuration for the local Supertonic runtime."""
+    """Configuration for the local Nastech Voice Core runtime."""
 
     default_voice: str = "F1"
     language: str = "en"
     total_steps: int = 8
     speed: float = 1.0
-    cache_dir: Path = Path.home() / ".cache" / "supertonic3"
+    cache_dir: Path = Path.home() / ".cache" / "nastech-voice-core"
 
     @classmethod
     def from_env(cls) -> CompactSettings:
@@ -45,7 +46,7 @@ class CompactSettings:
             total_steps=int(os.getenv("NASTECH_STEPS", "8")),
             speed=float(os.getenv("NASTECH_SPEED", "1.0")),
             cache_dir=Path(
-                os.getenv("NASTECH_MODEL_CACHE", str(Path.home() / ".cache" / "supertonic3"))
+                os.getenv("NASTECH_MODEL_CACHE", str(Path.home() / ".cache" / "nastech-voice-core"))
             ),
         )
 
@@ -75,12 +76,12 @@ _EMOTION_TAGS: dict[str, tuple[str | None, Fidelity, str]] = {
     "excited": (
         "<surprise>",
         Fidelity.APPROXIMATED,
-        "Mapped to the upstream surprise expression tag.",
+        "Mapped to the Nastech Voice Core surprise expression control.",
     ),
     "surprised": (
         "<surprise>",
         Fidelity.DIRECT,
-        "Upstream Supertonic expression tag.",
+        "Nastech Voice Core expression control.",
     ),
     "fearful": (
         "<surprise>",
@@ -93,8 +94,8 @@ _EMOTION_TAGS: dict[str, tuple[str | None, Fidelity, str]] = {
     "calm": ("<breath>", Fidelity.APPROXIMATED, "Breath cue may support a calmer delivery."),
 }
 _SOUND_TAGS: dict[str, tuple[str, Fidelity, str]] = {
-    "laugh": ("<laugh>", Fidelity.DIRECT, "Officially documented Supertonic expression tag."),
-    "sigh": ("<sigh>", Fidelity.DIRECT, "Officially documented Supertonic expression tag."),
+    "laugh": ("<laugh>", Fidelity.DIRECT, "Documented Nastech Voice Core expression control."),
+    "sigh": ("<sigh>", Fidelity.DIRECT, "Documented Nastech Voice Core expression control."),
     "chuckle": ("<laugh>", Fidelity.APPROXIMATED, "Mapped to documented laugh tag."),
     "gasp": (
         "<surprise>",
@@ -143,6 +144,7 @@ def _compile_span(span: AudioSpan, index: int) -> tuple[str, dict[str, Any], flo
             compiled_controls=[tag],
             fidelity=fidelity.value,
             reason=reason,
+            optional_vocal_event=event_route(str(span.value)).as_dict(),
         )
         return tag, decision, speed
 
@@ -191,7 +193,7 @@ def compile_nastechml(
     manifest = {
         "request_id": request_id,
         "language": selected_language,
-        "model_family": "supertonic-3",
+        "voice_core": "nastech-voice-core",
         "source_markup": markup,
         "compiled_text": " ".join(compiled),
         "voice": base_voice,
@@ -226,7 +228,7 @@ def compile_nastechml(
 
 @dataclass
 class SupertonicRuntime:
-    """Lazy Supertonic runtime with tuned ONNX sessions and bounded CPU work."""
+    """Lazy Nastech Voice Core runtime with tuned ONNX sessions and bounded CPU work."""
 
     settings: CompactSettings = field(default_factory=CompactSettings.from_env)
     cpu: CpuTuning = field(default_factory=CpuTuning.from_env)
@@ -242,6 +244,7 @@ class SupertonicRuntime:
             "synthesis_requests": 0,
             "synthesis_failures": 0,
             "audio_cache_hits": 0,
+            "total_cache_hit_seconds": 0.0,
             "total_queue_wait_seconds": 0.0,
             "total_synthesis_seconds": 0.0,
         },
@@ -256,10 +259,10 @@ class SupertonicRuntime:
         if self._tts is not None:
             return self._tts
         try:
-            from supertonic import TTS
+            from nastech_voice_core import TTS
         except ImportError as exc:
             raise CompactRuntimeError(
-                "Supertonic is not installed. Install Nastech with the compact extra."
+                "Nastech Voice Core is unavailable. Install the Nastech TTS local runtime."
             ) from exc
         try:
             self._tts = TTS(
@@ -271,7 +274,7 @@ class SupertonicRuntime:
             )
         except Exception as exc:
             raise CompactRuntimeError(
-                f"Unable to initialize local Supertonic assets: {exc}"
+                f"Unable to initialize Nastech Voice Core local assets: {exc}"
             ) from exc
         return self._tts
 
@@ -281,7 +284,7 @@ class SupertonicRuntime:
                 self._styles[voice] = self._load().get_voice_style(voice_name=voice)
             except Exception as exc:
                 raise CompactRuntimeError(
-                    f"Unable to load Supertonic voice '{voice}': {exc}"
+                    f"Unable to load Nastech Voice Core voice '{voice}': {exc}"
                 ) from exc
         return self._styles[voice]
 
@@ -326,8 +329,8 @@ class SupertonicRuntime:
             cache_bytes = self._cache_bytes
         requests = int(metrics["synthesis_requests"])
         return {
-            "provider": "supertonic-local",
-            "model_family": "supertonic-3",
+            "provider": "nastech-voice-core",
+            "voice_core": "nastech-voice-core",
             "loaded": self._tts is not None,
             "model_cache": str(self.settings.cache_dir),
             "model_assets_bytes": _cache_size_bytes(self.settings.cache_dir),
@@ -345,6 +348,14 @@ class SupertonicRuntime:
                     float(metrics["total_synthesis_seconds"]) / requests, 4
                 )
                 if requests
+                else 0.0,
+                "mean_cache_hit_milliseconds": round(
+                    1000
+                    * float(metrics["total_cache_hit_seconds"])
+                    / int(metrics["audio_cache_hits"]),
+                    4,
+                )
+                if int(metrics["audio_cache_hits"])
                 else 0.0,
                 "uptime_seconds": round(time.monotonic() - self._started_at, 3),
             },
@@ -459,9 +470,11 @@ class SupertonicRuntime:
     ) -> CompactAudio:
         """Generate local WAV audio, optionally bypassing the bounded response cache."""
         key = self._cache_key(compiled)
+        call_started = time.perf_counter()
         if use_cache:
             cached = self._read_cached_audio(key)
             if cached is not None:
+                self._record("total_cache_hit_seconds", time.perf_counter() - call_started)
                 return cached
 
         queue_started = time.perf_counter()
@@ -478,6 +491,7 @@ class SupertonicRuntime:
             if use_cache:
                 cached = self._read_cached_audio(key)
                 if cached is not None:
+                    self._record("total_cache_hit_seconds", time.perf_counter() - call_started)
                     return cached
             started = time.perf_counter()
             tts = self._load()
@@ -491,7 +505,7 @@ class SupertonicRuntime:
                 )
             except Exception as exc:
                 self._record("synthesis_failures")
-                raise CompactRuntimeError(f"Local Supertonic synthesis failed: {exc}") from exc
+                raise CompactRuntimeError(f"Nastech Voice Core synthesis failed: {exc}") from exc
             try:
                 import soundfile as sf
 
@@ -499,7 +513,9 @@ class SupertonicRuntime:
                 sf.write(buffer, waveform.squeeze(), 44100, format="WAV")
             except Exception as exc:
                 self._record("synthesis_failures")
-                raise CompactRuntimeError(f"Unable to encode Supertonic audio: {exc}") from exc
+                raise CompactRuntimeError(
+                    f"Unable to encode Nastech Voice Core audio: {exc}"
+                ) from exc
             audio = CompactAudio(
                 data=buffer.getvalue(),
                 content_type="audio/wav",

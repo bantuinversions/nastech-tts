@@ -1,4 +1,4 @@
-"""Deterministic PCM WAV level analysis for Nastech Compact release verification.
+"""Deterministic PCM WAV level analysis for Nastech TTS release verification.
 
 The analyzer only measures decoded PCM. It does not judge intelligibility,
 voice identity, emotion, or model quality; those require human or dedicated

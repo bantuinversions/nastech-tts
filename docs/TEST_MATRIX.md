@@ -1,8 +1,8 @@
-# Nastech Compact TTS Test Matrix
+# Nastech TTS Test Matrix
 
 ## Quality Objective
 
-Nastech Compact maintains **81 collected deterministic Python tests**. The suite is designed to run without model download, GPU access, cloud credentials, or a running network service. Real local synthesis, optional cleanup, API smoke checks, builds, and budget enforcement remain separate release-verification steps.
+Nastech TTS maintains **81 collected deterministic Python tests**. The suite is designed to run without model download, GPU access, cloud credentials, or a running network service. Real local synthesis, optional cleanup, API smoke checks, builds, and budget enforcement remain separate release-verification steps.
 
 | Test area | Focus | Coverage style |
 |---|---|---|
@@ -26,7 +26,7 @@ make verify
 
 ## Runtime Verification Commands
 
-The deterministic suite deliberately does not load the real ONNX model. Run these checks on a host with Supertonic assets when validating a release candidate.
+The deterministic suite deliberately does not load the real ONNX model. Run these checks on a host with Nastech Voice Core assets when validating a release candidate.
 
 ```bash
 # Inspect local CPU policy, model cache, response cache, and metrics.

@@ -1,6 +1,6 @@
 """Render reviewed OpenBible Luganda VITS speech in an isolated optional runtime.
 
-This script deliberately lives outside the Nastech Compact core. It downloads the
+This script deliberately lives outside the Nastech TTS core. It downloads the
 public reviewed model only when the operator runs it, selects a named training-set
 speaker, performs CPU-only local inference, and writes the provider-native WAV.
 Nastech's guarded adapter normalizes the resulting WAV to its delivery contract.

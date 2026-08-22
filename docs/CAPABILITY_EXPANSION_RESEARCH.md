@@ -2,15 +2,15 @@
 
 ## Purpose
 
-This research note supports the second 500-record Nastech roadmap expansion. The catalog is an **engineering and validation program**, not a claim that every record is implemented by Nastech Compact. Each record must remain labelled with an implementation, validation, consent, security, licensing, or research delivery class.
+This research note supports the second 500-record Nastech roadmap expansion. The catalog is an **engineering and validation program**, not a claim that every record is implemented by Nastech TTS. Each record must remain labelled with an implementation, validation, consent, security, licensing, or research delivery class.
 
 ## Evidence Summary
 
 | Source family | Verified capability concepts for the roadmap | Boundary applied to Nastech |
 |---|---|---|
 | OpenVoice | Voice tone-color cloning, style controls, emotion, accent, rhythm, pauses, intonation, and cross-lingual cloning are documented capability families. [1] | Nastech remains English-only and single-model-family; cloning and conversion records require explicit consent, abuse prevention, model/license review, and separate deployment sizing. |
-| SpeechBrain | Speech recognition, enhancement, separation, speaker recognition, speech-to-speech translation, sound-event detection, beamforming, augmentation, feature extraction, and research recipes are documented speech/audio families. [2] | These are integrations or research tracks, not bundled Nastech Compact features; each would require model, runtime, quality, and budget validation. |
-| ONNX Runtime Mobile | Android CPU, NNAPI, XNNPACK, iOS CoreML, model fit, memory, binary size, latency, power, operator compatibility, and custom-runtime sizing are documented mobile concerns. [3] | A provider listing never verifies Supertonic execution. Mobile profiles remain planned until target-device synthesis and evidence are committed. |
+| SpeechBrain | Speech recognition, enhancement, separation, speaker recognition, speech-to-speech translation, sound-event detection, beamforming, augmentation, feature extraction, and research recipes are documented speech/audio families. [2] | These are integrations or research tracks, not bundled Nastech TTS features; each would require model, runtime, quality, and budget validation. |
+| ONNX Runtime Mobile | Android CPU, NNAPI, XNNPACK, iOS CoreML, model fit, memory, binary size, latency, power, operator compatibility, and custom-runtime sizing are documented mobile concerns. [3] | A provider listing never verifies Nastech Voice Core execution. Mobile profiles remain planned until target-device synthesis and evidence are committed. |
 | W3C WAI text-to-speech guidance | Semantic structure, keyboard compatibility, text alternatives, language metadata, synchronized highlighting, and reader controls matter for accessible speech interfaces. [4] | Accessibility records must be tested with supported clients and proper structured inputs, not merely narrated text. |
 | W3C WAI media description guidance | Audio description, timed text, VTT, audio-track mixing, ducking, description timing, and descriptive transcript workflows are concrete media-accessibility capability families. [5] | Any video/audio-description pipeline requires explicit media-input, timing, and player-support validation; it is not supplied by the current TTS runtime. |
 | C2PA | Content Credentials are an open standard for recording media origin and edits. [6] | Provenance records are planned security work and do not imply cryptographic signatures are present in current WAV output. |

@@ -1,4 +1,4 @@
-"""Nastech Compact agent API with a local-first provider mixer."""
+"""Nastech TTS agent API with a local-first provider mixer."""
 
 from __future__ import annotations
 
@@ -15,6 +15,7 @@ from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from .agent_identity import agent_identity, generate_nastech_story_markup
+from .brand import PRODUCT_DESCRIPTION, PRODUCT_NAME, PUBLISHER, VOICE_CORE_NAME, product_identity
 from .cleanup import VoiceCleanupError, clean_wav
 from .console import render_console
 from .hardware import HardwareConfigurationError, HardwarePlan
@@ -113,7 +114,7 @@ class PlatformPreflightRequest(BaseModel):
 class OpenAISpeechRequest(BaseModel):
     """Small OpenAI-compatible request shape for existing agent clients."""
 
-    model: str = "nastech-compact-en-v1"
+    model: str = "nastech-tts-local-en-v1"
     input: str = Field(min_length=1, max_length=12000)
     voice: str | None = Field(default=None, pattern="^[A-Za-z0-9_-]{1,64}$")
     response_format: str = Field(default="wav", pattern="^wav$")
@@ -498,7 +499,7 @@ def _stream_bytes(data: bytes, chunk_bytes: int) -> Iterator[bytes]:
 
 
 def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
-    """Create a local and independently testable Nastech Compact application."""
+    """Create a local and independently testable Nastech TTS application."""
 
     @asynccontextmanager
     async def lifespan(application: FastAPI):
@@ -511,11 +512,11 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         yield
 
     app = FastAPI(
-        title="Nastech Compact TTS",
+        title=PRODUCT_NAME,
         version=VERSION,
         description=(
-            "A Nastech-branded, local-first, agent-ready expressive TTS API with a provider "
-            "mixer, auditable provider selection, and bounded WAV delivery."
+            f"{PRODUCT_DESCRIPTION} Nastech Voice Core provides local-first, agent-ready "
+            "expressive speech with auditable provider selection and bounded WAV delivery."
         ),
         lifespan=lifespan,
     )
@@ -532,6 +533,9 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         return {
             "status": "ok",
             "service": "nastech-tts",
+            "product": PRODUCT_NAME,
+            "voice_core": VOICE_CORE_NAME,
+            "publisher": PUBLISHER,
             "version": VERSION,
             "runtime": local_runtime.status(),
             "hardware": HardwarePlan.detect().as_dict(),
@@ -541,12 +545,14 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
     @app.get("/v1/voices")
     async def list_english_voices(_: None = Depends(require_agent_key)) -> dict[str, Any]:
         return {
-            "publisher": "Nastech Research",
+            "publisher": PUBLISHER,
+            "product": PRODUCT_NAME,
+            "voice_core": VOICE_CORE_NAME,
             "language": "en",
             "summary": english_voice_summary(),
             "profiles": english_voice_inventory(),
             "claim_boundary": (
-                "Forty selectable delivery profiles are backed by ten verified local Supertonic "
+                "Forty selectable delivery profiles are backed by ten verified Nastech Voice Core "
                 "base timbres; profiles are not claimed as forty separately trained speakers."
             ),
         }
@@ -554,7 +560,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
     @app.get("/v1/capabilities")
     async def capabilities(_: None = Depends(require_agent_key)) -> dict[str, Any]:
         return {
-            "publisher": "Nastech Research",
+            **product_identity(),
             "default_language": "en",
             "language_inventory": language_inventory(),
             "english_voice_profiles": english_voice_summary(),
@@ -701,6 +707,9 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
     ) -> dict[str, Any]:
         return {
             "service": "nastech-tts",
+            "product": PRODUCT_NAME,
+            "voice_core": VOICE_CORE_NAME,
+            "publisher": PUBLISHER,
             "version": VERSION,
             "runtime": local_runtime.status(),
             "hardware": HardwarePlan.detect().as_dict(),
@@ -758,7 +767,7 @@ def create_app(runtime: SupertonicRuntime | None = None) -> FastAPI:
         headers.update(
             {
                 "X-Nastech-Agent": "nastech-agent",
-                "X-Nastech-Publisher": "Nastech Research",
+                "X-Nastech-Publisher": PUBLISHER,
                 "X-Nastech-Story-Theme": payload.theme,
             }
         )

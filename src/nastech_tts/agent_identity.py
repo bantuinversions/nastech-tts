@@ -12,9 +12,9 @@ from dataclasses import dataclass
 from typing import Any
 from xml.sax.saxutils import escape
 
+from .brand import PRODUCT_NAME, PUBLISHER, VOICE_CORE_NAME
 from .markup import _ALLOWED_EMOTIONS, _ALLOWED_SOUNDS, parse_nastechml
 
-PUBLISHER = "Nastech Research"
 AGENT_NAME = "Nastech Agent"
 AGENT_SLUG = "nastech-agent"
 
@@ -68,6 +68,8 @@ def agent_identity() -> dict[str, Any]:
     return {
         "name": AGENT_NAME,
         "slug": AGENT_SLUG,
+        "product": PRODUCT_NAME,
+        "voice_core": VOICE_CORE_NAME,
         "publisher": PUBLISHER,
         "repository_owner": "bantuinversions",
         "identity_role": "local expressive TTS planning and story composition",

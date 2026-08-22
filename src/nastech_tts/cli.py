@@ -1,4 +1,4 @@
-"""Command-line interface for Nastech Compact local Supertonic TTS."""
+"""Command-line interface for Nastech TTS and Nastech Voice Core."""
 
 from __future__ import annotations
 
@@ -35,6 +35,14 @@ from .providers import (
     synthesize_with_provider,
 )
 from .supertonic import CompactRuntimeError, SupertonicRuntime, compile_nastechml
+from .vocal_events import (
+    VocalEventError,
+    render_vocal_event,
+    supported_event_sounds,
+)
+from .vocal_events import (
+    pack_status as vocal_events_pack_status,
+)
 from .voices import english_voice_inventory, english_voice_summary
 
 VERSION = "0.12.2"
@@ -42,7 +50,7 @@ VERSION = "0.12.2"
 
 def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="nastech-tts", description="Nastech Compact local expressive CPU TTS."
+        prog="nastech-tts", description="Nastech TTS local expressive speech platform."
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -136,6 +144,37 @@ def _parser() -> argparse.ArgumentParser:
     clean.add_argument("input", type=Path, help="Input mono signed-16-bit PCM WAV.")
     clean.add_argument("--output", type=Path, required=True, help="Cleaned WAV destination path.")
     clean.add_argument("--report", type=Path, help="Optional JSON cleanup report destination.")
+
+    subparsers.add_parser(
+        "vocal-events",
+        help="Inspect the optional local Nastech Vocal Events Pack without loading it.",
+    )
+    vocal_event = subparsers.add_parser(
+        "vocal-event",
+        help="Render one native local vocal event through the optional Nastech Vocal Events Pack.",
+    )
+    vocal_event.add_argument("sound", choices=supported_event_sounds(), help="Nastech sound cue.")
+    vocal_event.add_argument(
+        "--reference-audio",
+        type=Path,
+        required=True,
+        help="Authorized 10+ second WAV reference for local event voice conditioning.",
+    )
+    vocal_event.add_argument(
+        "--confirm-reference-authorized",
+        action="store_true",
+        help="Required confirmation that you have authorization to use the reference voice.",
+    )
+    vocal_event.add_argument(
+        "--output", type=Path, required=True, help="Native-event WAV destination."
+    )
+    vocal_event.add_argument(
+        "--manifest", type=Path, help="Optional native-event manifest destination."
+    )
+    vocal_event.add_argument("--report", type=Path, help="Optional JSON event report destination.")
+    vocal_event.add_argument(
+        "--clean", action="store_true", help="Apply conservative local WAV cleanup."
+    )
 
     subparsers.add_parser("status", help="Show model, CPU policy, cache, and runtime status.")
     subparsers.add_parser(
@@ -232,7 +271,8 @@ def _parser() -> argparse.ArgumentParser:
     )
 
     benchmark = subparsers.add_parser(
-        "benchmark", help="Measure warmed local ONNX synthesis with cache disabled per run."
+        "benchmark",
+        help="Measure warmed full local synthesis and bounded RAM-cache hits separately.",
     )
     benchmark.add_argument("input", type=Path, help="Input NastechML document.")
     benchmark.add_argument(
@@ -300,11 +340,38 @@ def _benchmark(
     wall_clock_seconds = time.perf_counter() - batch_started
     elapsed = [measurement["elapsed_seconds"] for measurement in measurements]
     rtf = [measurement["real_time_factor"] for measurement in measurements]
+
+    # Seed the bounded RAM cache once, then measure exact repeat-request service.
+    # These timings intentionally exclude compilation and model inference; they are
+    # reported separately so a cache hit is never represented as fresh audio generation.
+    cache_compiled = compile_nastechml(markup, runtime.settings)
+    cache_seed_started = time.perf_counter()
+    runtime.synthesize(cache_compiled, use_cache=True)
+    cache_seed_seconds = time.perf_counter() - cache_seed_started
+    cache_hits: list[float] = []
+    for _ in range(runs):
+        cache_started = time.perf_counter()
+        runtime.synthesize(cache_compiled, use_cache=True)
+        cache_hits.append(time.perf_counter() - cache_started)
+
     return {
         "service": "nastech-tts",
         "version": VERSION,
         "warmup": warmup_result,
         "runs": measurements,
+        "ram_cache": {
+            "seed_full_render_seconds": round(cache_seed_seconds, 4),
+            "repeat_request_seconds": [round(value, 7) for value in cache_hits],
+            "summary": {
+                "count": len(cache_hits),
+                "mean_milliseconds": round(1000 * statistics.fmean(cache_hits), 4),
+                "median_milliseconds": round(1000 * statistics.median(cache_hits), 4),
+                "best_milliseconds": round(1000 * min(cache_hits), 4),
+                "contract": (
+                    "Exact repeat-request RAM-cache lookup only; not fresh model synthesis."
+                ),
+            },
+        },
         "summary": {
             "count": len(measurements),
             "requested_concurrency": concurrency,
@@ -335,6 +402,40 @@ def main() -> int:
         return run_stdio()
     try:
         runtime = SupertonicRuntime()
+
+        if args.command == "vocal-events":
+            print(json.dumps(vocal_events_pack_status(), indent=2))
+            return 0
+
+        if args.command == "vocal-event":
+            if not args.confirm_reference_authorized:
+                raise VocalEventError(
+                    "--confirm-reference-authorized is required before using a voice reference."
+                )
+            data, manifest = render_vocal_event(args.sound, args.reference_audio)
+            args.output.parent.mkdir(parents=True, exist_ok=True)
+            args.output.write_bytes(data)
+            if args.clean:
+                cleaned = clean_wav(data)
+                args.output.write_bytes(cleaned.data)
+                manifest["cleanup"] = cleaned.report
+            manifest_path = args.manifest or args.output.with_suffix(
+                args.output.suffix + ".manifest.json"
+            )
+            _write_json(manifest_path, manifest)
+            _print_or_write(
+                {
+                    "service": "nastech-tts",
+                    "kind": "native_local_vocal_event",
+                    "output_audio": str(args.output),
+                    "output_manifest": str(manifest_path),
+                    "sound": args.sound,
+                    "render_route": manifest["render_route"],
+                    "local_only": True,
+                },
+                args.report,
+            )
+            return 0
 
         if args.command == "status":
             payload = {"service": "nastech-tts", "version": VERSION, **runtime.status()}
@@ -665,6 +766,7 @@ def main() -> int:
         PlatformPlanError,
         ProviderActivationError,
         AgentExpressionError,
+        VocalEventError,
     ) as exc:
         print(f"Nastech error: {exc}")
         return 2

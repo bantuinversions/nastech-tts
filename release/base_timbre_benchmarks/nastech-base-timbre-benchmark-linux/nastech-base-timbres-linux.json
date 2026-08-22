@@ -1551,8 +1551,8 @@
     "warmup_seconds": 4.0629,
     "audio_duration_seconds": 1.7399,
     "runtime": {
-      "provider": "supertonic-local",
-      "model_family": "supertonic-3",
+      "provider": "nastech-voice-core",
+      "voice_core": "nastech-voice-core",
       "loaded": true,
       "model_cache": "/home/runner/.cache/supertonic3",
       "model_assets_bytes": 403520887,
@@ -1567,8 +1567,8 @@
         "queue_timeout_seconds": 120.0,
         "audio_cache_entries": 8,
         "audio_cache_mib": 32,
-        "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
-        "execution_mode": "sequential (provided by Supertonic)"
+        "graph_optimization": "ORT_ENABLE_ALL (provided by Nastech Voice Core)",
+        "execution_mode": "sequential (provided by Nastech Voice Core)"
       },
       "audio_cache": {
         "entries": 1,
@@ -1588,8 +1588,8 @@
     "elapsed_seconds": 4.06715
   },
   "runtime_status": {
-    "provider": "supertonic-local",
-    "model_family": "supertonic-3",
+    "provider": "nastech-voice-core",
+    "voice_core": "nastech-voice-core",
     "loaded": true,
     "model_cache": "/home/runner/.cache/supertonic3",
     "model_assets_bytes": 403520887,
@@ -1604,8 +1604,8 @@
       "queue_timeout_seconds": 120.0,
       "audio_cache_entries": 8,
       "audio_cache_mib": 32,
-      "graph_optimization": "ORT_ENABLE_ALL (provided by Supertonic)",
-      "execution_mode": "sequential (provided by Supertonic)"
+      "graph_optimization": "ORT_ENABLE_ALL (provided by Nastech Voice Core)",
+      "execution_mode": "sequential (provided by Nastech Voice Core)"
     },
     "audio_cache": {
       "entries": 1,

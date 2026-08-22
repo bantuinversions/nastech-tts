@@ -65,4 +65,4 @@ jobs:
           gh release create "$RELEASE_TAG" dist/* SHA256SUMS release/voice_fixtures/* \
             --draft \
             --generate-notes \
-            --title "Nastech Compact $RELEASE_TAG"
+            --title "Nastech TTS $RELEASE_TAG"

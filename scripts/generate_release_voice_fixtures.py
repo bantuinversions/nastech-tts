@@ -1,4 +1,4 @@
-"""Generate real local WAV fixtures for a Nastech Compact release.
+"""Generate real local WAV fixtures for a Nastech TTS release.
 
 This command is intentionally excluded from deterministic unit tests. It loads
 the active local Nastech provider, writes short cleaned WAV fixtures, measures

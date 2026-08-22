@@ -1,8 +1,8 @@
-# Nastech Compact Voice Inventory and Accent Support Policy
+# Nastech TTS Voice Inventory and Accent Support Policy
 
-Nastech Compact TTS is published by **Nastech Research** and uses one local Supertonic 3 ONNX model family. This document separates the voices currently shipped in the local model cache from regional-accent targets that require a consented, licensed custom voice-style profile and recorded verification.
+Nastech TTS is published by **Nastech Research** and uses one local Nastech Voice Core model family. This document separates the voices currently shipped in the local model cache from regional-accent targets that require a consented, licensed custom voice-style profile and recorded verification.
 
-> **Truthful current state:** the installed local Supertonic 3 package contains **10 preset styles**—`M1`–`M5` and `F1`–`F5`. It does **not** ship 32 verified British voices, 20 verified American voices, a generic “African accent,” or a Jamaican voice. Those counts and regional targets are retained as named expansion requirements, not presented as current product inventory. [1] [2]
+> **Truthful current state:** the installed local Nastech Voice Core package contains **10 preset styles**—`M1`–`M5` and `F1`–`F5`. It does **not** ship 32 verified British voices, 20 verified American voices, a generic “African accent,” or a Jamaican voice. Those counts and regional targets are retained as named expansion requirements, not presented as current product inventory. [1] [2]
 
 ## Verified local presets
 
@@ -12,11 +12,11 @@ The upstream Python reference documents ten built-in voices, and the local deplo
 |---|---:|---|---|
 | `M1`–`M5` | 5 | Verified local preset-style assets | No British, American, African, Jamaican, or other regional-accent label is asserted |
 | `F1`–`F5` | 5 | Verified local preset-style assets | No British, American, African, Jamaican, or other regional-accent label is asserted |
-| Total | **10** | Verified in the Supertonic 3 cache | Speaker-style labels only |
+| Total | **10** | Verified in the Nastech Voice Core cache | Speaker-style labels only |
 
 ## Requested expansion catalog
 
-The following profiles are **planned**. A profile becomes available only after a Nastech Research review confirms a lawful source style, documented consent or appropriate authorization, model and license compatibility, a verified import into the same Supertonic model family, and English intelligibility plus digital-audio checks. A regional label must describe the verified profile’s approved self-identification and linguistic evaluation; it must never be guessed from a voice or used to portray a protected group as a single accent.
+The following profiles are **planned**. A profile becomes available only after a Nastech Research review confirms a lawful source style, documented consent or appropriate authorization, model and license compatibility, a verified import into the same Nastech Voice Core model family, and English intelligibility plus digital-audio checks. A regional label must describe the verified profile’s approved self-identification and linguistic evaluation; it must never be guessed from a voice or used to portray a protected group as a single accent.
 
 | Requested family | Target count | Current state | Promotion gate |
 |---|---:|---|---|
@@ -27,7 +27,7 @@ The following profiles are **planned**. A profile becomes available only after a
 
 ## Technical and licensing boundary
 
-Supertonic 3 supports English text locally, but its open package ships fixed preset styles rather than a documented national-accent catalog. The upstream Python documentation states that custom voice-style JSON can be loaded from a Voice Builder export or other style JSON; the upstream project also cautions that official Voice Builder access ends after August 31, 2026. Nastech will therefore accept only a locally importable, reviewed profile and will not rely on an ongoing hosted service for runtime synthesis. [2] [3]
+Nastech Voice Core supports English text locally, but its open package ships fixed preset styles rather than a documented national-accent catalog. The upstream Python documentation states that custom voice-style JSON can be loaded from a Voice Builder export or other style JSON; the upstream project also cautions that official Voice Builder access ends after August 31, 2026. Nastech will therefore accept only a locally importable, reviewed profile and will not rely on an ongoing hosted service for runtime synthesis. [2] [3]
 
 > **No accent is simulated by spelling tricks or stereotypes.** Nastech’s `voice` parameter selects an installed style. It does not claim to transform a preset voice into British, American, African, Jamaican, or any other accent.
 
@@ -37,8 +37,8 @@ Every future profile must receive a stable Nastech ID, provenance/consent record
 
 ## References
 
-[1] [Supertonic Python SDK: Voices](https://supertone-inc.github.io/supertonic-py/voices/)
+[1] [Nastech Voice Core Python SDK: Voices](https://github.com/bantuinversions/nastech-tts)
 
-[2] [Supertonic Python SDK: custom voice-style JSON usage](https://supertone-inc.github.io/supertonic-py/)
+[2] [Nastech Voice Core Python SDK: custom voice-style JSON usage](https://github.com/bantuinversions/nastech-tts)
 
-[3] [Supertonic official repository: service and Voice Builder notice](https://github.com/supertone-inc/supertonic)
+[3] [Nastech Voice Core official repository: service and Voice Builder notice](https://github.com/bantuinversions/nastech-tts)

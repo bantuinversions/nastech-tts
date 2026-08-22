@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thank you for helping improve Nastech Compact. Do not include API keys, bearer tokens, private audio, or customer text in this report.
+        Thank you for helping improve Nastech TTS. Do not include API keys, bearer tokens, private audio, or customer text in this report.
 
   - type: input
     id: version

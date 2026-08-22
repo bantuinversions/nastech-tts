@@ -62,10 +62,10 @@ def _provider(
 _PROVIDER_ROWS = (
     _provider(
         "nastech-native-onnx",
-        "Nastech native local ONNX",
+        "Nastech Voice Core (local ONNX)",
         "local-python",
         ACTIVE_LOCAL,
-        "Included in the measured local Nastech core.",
+        "Included in the measured local Nastech TTS core.",
     ),
     _provider(
         "mms-lazy",

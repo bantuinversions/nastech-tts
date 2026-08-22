@@ -10,8 +10,8 @@ class FakeCompactRuntime:
 
     def status(self):
         return {
-            "provider": "supertonic-local",
-            "model_family": "supertonic-3",
+            "provider": "nastech-voice-core",
+            "voice_core": "nastech-voice-core",
             "model_assets_mib": 386.0,
             "target_max_deployment_mib": 1024,
             "cpu": {"profile": "balanced", "intra_op_threads": 4},
@@ -46,7 +46,7 @@ def test_compile_returns_auditable_local_expression_plan() -> None:
     assert body["runtime"] == "nastech-provider-mixer"
     assert body["provider"]["id"] == "nastech-native-onnx"
     assert body["text"] == "<sad> Hello. <laugh>"
-    assert body["manifest"]["model_family"] == "supertonic-3"
+    assert body["manifest"]["voice_core"] == "nastech-voice-core"
 
 
 def test_speech_endpoint_returns_local_audio() -> None:

@@ -1,7 +1,7 @@
 """Truthful local English voice-profile inventory for Nastech TTS.
 
-The compact Supertonic runtime provides ten verified base timbres (F1-F5 and
-M1-M5). Nastech exposes ten requested named base profiles plus thirty delivery
+Nastech Voice Core provides ten verified base timbres (F1-F5 and M1-M5).
+Nastech TTS exposes ten requested named base profiles plus thirty delivery
 profiles that select one base timbre and a documented default rate. Raw base
 style IDs remain accepted as aliases. A profile is not represented as a
 separate trained speaker identity.
@@ -53,7 +53,7 @@ def _profiles() -> tuple[EnglishVoiceProfile, ...]:
             default_speed=1.0,
             kind="named-base-profile",
             description=(
-                f"Named Nastech profile backed by verified Supertonic {voice}. "
+                f"Named Nastech profile backed by verified Nastech Voice Core timbre {voice}. "
                 "The display name is not claimed as a separately trained speaker identity."
             ),
         )
@@ -67,7 +67,7 @@ def _profiles() -> tuple[EnglishVoiceProfile, ...]:
             default_speed=speed,
             kind="delivery-profile",
             description=(
-                f"{description.capitalize()} using verified Supertonic {voice}. "
+                f"{description.capitalize()} using verified Nastech Voice Core timbre {voice}. "
                 "This is a delivery profile, not a distinct trained speaker identity."
             ),
         )

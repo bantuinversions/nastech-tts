@@ -2,12 +2,12 @@
 
 ## Goal
 
-Nastech Compact keeps **CPU Python inference** as its current verified deployment. The portability layer adds a stable way for agents and clients to discover host capabilities, plan a platform target, and reject unsupported configurations before work begins. It does not activate a GPU, Android accelerator, or mobile client merely because a label exists.
+Nastech TTS keeps **CPU Python inference** as its current verified deployment. The portability layer adds a stable way for agents and clients to discover host capabilities, plan a platform target, and reject unsupported configurations before work begins. It does not activate a GPU, Android accelerator, or mobile client merely because a label exists.
 
 | Target | Current state | Activation rule |
 |---|---|---|
-| Python CPU | Verified local runtime | Default Supertonic Python/ONNX path passes synthesis and budget checks |
-| NVIDIA CUDA | Provider-detected/planned | Supertonic session must accept CUDA provider selection and pass real ONNX synthesis on the target GPU |
+| Python CPU | Verified local runtime | Default Nastech Voice Core Python/ONNX path passes synthesis and budget checks |
+| NVIDIA CUDA | Provider-detected/planned | Nastech Voice Core session must accept CUDA provider selection and pass real ONNX synthesis on the target GPU |
 | TensorRT | Planned | Export/build compatibility, supported graph partitions, and real latency/quality acceptance must pass |
 | Windows DirectML | Planned | Platform build and real provider/session validation must pass |
 | Intel OpenVINO | Planned | Compatible model conversion/provider run and output acceptance must pass |
@@ -29,7 +29,7 @@ The `nastech_tts.platforms` module and `/v1/platforms` API expose four factual l
 
 ## GPU Rule
 
-ONNX Runtime supports hardware execution providers, but provider availability alone does not prove that the Supertonic graph executed there. Nastech will expose a GPU target as **planned** until the Supertonic loader can pass explicit provider ordering into the ONNX session and a real synthesis test records active provider, correctness, latency, memory, and audio acceptance.
+ONNX Runtime supports hardware execution providers, but provider availability alone does not prove that the Nastech Voice Core graph executed there. Nastech will expose a GPU target as **planned** until the Nastech Voice Core loader can pass explicit provider ordering into the ONNX session and a real synthesis test records active provider, correctness, latency, memory, and audio acceptance.
 
 ## Android Rule
 
@@ -42,7 +42,7 @@ A platform profile changes from planned to verified only when all relevant evide
 | Requirement | CPU | GPU | Android |
 |---|---:|---:|---:|
 | Provider/runtime registration | yes | yes | yes |
-| Real Supertonic synthesis | yes | yes | yes |
+| Real Nastech Voice Core synthesis | yes | yes | yes |
 | Audio-duration and waveform validity | yes | yes | yes |
 | Latency and memory measurement | yes | yes | yes |
 | Model/app size measurement | yes | yes | yes |

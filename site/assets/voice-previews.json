@@ -11,7 +11,7 @@
       "base_voice": "F1",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic F1. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F1. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/siya.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -35,7 +35,7 @@
       "base_voice": "F2",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic F2. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F2. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/nasi.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -59,7 +59,7 @@
       "base_voice": "M1",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic M1. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M1. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/jafta.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -83,7 +83,7 @@
       "base_voice": "F3",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic F3. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F3. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/della.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -107,7 +107,7 @@
       "base_voice": "M2",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic M2. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M2. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/axam.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -131,7 +131,7 @@
       "base_voice": "F4",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic F4. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F4. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/alicia.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -155,7 +155,7 @@
       "base_voice": "F5",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic F5. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core F5. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/shanice.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -179,7 +179,7 @@
       "base_voice": "M3",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic M3. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M3. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/adam.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -203,7 +203,7 @@
       "base_voice": "M4",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic M4. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M4. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/shakira.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -227,7 +227,7 @@
       "base_voice": "M5",
       "kind": "named-base-profile",
       "default_speed": 1.0,
-      "description": "Named Nastech profile backed by verified Supertonic M5. The display name is not claimed as a separately trained speaker identity.",
+      "description": "Named Nastech profile backed by verified Nastech Voice Core M5. The display name is not claimed as a separately trained speaker identity.",
       "preview": "assets/voice-previews/shimah.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -251,7 +251,7 @@
       "base_voice": "F1",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F1. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f1-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -275,7 +275,7 @@
       "base_voice": "F1",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F1. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f1-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -299,7 +299,7 @@
       "base_voice": "F1",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic F1. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F1. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f1-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -323,7 +323,7 @@
       "base_voice": "F2",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F2. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f2-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -347,7 +347,7 @@
       "base_voice": "F2",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F2. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f2-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -371,7 +371,7 @@
       "base_voice": "F2",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic F2. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F2. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f2-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -395,7 +395,7 @@
       "base_voice": "F3",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F3. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f3-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -419,7 +419,7 @@
       "base_voice": "F3",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F3. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f3-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -443,7 +443,7 @@
       "base_voice": "F3",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic F3. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F3. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f3-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -467,7 +467,7 @@
       "base_voice": "F4",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F4. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f4-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -491,7 +491,7 @@
       "base_voice": "F4",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F4. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f4-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -515,7 +515,7 @@
       "base_voice": "F4",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic F4. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F4. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f4-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -539,7 +539,7 @@
       "base_voice": "F5",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core F5. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f5-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -563,7 +563,7 @@
       "base_voice": "F5",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core F5. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f5-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -587,7 +587,7 @@
       "base_voice": "F5",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic F5. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core F5. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-f5-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -611,7 +611,7 @@
       "base_voice": "M1",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M1. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m1-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -635,7 +635,7 @@
       "base_voice": "M1",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M1. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m1-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -659,7 +659,7 @@
       "base_voice": "M1",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic M1. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M1. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m1-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -683,7 +683,7 @@
       "base_voice": "M2",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M2. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m2-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -707,7 +707,7 @@
       "base_voice": "M2",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M2. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m2-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -731,7 +731,7 @@
       "base_voice": "M2",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic M2. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M2. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m2-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -755,7 +755,7 @@
       "base_voice": "M3",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M3. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m3-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -779,7 +779,7 @@
       "base_voice": "M3",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M3. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m3-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -803,7 +803,7 @@
       "base_voice": "M3",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic M3. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M3. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m3-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -827,7 +827,7 @@
       "base_voice": "M4",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M4. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m4-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -851,7 +851,7 @@
       "base_voice": "M4",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M4. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m4-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -875,7 +875,7 @@
       "base_voice": "M4",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic M4. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M4. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m4-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -899,7 +899,7 @@
       "base_voice": "M5",
       "kind": "delivery-profile",
       "default_speed": 1.0,
-      "description": "Neutral, measured delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Neutral, measured delivery using verified Nastech Voice Core M5. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m5-clear.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -923,7 +923,7 @@
       "base_voice": "M5",
       "kind": "delivery-profile",
       "default_speed": 0.9,
-      "description": "Slower, gentle delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Slower, gentle delivery using verified Nastech Voice Core M5. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m5-soft.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
@@ -947,7 +947,7 @@
       "base_voice": "M5",
       "kind": "delivery-profile",
       "default_speed": 1.1,
-      "description": "Faster, energetic delivery using verified Supertonic M5. This is a delivery profile, not a distinct trained speaker identity.",
+      "description": "Faster, energetic delivery using verified Nastech Voice Core M5. This is a delivery profile, not a distinct trained speaker identity.",
       "preview": "assets/voice-previews/en-m5-dynamic.wav",
       "quality": {
         "format": "mono-16-bit-pcm-wav",
